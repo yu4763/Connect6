@@ -2,13 +2,13 @@
 using namespace std;
 
 // TO DO List
-////////////////////////////////////////
-// 1. SelectionAndExpansion Implementation
+////////////////////////////////////////////////////////////////////////////
+// 1. SelectionAndExpansion Implementation V \ MakeChildState Implementation
 // 2. Evaluation random index Selection
 // 3. VirtualPlay Implementation
 // 4. Calculate uct_value
 // 5. Determine Bestchoice strategy
-///////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 
 Position MonteCarloTreeSearch(State& current, double recv_time) {
   // Calculate start time
@@ -32,15 +32,24 @@ Position MonteCarloTreeSearch(State& current, double recv_time) {
 State& State::SelectionAndExpansion() {
   // If all children are visited, then go to best child.
   // If there are children to check, then select it and expand children.
+  int max_idx;
+  double max_uct_value = 0;
   for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
-    if () {
-
-
-    } else {
-
-
+    if (child_list_[i] == NULL) {
+      for ( int j = 0; j < mct_const::NUMBER_OF_MAX_CHILD_NODES; j++) {
+        //
+        // Make child state with our strategy MakeChildState();
+        //
+      }
+      return *child_list_[i];
+    }
+    if (child_list_[i]->uct_value_ > max_uct_value) {
+      max_idx = i;
+      max_uct_value = child_list_[i]->uct_value_;
     }
   }
+
+  return child_list_[max_idx]->SelectionAndExpansion();
 }
 
 int State::Evaluation() {

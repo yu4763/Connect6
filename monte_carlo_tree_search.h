@@ -40,11 +40,15 @@ class State {
       memset(board_, 0, sizeof(board_));
     }
     State(const int* board) : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1){
+      for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
+        child_list_[i] = NULL;
+      }
       for (int i = 0; i < 361; i++) {
         board_[i] = board[i];
       }
     }
     State& SelectionAndExpansion();
+    void MakeChildState();
     int Evaluation();
     void VirtualPlay(int& win_count);
     void Update(int result);
