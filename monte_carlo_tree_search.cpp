@@ -2,16 +2,19 @@
 using namespace std;
 
 // TO DO List
-// SelectionAndExpansion Implementation
-// Evaluation random index Selection
-// VirtualPlay Implementation
-
+////////////////////////////////////////
+// 1. SelectionAndExpansion Implementation
+// 2. Evaluation random index Selection
+// 3. VirtualPlay Implementation
+// 4. Calculate uct_value
+// 5. Determine Bestchoice strategy
+///////////////////////////////////////
 
 Position MonteCarloTreeSearch(State& current, double recv_time) {
   // Calculate start time
   chrono::system_clock::time_point start = chrono::system_clock::now();
 
-  // Modify received time to return safe
+  // Modify received time to return safely
   recv_time -= TERMINIATE_TIME_PADDING;
   Position best_pos;
   int win_count;
@@ -44,7 +47,8 @@ int State::Evaluation() {
   int win_count = 0;
   thread** thread_list = new thread*[mct_const::NUMBER_OF_THREADS];
 
-  // Select random index of child child_list_
+  //
+  // 2. Select random index of child child_list_
   //
   for (int i = 0; i < mct_const::NUMBER_OF_THREADS; i++) {
     thread_list[i] = new thread(child_list_[i]->VirtualPlay, win_count);
@@ -59,12 +63,21 @@ int State::Evaluation() {
 }
 
 void State::VirtualPlay(int& win_count) {
-
+  // Do Connect6 randomly according to expected strategy
+  int number_of_rounds;
+  for (int i = 0; i < number_of_rounds; i++) {
+    //
+    // 3. strategy
+    //
+  }
 }
 
 void State::Update(int result) {
   number_of_wins_ += result;
   number_of_visiting_ += mct_const::NUMBER_OF_THREADS;
+  //
+  // 4. Change uct_value_
+  //
   parent_->Update();
 }
 
@@ -73,6 +86,11 @@ Position State::BestChoice() {
   int change_pos;
   double max_avg_wins = (double)(child_list_[0]->number_of_wins_) / (child_list_[0]->number_of_visiting_);
   for (int i = 1; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
+    if ((child_list_[i]->number_of_visiting_) == 0) continue;
+    // 5. Select Best
+    // Option1. The most visited
+    // Option2. The highest uct_value
+    // etc.
     int avg_wins = (double)(child_list_[i]->number_of_wins_) / (child_list_[i]->number_of_visiting_);
     if (max_avg_wins < avg_wins) {
       max_avg_wins = avg_wins;
