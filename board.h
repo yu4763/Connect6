@@ -21,7 +21,6 @@ class board : public QWidget {
             void handleButton();
     private:
         int x, y;
-        int stoneColor;  // 0:black 1:white
         QPushButton *startButton;
         stone *stones[boardNum][boardNum];
 

@@ -1,6 +1,7 @@
 #include <board.h>
 #include <stdio.h>
-
+#include <iostream>
+using namespace std;
 
 board::board() : QWidget(){
 
@@ -16,14 +17,14 @@ board::board() : QWidget(){
     for(i=0; i<boardNum-1; i++){
         for(k=0; k<boardNum-1; k++){
             stones[i][k] = new stone(this, i, k);
-            stones[i][k]->setGeometry(QRect(QPoint(x+40*i,y+40*k), QSize(80,80)));
+            stones[i][k]->setUpdatesEnabled(false);
+            stones[i][k]->setGeometry(x+40*i+20,y+40*k+20, 45, 45);
+            stones[i][k]->stoneColor = 1;
         }
     }
 }
 
 void board::handleButton(){
-
-    stoneColor = 0;
 
 }
 
