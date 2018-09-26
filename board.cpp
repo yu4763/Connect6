@@ -1,8 +1,8 @@
-#include <board.h>
+#include <function.h>
 #include <stdio.h>
 
-
 bool userStatus = false;
+int userColor = 0;
 
 board::board() : QWidget(){
 
@@ -22,24 +22,43 @@ board::board() : QWidget(){
         for(k=0; k<boardNum-1; k++){
             stones[i][k] = new stone(this, i, k);
             stones[i][k]->setUpdatesEnabled(false);
-            stones[i][k]->setGeometry(x+40*i+20,y+40*k+20, 45, 45);
-            stones[i][k]->stoneColor = 1;
+            stones[i][k]->setGeometry(x+40*i+20,y+40*k+20, 41, 41);
         }
     }
 }
 
 void board::handleButton(){
 
+    userColor = 0;
     userStatus = true;
     statusLabel->setText("Your Turn");
 
 }
 
-void board::handleClick(){
+void board::changeLabel(){
+
+    userStatus = true;
+    statusLabel->setText("Your Turn");
+}
+
+void board::emptyLabel(){
 
     userStatus = false;
     statusLabel->setText("");
 }
+
+void board::handleClick(){
+
+    int i, k;
+    i = wheretoPut(this);
+    k = i%18;
+    i = i/18;
+
+    stones[i][k]->setUpdatesEnabled(true);
+    stones[i][k]->exist = 1;
+}
+
+
 
 void board::paintEvent(QPaintEvent*) {
 

@@ -1,3 +1,6 @@
+#ifndef STONE_H
+#define STONE_H
+
 #include <QApplication>
 #include <QWidget>
 #include <QPainter>
@@ -17,9 +20,6 @@ class stone : public QWidget {
 
     public:
         int i, k;
-        int stoneColor;  // 0:black 1:white
-
-    private:
         int exist;
 
 };
@@ -36,3 +36,5 @@ public:
     int i, k;
 
 };
+
+#endif

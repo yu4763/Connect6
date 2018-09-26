@@ -1,3 +1,6 @@
+#ifndef BOARD_H
+#define BOARD_H
+
 #include <QApplication>
 #include <QWidget>
 #include <QPainter>
@@ -5,6 +8,7 @@
 #include <QObject>
 #include <QPushButton>
 #include <QLabel>
+#include <QTimer>
 #include <stone.h>
 
 #define boardNum 19
@@ -20,11 +24,17 @@ class board : public QWidget {
         void paintEvent(QPaintEvent*);
         public slots:
             void handleButton();
+            void changeLabel();
+            void emptyLabel();
             void handleClick();
+
     private:
         int x, y;
         QPushButton *startButton;
         QLabel *statusLabel;
+    public:
         stone *stones[boardNum][boardNum];
 
 };
+
+#endif
