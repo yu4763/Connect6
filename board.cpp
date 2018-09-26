@@ -1,15 +1,19 @@
 #include <board.h>
 #include <stdio.h>
-#include <iostream>
-using namespace std;
+
+
+bool userStatus = false;
 
 board::board() : QWidget(){
 
     this->x = 200;
     this->y = 50;
     startButton = new QPushButton("Game Start", this);
-    startButton->setGeometry(QRect(QPoint(60, 400), QSize(100,50)));
+    startButton->setGeometry(QRect(QPoint(50, 340), QSize(100,50)));
     connect(startButton, SIGNAL (released()), this, SLOT (handleButton()));
+
+    statusLabel = new QLabel(this);
+    statusLabel->setGeometry(QRect(QPoint(65, 390), QSize(100,50)));
 
     update();
 
@@ -26,6 +30,15 @@ board::board() : QWidget(){
 
 void board::handleButton(){
 
+    userStatus = true;
+    statusLabel->setText("Your Turn");
+
+}
+
+void board::handleClick(){
+
+    userStatus = false;
+    statusLabel->setText("");
 }
 
 void board::paintEvent(QPaintEvent*) {

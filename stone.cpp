@@ -1,5 +1,7 @@
-#include <stone.h>
+#include <board.h>
 #include <stdio.h>
+
+extern bool userStatus;
 
 stone::stone(QWidget *parent, int i, int k) : QWidget(parent){
     this->i = i;
@@ -28,8 +30,11 @@ void stone::paintEvent(QPaintEvent*){
 
 void stone::mousePressEvent(QMouseEvent*){
 
-    if( exist == 0 )
+    if( userStatus && exist == 0 ){
         this->setUpdatesEnabled(true);
+        ((board*)this->parentWidget())->handleClick();
+        exist = 1;
+    }
 
 }
 
