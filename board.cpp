@@ -22,7 +22,7 @@ board::board() : QWidget(){
         for(k=0; k<boardNum-1; k++){
             stones[i][k] = new stone(this, i, k);
             stones[i][k]->setUpdatesEnabled(false);
-            stones[i][k]->setGeometry(x+40*i+20,y+40*k+20, 41, 41);
+            stones[i][k]->setGeometry(x+40*k+20,y+40*i+20, 41, 41);
         }
     }
 }
