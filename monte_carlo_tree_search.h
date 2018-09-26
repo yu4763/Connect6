@@ -2,6 +2,7 @@
 #define __MONTE_CARLO_TREE_SEARCH_H__
 
 #include <cstdlib>
+#include <cmath>
 #include <thread>
 #include <chrono>
 #include <random>
@@ -32,22 +33,31 @@ class Position {
 
 class State {
   public:
-    State() : parent_(NULL), uct_value_(123456789), avg_wins_(0), number_of_visiting_(0) {
+    State() : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1) {
       for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         child_list_[i] = NULL;
       }
+      memset(board_, 0, sizeof(board_));
+    }
+    State(const int* board) : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1){
+      for (int i = 0; i < 361; i++) {
+        board_[i] = board[i];
+      }
     }
     State& SelectionAndExpansion();
-    void Evaluation();
-    void Update();
+    int Evaluation();
+    void VirtualPlay(int& win_count);
+    void Update(int result);
     Position BestChoice();
 
   private:
     State* parent_;
     State* child_list_[mct_const::NUMBER_OF_MAX_CHILD_NODES];
     double uct_value_;
-    double avg_wins_;
+    int number_of_wins_;
     int number_of_visiting_;
+    int change_idx_;
+    int board_[361];
 };
 
 Position MonteCarloTreeSearch(State& current, double recv_time);
