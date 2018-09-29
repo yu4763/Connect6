@@ -20,8 +20,7 @@ class stone : public QWidget {
 
     public:
         int i, k;
-        int exist;
-        int color;
+        char state;
 
 };
 

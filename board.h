@@ -11,7 +11,7 @@
 #include <QTimer>
 #include <stone.h>
 
-#define boardNum 19
+#define stoneNum 19
 #define stoneSize 40
 
 
@@ -33,7 +33,7 @@ class board : public QWidget {
         QPushButton *startButton;
         QLabel *statusLabel;
     public:
-        stone *stones[boardNum][boardNum];
+        stone *stones[stoneNum][stoneNum];
 
 };
 

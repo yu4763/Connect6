@@ -2,12 +2,12 @@
 #include <stdio.h>
 
 bool userStatus = false;
-int userColor = 0;
+char userColor = 1;
 
 board::board() : QWidget(){
 
     this->x = 200;
-    this->y = 50;
+    this->y = 60;
     startButton = new QPushButton("Game Start", this);
     startButton->setGeometry(QRect(QPoint(50, 340), QSize(100,50)));
     connect(startButton, SIGNAL (released()), this, SLOT (handleButton()));
@@ -18,18 +18,18 @@ board::board() : QWidget(){
     update();
 
     int i, k;
-    for(i=0; i<boardNum-1; i++){
-        for(k=0; k<boardNum-1; k++){
+    for(i=0; i<stoneNum; i++){
+        for(k=0; k<stoneNum; k++){
             stones[i][k] = new stone(this, i, k);
             stones[i][k]->setUpdatesEnabled(false);
-            stones[i][k]->setGeometry(x+40*k+20,y+40*i+20, 41, 41);
+            stones[i][k]->setGeometry(x+40*k-20,y+40*i-20, 41, 41);
         }
     }
 }
 
 void board::handleButton(){
 
-    userColor = 0;
+    userColor = 1;
     userStatus = true;
     statusLabel->setText("Your Turn");
 
@@ -37,7 +37,7 @@ void board::handleButton(){
 
 void board::changeLabel(){
 
-    if(!checkEnd(stones, (userColor+1)%2)){
+    if(!checkEnd(stones, (-userColor+3))){
         userStatus = true;
         statusLabel->setText("Your Turn");
     }
@@ -63,12 +63,12 @@ void board::handleClick(){
 
     int i, k;
     i = wheretoPut(this);
-    k = i%18;
-    i = i/18;
+    k = i%stoneNum;
+    i = i/stoneNum;
 
     stones[i][k]->setUpdatesEnabled(true);
     stones[i][k]->update();
-    stones[i][k]->exist = 1;
+    stones[i][k]->state = -userColor+3;
 
 }
 
@@ -77,7 +77,7 @@ void board::handleClick(){
 void board::paintEvent(QPaintEvent*) {
 
     int i;
-    int size = boardNum*stoneSize;
+    int size = (stoneNum-1)*stoneSize;
 
     QPainter painter(this);
 
@@ -88,7 +88,7 @@ void board::paintEvent(QPaintEvent*) {
     painter.drawRect(x, y, size, size);
     painter.setBrush(Qt::NoBrush);
 
-    for(i=1; i<boardNum; i++){
+    for(i=1; i<stoneNum-1; i++){
         painter.drawLine(x, y + i*stoneSize, x+size, y+i*stoneSize);
         painter.drawLine(x + i*stoneSize, y, x + i*stoneSize, y+size);
 

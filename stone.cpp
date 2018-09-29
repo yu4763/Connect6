@@ -7,7 +7,7 @@ extern int userColor;
 stone::stone(QWidget *parent, int i, int k) : QWidget(parent){
     this->i = i;
     this->k = k;
-    exist = 0;
+    state = 0;
 }
 
 void stone::paintEvent(QPaintEvent*){
@@ -15,17 +15,17 @@ void stone::paintEvent(QPaintEvent*){
     QPainter painter(this);
 
     if(userStatus){
-        if(userColor == 0){
+        if(userColor == 1){
             QPen myPen(Qt::black, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
-            color = 0;
+            state = 1;
         }
         else{
             QPen myPen(Qt::white, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
-            color = 1;
+            state = 2;
         }
 
         this->setUpdatesEnabled(false);
@@ -33,19 +33,19 @@ void stone::paintEvent(QPaintEvent*){
 
     }
     else{
-        if(userColor == 1){
+        if(userColor == 2){
             QPen myPen(Qt::black, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
-            color = 0;
+            state = 1;
         }
         else{
             QPen myPen(Qt::white, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
-            color = 1;
+            state = 2;
         }
-        
+
         this->setUpdatesEnabled(false);
         QTimer::singleShot(0, (board*)this->parentWidget(), SLOT(changeLabel()));
     }
@@ -56,9 +56,8 @@ void stone::paintEvent(QPaintEvent*){
 
 void stone::mousePressEvent(QMouseEvent*){
 
-    if( userStatus && exist == 0 ){
+    if( userStatus && state == 0 ){
         this->setUpdatesEnabled(true);
-        exist = 1;
 
     }
 
