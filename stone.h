@@ -21,19 +21,7 @@ class stone : public QWidget {
     public:
         int i, k;
         int exist;
-
-};
-
-class computerstone : public QWidget {
-
-    Q_OBJECT
-
-public:
-    computerstone(QWidget*, int i, int k);
-    void painEvent(QPaintEvent*);
-
-public:
-    int i, k;
+        int color;
 
 };
 

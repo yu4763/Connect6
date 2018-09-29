@@ -14,18 +14,21 @@ void stone::paintEvent(QPaintEvent*){
 
     QPainter painter(this);
 
-
     if(userStatus){
         if(userColor == 0){
             QPen myPen(Qt::black, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
+            color = 0;
         }
         else{
             QPen myPen(Qt::white, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
+            color = 1;
         }
+
+        this->setUpdatesEnabled(false);
         QTimer::singleShot(0, (board*)this->parentWidget(), SLOT(emptyLabel()));
 
     }
@@ -34,12 +37,16 @@ void stone::paintEvent(QPaintEvent*){
             QPen myPen(Qt::black, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
+            color = 0;
         }
         else{
             QPen myPen(Qt::white, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
+            color = 1;
         }
+        
+        this->setUpdatesEnabled(false);
         QTimer::singleShot(0, (board*)this->parentWidget(), SLOT(changeLabel()));
     }
 
@@ -52,13 +59,7 @@ void stone::mousePressEvent(QMouseEvent*){
     if( userStatus && exist == 0 ){
         this->setUpdatesEnabled(true);
         exist = 1;
-        QTimer::singleShot(1000, (board*)this->parentWidget(), SLOT(handleClick()));
 
     }
 
-}
-
-computerstone::computerstone(QWidget *parent, int i, int k) : QWidget(parent){
-    this->i = i;
-    this->k = k;
 }

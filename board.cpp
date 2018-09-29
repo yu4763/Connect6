@@ -37,14 +37,26 @@ void board::handleButton(){
 
 void board::changeLabel(){
 
-    userStatus = true;
-    statusLabel->setText("Your Turn");
+    if(!checkEnd(stones, (userColor+1)%2)){
+        userStatus = true;
+        statusLabel->setText("Your Turn");
+    }
+    else{
+        statusLabel->setText("Game End");
+    }
 }
 
 void board::emptyLabel(){
 
-    userStatus = false;
-    statusLabel->setText("");
+    if(!checkEnd(stones, userColor)){
+        userStatus = false;
+        statusLabel->setText("");
+        QTimer::singleShot(1000, this, SLOT(handleClick()));
+    }
+    else{
+        userStatus = false;
+        statusLabel->setText("Game End");
+    }
 }
 
 void board::handleClick(){
@@ -55,7 +67,9 @@ void board::handleClick(){
     i = i/18;
 
     stones[i][k]->setUpdatesEnabled(true);
+    stones[i][k]->update();
     stones[i][k]->exist = 1;
+
 }
 
 

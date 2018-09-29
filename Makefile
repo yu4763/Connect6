@@ -1029,6 +1029,7 @@ moc_board.cpp: ../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QApplication \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QLabel \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qlabel.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
+		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
 		stone.h \
 		board.h \
 		moc_predefs.h \
@@ -1711,6 +1712,7 @@ board.o: board.cpp function.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QLabel \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qlabel.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
+		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
 		stone.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o board.o board.cpp
 
@@ -2043,6 +2045,7 @@ main.o: main.cpp ../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QApplication \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QLabel \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qlabel.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
+		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
 		stone.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
@@ -2375,6 +2378,7 @@ stone.o: stone.cpp board.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QLabel \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qlabel.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
+		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
 		stone.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o stone.o stone.cpp
 
@@ -2708,6 +2712,7 @@ tempCalculation.o: tempCalculation.cpp function.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QLabel \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qlabel.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
+		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
 		stone.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tempCalculation.o tempCalculation.cpp
 

@@ -3,6 +3,7 @@
 ######################################################################
 
 QT += widgets
+QT += core
 TEMPLATE = app
 TARGET = connect6
 INCLUDEPATH += .
