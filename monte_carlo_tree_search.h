@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <cmath>
+#include <iostream>
 #include <thread>
 #include <chrono>
 #include <random>
@@ -15,22 +16,30 @@ namespace mct_const {
   const int NUMBER_OF_MAX_CHILD_NODES = 12;
 };
 
+// Class to save position of stone in board
 class Position {
   public:
-    Position() : xpos_(0), ypos_(0) {}
-    Position(int x, int y) : xpos_(x), ypos_(y) {}
-    Position(const Position& ref) : xpos_(ref.xpos_), ypos_(ref.ypos_) {}
+    Position() : pos_(0) {}
+    Position(int pos) : {
+      try {
+        if (pos < 0 || pos >= 361) throw pos;
+        pos_ = pos;
+      } catch(int pos) {
+        cout << pos << " is unvalid Position" << endl;
+        exit(1);
+      }
+    }
+    Position(const Position& ref) : pos_(ref.pos_) {}
     Position& operator=(const Position& ref) {
-      xpos_ = ref.xpos_;
-      ypos_ = ref.ypos_;
+      pos_ = ref.pos_;
       return *this;
     }
 
   private:
-    int xpos_;
-    int ypos_;
+    int pos_;
 };
 
+// Class for represent MCT_search's state
 class State {
   public:
     State() : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1) {
@@ -60,7 +69,7 @@ class State {
     double uct_value_;
     int number_of_wins_;
     int number_of_visiting_;
-    int change_idx_;
+    int change_idx_; // Discuss to use
     int board_[361];
 };
 
