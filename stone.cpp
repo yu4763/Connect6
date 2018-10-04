@@ -3,6 +3,7 @@
 
 extern bool userStatus;
 extern int userColor;
+int count = 1;
 
 stone::stone(QWidget *parent, int i, int k) : QWidget(parent){
     this->i = i;
@@ -48,6 +49,7 @@ void stone::paintEvent(QPaintEvent*){
 
         this->setUpdatesEnabled(false);
         QTimer::singleShot(0, (board*)this->parentWidget(), SLOT(changeLabel()));
+
     }
 
     painter.drawEllipse(0, 0, 40, 40);
@@ -56,9 +58,12 @@ void stone::paintEvent(QPaintEvent*){
 
 void stone::mousePressEvent(QMouseEvent*){
 
+
     if( userStatus && state == 0 ){
+        count++;
         this->setUpdatesEnabled(true);
 
     }
+
 
 }

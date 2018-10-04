@@ -3,6 +3,7 @@
 
 bool userStatus = false;
 char userColor = 1;
+extern int count;
 
 board::board() : QWidget(){
 
@@ -37,26 +38,41 @@ void board::handleButton(){
 
 void board::changeLabel(){
 
-    if(!checkEnd(stones, (-userColor+3))){
+    int result = checkEnd(stones, (-userColor+3));
+
+    if(result == 1){
+        statusLabel->setText("You Lose!!");
+    }
+    else if(result == 2){
+        statusLabel->setText("You Win!!");
+    }
+    else if(result == 0 && count == 2){
         userStatus = true;
         statusLabel->setText("Your Turn");
-    }
-    else{
-        statusLabel->setText("Game End");
+        count = 0;
     }
 }
 
 void board::emptyLabel(){
 
-    if(!checkEnd(stones, userColor)){
+    int result = checkEnd(stones, userColor);
+
+    if(result == 1){
+        userStatus = false;
+        statusLabel->setText("You Win!!");
+    }
+    else if(result == 2){
+        userStatus = false;
+        statusLabel->setText("You Lose!!");
+    }
+    else if(result == 0 && count == 2){
         userStatus = false;
         statusLabel->setText("");
-        QTimer::singleShot(1000, this, SLOT(handleClick()));
+        QTimer::singleShot(700, this, SLOT(handleClick()));
+        QTimer::singleShot(1400, this, SLOT(handleClick()));
+        count = 0;
     }
-    else{
-        userStatus = false;
-        statusLabel->setText("Game End");
-    }
+
 }
 
 void board::handleClick(){
@@ -65,6 +81,8 @@ void board::handleClick(){
     i = wheretoPut(this);
     k = i%stoneNum;
     i = i/stoneNum;
+
+    count++;
 
     stones[i][k]->setUpdatesEnabled(true);
     stones[i][k]->update();
