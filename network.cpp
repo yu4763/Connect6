@@ -1,5 +1,11 @@
 #include "network.h"
-void Network::getoutput(int* DATA, float* W1, float* b1, float* W2, float* b2, int batch, int inputsize, int hiddensize, int outputsize, float* OUTPUT){
+Network::Network(int _batch, int _inputsize, int _hiddensize, int _outputsize){
+	batch = _batch;
+	inputsize = _inputsize;
+	hiddensize = _hiddensize;
+	outputsize = _outputsize;
+}
+void Network::getoutput(float *W1, float *b1, float *W2, float *b2, char* DATA, float* OUTPUT){
 	float Y1[batch * hiddensize];
 	float L1[batch * hiddensize];
 	//float L2[_batch * _outputsize];			
@@ -27,8 +33,8 @@ void Network::getoutput(int* DATA, float* W1, float* b1, float* W2, float* b2, i
 	}
 }
 	
-void Network::backpropagation(int* DATA, float* W1, float* b1, float* W2, float* b2, int batch, int inputsize, int hiddensize, int outputsize, float* LABEL, float lr){
-	float Y1[batch * hiddensize];
+void Network::backpropagation(float *W1, float *b1, float *W2, float *b2, char* DATA, float* LABEL, float lr){
+	float Y1[batch * hiddensize] = {0};
 	float L1[batch * hiddensize];
 	float L2[batch * outputsize];
 	float dL1[batch * hiddensize];
@@ -37,6 +43,8 @@ void Network::backpropagation(int* DATA, float* W1, float* b1, float* W2, float*
 	float dW2[hiddensize * outputsize];
 	float Cost[batch * outputsize];
 	float temp;
+	//printf("%d", W1[0]);
+	//printf("%d", 2);
 	//Layer1
 	for (int i = 0; i<batch; i++){
 		for (int j = 0; j<hiddensize; j++){
@@ -46,6 +54,7 @@ void Network::backpropagation(int* DATA, float* W1, float* b1, float* W2, float*
 			}
 			Y1[hiddensize * i + j] += b1[hiddensize * i + j];
 			L1[hiddensize * i + j] = sigmoid(Y1[hiddensize * i + j]);
+			//printf("%d", W1[0]);
 		}
 	}
 

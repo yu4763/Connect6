@@ -4,8 +4,11 @@ float sigmoid(float x);
 float diffsigmoid(float x);
 
 class Network{
+	int batch, inputsize, hiddensize, outputsize;
+	
 	public:
-		void getoutput(int* DATA, float* W1, float* b1, float* W2, float* b2, int batch, int inputsize, int hiddensize, int outputsize, float* OUTPUT);
-		void backpropagation(int* DATA, float* W1, float* b1, float* W2, float* b2, int batch, int inputsize, int hiddensize, int outputsize, float* LABEL, float lr);	
+		Network(int, int, int, int);
+		void getoutput(float *W1, float *b1, float *W2, float *b2, char* DATA, float* OUTPUT);
+		void backpropagation(float *W1, float *b1, float *W2, float *b2, char* DATA, float* LABEL, float lr);	
 };
 
