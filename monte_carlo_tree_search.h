@@ -16,6 +16,9 @@ namespace mct_const {
   const double TERMINIATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_MAX_CHILD_NODES = 12;
+  const int NUMBER_OF_ROUNDS = 16;
+  const char BLACK = 1;
+  const char WHITE = 2;
 };
 
 // Class to save position of stone in board
@@ -77,7 +80,7 @@ class State {
       }
       for (int i = 0; i < 19; i++) {
         for (int j = 0; j < 19; j++) {
-          board_[19 * i + j] = board_ref[i][j];
+          board_[19 * i + j] = board_ref.stones[i][j]->state;
         }
       }
     }
@@ -111,5 +114,5 @@ class State {
 };
 
 Position MonteCarloTreeSearch(State& current, double recv_time);
-
+int IsWin(const char* board);
 #endif
