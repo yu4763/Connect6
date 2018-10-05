@@ -1,6 +1,9 @@
 #include "monte_carlo_tree_search.h"
 using namespace std;
 
+// 
+extern board window;
+
 //
 // TO DO List
 //
@@ -10,25 +13,26 @@ using namespace std;
 // 4. Calculate uct_value
 // 5. Determine Bestchoice strategy
 // 6. Recursive to Iterative
+// 7. Get Color when start
 //
 
 // Main MonteCarloTreeSearch Implemetation
-Position MonteCarloTreeSearch(State& current, double recv_time) {
+Position MonteCarloTreeSearch(State& current) {
   // Calculate start time
   chrono::system_clock::time_point start = chrono::system_clock::now();
 
   // Modify received time to return safely
-  recv_time -= mct_const::TERMINIATE_TIME_PADDING;
+  double time = mct_const::TIME - mct_const::TERIMINATE_TIME_PADDING;
   Position best_pos;
 
   // Play game virtually during received time
-  while ((chrono::duration<double>(chrono::system_clock::now() - start).count() < recv_time) {
+  while ((chrono::duration<double>(chrono::system_clock::now() - start).count() < time) {
     State& best_child = current.SelectionAndExpansion();
     best_child.Update(best_child.Evaluation());
     best_pos = current.BestChoice();
   }
 
-  return best_pos;
+  return best_pos.GetPostion();
 }
 
 State& State::SelectionAndExpansion() {
@@ -38,11 +42,31 @@ State& State::SelectionAndExpansion() {
   double max_uct_value = 0;
   for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
     if (child_list_[i] == NULL) {
-      for ( int j = 0; j < mct_const::NUMBER_OF_MAX_CHILD_NODES; j++) {
+      // For Arbitrary child construction
+      // ==========================================
+      int cidx_list[10];
+      int cidx_num = 0;
+      int idx = 0;
+      while (1) {
+        if (cidx_num == 10) break;
+        if (idx == 361) {
+          cout << "There is no space to play" << endl;
+          exit(1);
+        }
+        if (board_[idx] == 0) {
+          cidx_list[cidx_num++] = idx;
+        }
+        idx++;
+      } 
+      // =========================================
+      for (int j = 0; j < mct_const::NUMBER_OF_MAX_CHILD_NODES; j++) {
         //
         // Make child state with our strategy MakeChildState();
         // Save change index
         //
+        
+        // Make with black
+        MakeChildState(j, cidx_list[2 * j], cidx2[2 * j + 1], 1);
       }
       return *child_list_[i];
     }
@@ -59,13 +83,23 @@ State& State::SelectionAndExpansion() {
   return child_list_[max_idx]->SelectionAndExpansion();
 }
 
+void State::MakeChildState(const int child_idx, const int idx_1, const int idx_2, const char color) {
+  child_list_[child_idx] = new State(*this);
+  child_list_[child_idx]->parent = this;
+  
+  // Set with my_color
+  child_list_[child_idx]->board_[idx_1] = color;
+  child_list_[child_idx]->board_[idx_2] = color;
+  
+  child_list_[chlid_idx]->change_idx_1 = idx_1;
+  child_list_[child_idx]->change_idx_2 = idx_2;
+}
+
+// With Thread
 int State::Evaluation() {
   int win_count = 0;
   thread** thread_list = new thread*[mct_const::NUMBER_OF_THREADS];
 
-  //
-  // 2. Select random index of child child_list_
-  //
   for (int i = 0; i < mct_const::NUMBER_OF_THREADS; i++) {
     thread_list[i] = new thread(VirtualPlay, win_count);
   }
