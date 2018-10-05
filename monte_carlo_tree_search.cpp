@@ -35,6 +35,7 @@ Position MonteCarloTreeSearch(State& current) {
   return best_pos.GetPostion();
 }
 
+// Recursive version of Selection and Expansion 
 State& State::SelectionAndExpansion() {
   // If there is no child state, then expand and return its child.
   // If all children are visited, then go to best child.
@@ -81,6 +82,59 @@ State& State::SelectionAndExpansion() {
   }
 
   return child_list_[max_idx]->SelectionAndExpansion();
+}
+
+// Iterative version of Selection and Expansion
+State& State::SelectionAndExpansion() {
+  State* best_child = this;
+  while (1) {
+    int max_idx = 0;
+    double max_uct_value = 0;
+    for (int child_idx = 0; child_idx < mct_const::NUMBER_OF_MAX_CHILD_NODES; child_idx++) {
+      
+      // Case1) No child
+      if (best_chlid->child_list[child_idx] == NULL) {
+        // For Arbitrary child construction
+        // ==========================================
+        int cidx_list[10];
+        int cidx_num = 0;
+        int empty_idx = 0;
+        while (1) {
+          if (cidx_num == 10) break;
+          if (empty_idx == 361) {
+            cout << "There is no space to play" << endl;
+            exit(1);
+          }
+          if (board_[idx] == 0) {
+            cidx_list[cidx_num++] = empty_idx;
+          }
+          empty_idx++;
+        }
+        for (int j = 0; j < mct_const::NUMBER_OF_MAX_CHILD_NODES; j++) {
+          //
+          // Make child state with our strategy MakeChildState();
+          // Save change index
+          //
+        
+          // Make with black
+          best_child->MakeChildState(j, cidx_list[2 * j], cidx_list[2 * j + 1], 1);
+        }
+        return *(best_child->child_list_[child_idx]);
+
+      // Case2) There is unvisited node
+      } else if (best_child->child_list_[child_idx]->number_of_visiting_ == 0) {
+        return *(best_child->child_list_[child_idx]);
+      
+      // Case3) There is node who has larger uct_value_ than max 
+      } else if (best_child->child_list_[child_idx]->uct_valuee_ > max_uct_value) {
+        max_idx = child_idx;
+        max_uct_value = best_child->child_list_[child_idx]->uct_value_;
+      }
+    }
+
+    // Update Best child
+    best_child = best_child->child_list_[child_idx];
+  }
 }
 
 void State::MakeChildState(const int child_idx, const int idx_1, const int idx_2, const char color) {
