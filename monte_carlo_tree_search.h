@@ -13,7 +13,7 @@ using namespace std;
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
   const double TIME = 3;
-  const double TERMINIATE_TIME_PADDING = 0.01;
+  const double TERMINATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_MAX_CHILD_NODES = 12;
   const int NUMBER_OF_ROUNDS = 16;
@@ -25,7 +25,7 @@ namespace mct_const {
 class Position {
   public:
     Position() : pos_(0) {}
-    Position(int pos) : {
+    Position(int pos) {
       try {
         if (pos < 0 || pos >= 361) throw pos;
         pos_ = pos;
@@ -48,22 +48,22 @@ class Position {
 // Class for represent MCT_search's state
 class State {
   public:
-    State() : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1) {
+    State() : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_1_(-1), change_idx_2_(-1) {
       for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         child_list_[i] = NULL;
       }
       memset(board_, 0, sizeof(board_));
     }
     State(const State& ref)
-      : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1) {
-      for (int i = 0; i < mct_const::NUMBER_OF_MAS_CHILD_NODES; i++) {
+      : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_1_(-1), change_idx_2_(-1) {
+      for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         child_list_[i] = NULL;
       }
       for (int i = 0; i <361; i++) {
         board_[i] = ref.board_[i];
       }
     }
-    State(const char* board) : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1){
+    State(const char* board) : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_1_(-1), change_idx_2_(-1) {
       for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         child_list_[i] = NULL;
       }
@@ -74,8 +74,8 @@ class State {
         
     // Construction using board
     State(const board& board_ref) 
-      : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_(-1) {
-      for (int i = 0; i <mct_cost::NUMBER_OF_MAX_CHILD_NODES; i++) {
+      : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_1_(-1), change_idx_2_(-1) {
+      for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         child_list_[i] = NULL;
       }
       for (int i = 0; i < 19; i++) {
@@ -89,18 +89,18 @@ class State {
     State(const int idx1, const int idx2);
 
     ~State() {
-      for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES) {
+      for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         if (child_list_[i]) {
           delete child_list_[i];
         }
       }
     }
     State& SelectionAndExpansion();
-    void MakeChildState(State& parent, const int child_idx, const int idx_1, const int idx_2, const char color);
+    void MakeChildState(const int child_idx, const int idx_1, const int idx_2, const char color);
     int Evaluation();
     void VirtualPlay(int& win_count);
     void Update(int result);
-    Position BestChoice();
+    void BestChoice();
 
   private:
     State* parent_;
@@ -108,11 +108,11 @@ class State {
     double uct_value_;
     int number_of_wins_;
     int number_of_visiting_;
-    int change_idx_1;
-    int change_idx_2;
+    int change_idx_1_;
+    int change_idx_2_;
     char board_[361];
 };
 
-Position MonteCarloTreeSearch(State& current, double recv_time);
+void MonteCarloTreeSearch();
 int IsWin(const char* board);
 #endif

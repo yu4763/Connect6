@@ -1,16 +1,39 @@
 #include <function.h>
 #include <stdio.h>
+#include "monte_carlo_tree_search.h"
+#include "monte_carlo_tree_search.cpp"
+
+// ====================
+// To get two positions
+extern int best_pos1;
+extern int best_pos2;
+
+bool is_first = true;
+// ====================
 
 int wheretoPut( board *b ){
 
     int i, k;
-    for (i=0; i<stoneNum; i++){
-        for(k=0; k<stoneNum; k++){
-
-            if(b->stones[i][k]->state == 0){
-                return i*stoneNum +k;
-            }
-        }
+    // ========================================
+    // Arbitrary playing
+    //
+    // for (i=0; i<stoneNum; i++){
+    //    for(k=0; k<stoneNum; k++){
+    //
+    //        if(b->stones[i][k]->state == 0){
+    //            return i*stoneNum +k;
+    //        }
+    //    }
+    // }
+    // =======================================
+    // Using monte carlo search
+    if (is_first) { 
+      MonteCarloTreeSearch();
+      is_first = false;
+      return best_pos1;
+    } else {
+      is_first = true;
+      return best_pos2;
     }
 }
 
