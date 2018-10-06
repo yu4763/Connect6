@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <cmath>
+#include <ctime>
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -12,7 +13,7 @@ using namespace std;
 
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
-  const double TIME = 3;
+  const double TIME = 5;
   const double TERMINATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_MAX_CHILD_NODES = 12;

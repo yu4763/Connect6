@@ -16,11 +16,14 @@ void MonteCarloTreeSearch() {
   // Calculate start time
   chrono::system_clock::time_point start = chrono::system_clock::now();
 
-  // Modify received time to return safely
-  double time = mct_const::TIME - mct_const::TERMINATE_TIME_PADDING;
+  // For random functions below
+  srand((unsigned int)time(NULL));
 
+  // Modify received time to return safely
+  double rcv_time = mct_const::TIME - mct_const::TERMINATE_TIME_PADDING;
+  
   // Play game virtually during received time
-  while ((chrono::duration<double>(chrono::system_clock::now() - start)).count() < time) {
+  while ((chrono::duration<double>(chrono::system_clock::now() - start)).count() < rcv_time) {
     State& best_child = current.SelectionAndExpansion();
     best_child.Update(best_child.Evaluation());
     current.BestChoice();
@@ -92,15 +95,11 @@ State& State::SelectionAndExpansion() {
         int empty_count = 0;
         int empty_idx = 0;
         while (1) {
-          if (empty_idx == 361) {
-            cout << "There is no space to play" << endl;
-            exit(1);
-          }
+          empty_idx = rand() % 361;
           if (board_[empty_idx] == 0) {
             empty_list[empty_count++] = empty_idx;
             if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
           }
-          empty_idx++;
         }
         // ================================
         for (int born = 0; born < mct_const::NUMBER_OF_MAX_CHILD_NODES; born++) {
@@ -109,7 +108,7 @@ State& State::SelectionAndExpansion() {
           // Save change index
           //
 
-          // Make with black
+          // Make with my color
           best_child->MakeChildState(born, empty_list[2 * born], empty_list[2 * born + 1], my_color);
         }
         return *(best_child->child_list_[child_idx]);
@@ -189,15 +188,11 @@ void State::VirtualPlay(int& win_count) {
     int empty_count = 0;
     int empty_idx = 0;
     while (1) {
-      if (empty_idx == 361) {
-        cout << "There is no space to play" << endl;
-        exit(1);
-      }
+      empty_idx = rand() % 361;
       if (virtual_board[empty_idx] == 0) {
         empty_list[empty_count++] = empty_idx;
         if (empty_count == 4) break;
       }
-      empty_idx++;
      }
     // ==========================
     for (int i = 0; i < 2; i++) {
