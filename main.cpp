@@ -7,40 +7,48 @@ int main(void){
 	char state[361];
 	float UCT[361] = {0};
 	
+	float temp;
+	float DeepUCT[361] = {0};
 	int inputsize = 11;
 	int hiddensize = 10;
 	int outputsize = 1;
 	int batch = 4;
 	
 	char lines[44];
-	float Y[4]= {5, 5, 5, 5};
+	int indexes[10];
+	float Y[4]= {10, 10, 10, 10};
 	
-	float W1[inputsize * hiddensize] = {0};	
-	float b1[batch * hiddensize] = {0};
-	float W2[hiddensize * outputsize] = {0};
-	float b2[batch * outputsize] = {0};
+	float W1[inputsize * hiddensize] = {1};	
+	float b1[batch * hiddensize] = {2};
+	float W2[hiddensize * outputsize] = {3};
+	float b2[batch * outputsize] = {4};
 	
-	getline(state, lines, 0);
+	getline(state, lines, 180);
 	
 	
-	Network CalUCT (batch, inputsize, hiddensize, outputsize);
+	Network CalDeepUCT (batch, inputsize, hiddensize, outputsize);
 	//Network Winrate (Q_batch, Q_inputsize, Q_hiddensize, Q_outputsize);
 	
-	for (int i=0; i<1000; i++){
-		CalUCT.backpropagation(W1, b1, W2, b2, lines, Y, 0.001);
+	//train CALDeepUCT 
+	for (int i=0; i<100000; i++){
+		CalDeepUCT.backpropagation(W1, b1, W2, b2, lines, Y, 0.001);
 	}
-	int index[361];
-    for (int i=0; i<360; i++){
-    	index[i] = i;
-	}
-	plusUCT(UCT, state, lastAction, CalUCT, W1, b1, W2, b2);
-
-	quick_sort(UCT, index, 0, 360);
 	
-	//상위 10개를 드림 
-	for (int i=0; i<10; i++){
-		printf("%d : %d\n",i, index[i]);
+	//init Deep UCT
+	initUCT(DeepUCT, state, lastAction, CalDeepUCT, W1, b1, W2, b2);
+	
+	//update Deep UCT
+	updateUCT(DeepUCT, state, lastAction, CalDeepUCT, W1, b1, W2, b2);
+	
+	//merge Deep UCT and UCT
+	addUCT(DeepUCT, UCT);
+
+	best10(UCT, 10, indexes);
+	
+	for(int i =0; i<10; i++){
+		printf("%d index : %d, value : %f\n",i, indexes[i], UCT[indexes[i]]);	
 	}
+	
 	return 0;
 }
 

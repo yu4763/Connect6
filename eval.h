@@ -1,5 +1,6 @@
 void getline(char* state, char* line, int action);
-void plusUCT(float* UCT, char* state, int action, Network CalUCT);
-void floatswap(float* a, float* b);
-void intswap(int* a, int* b);
-void quick_sort(float* UCT, int* index, int start, int end);
+void updateUCT(float* UCT, char* state, int action, Network CalUCT, float *W1, float *b1, float *W2, float *b2);
+void initUCT(float* UCT, char* state, int action, Network CalUCT, float *W1, float *b1, float *W2, float *b2);
+void addUCT(float* DeepUCT, float* UCT);
+void best10(float* UCT, int best, int* indexes);
+
