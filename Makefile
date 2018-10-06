@@ -2713,7 +2713,9 @@ tempCalculation.o: tempCalculation.cpp function.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qlabel.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
-		stone.h
+		stone.h \
+		monte_carlo_tree_search.h \
+		monte_carlo_tree_search.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tempCalculation.o tempCalculation.cpp
 
 moc_board.o: moc_board.cpp 

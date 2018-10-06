@@ -203,7 +203,7 @@ void State::VirtualPlay(int& win_count) {
     for (int i = 0; i < 2; i++) {
       // Set opponent's stone
       virtual_board[empty_list[i]] = userColor;
-      
+
       // Set player's stone
       virtual_board[empty_list[i+2]] = my_color;
     }

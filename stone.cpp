@@ -3,7 +3,7 @@
 
 extern bool userStatus;
 extern int userColor;
-int count = 1;
+int cnt = 1;
 
 stone::stone(QWidget *parent, int i, int k) : QWidget(parent){
     this->i = i;
@@ -60,7 +60,7 @@ void stone::mousePressEvent(QMouseEvent*){
 
 
     if( userStatus && state == 0 ){
-        count++;
+        cnt++;
         this->setUpdatesEnabled(true);
 
     }

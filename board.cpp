@@ -1,9 +1,12 @@
 #include <function.h>
 #include <stdio.h>
+#include <monte_carlo_tree_search.h>
 
 bool userStatus = false;
 char userColor = 1;
-extern int count;
+extern int cnt;
+extern int best_pos1;
+extern int best_pos2;
 
 board::board() : QWidget(){
 
@@ -46,10 +49,10 @@ void board::changeLabel(){
     else if(result == 2){
         statusLabel->setText("You Win!!");
     }
-    else if(result == 0 && count == 2){
+    else if(result == 0 && cnt == 2){
         userStatus = true;
         statusLabel->setText("Your Turn");
-        count = 0;
+        cnt = 0;
     }
 }
 
@@ -65,12 +68,13 @@ void board::emptyLabel(){
         userStatus = false;
         statusLabel->setText("You Lose!!");
     }
-    else if(result == 0 && count == 2){
+    else if(result == 0 && cnt == 2){
         userStatus = false;
-        statusLabel->setText("");
-        QTimer::singleShot(700, this, SLOT(handleClick()));
-        QTimer::singleShot(1400, this, SLOT(handleClick()));
-        count = 0;
+        statusLabel->setText("computer");
+        MonteCarloTreeSearch();
+        QTimer::singleShot(500, this, SLOT(handleClick()));
+        QTimer::singleShot(1000, this, SLOT(handleClick()));
+        cnt = 0;
     }
 
 }
@@ -78,11 +82,22 @@ void board::emptyLabel(){
 void board::handleClick(){
 
     int i, k;
-    i = wheretoPut(this);
-    k = i%stoneNum;
-    i = i/stoneNum;
 
-    count++;
+    cnt++;
+
+    if(cnt == 1){
+
+        k = best_pos1%stoneNum;
+        i = best_pos1/stoneNum;
+
+    }
+
+    else{
+
+        k = best_pos2%stoneNum;
+        i = best_pos2/stoneNum;
+
+    }
 
     stones[i][k]->setUpdatesEnabled(true);
     stones[i][k]->update();
