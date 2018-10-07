@@ -16,8 +16,8 @@ namespace mct_const {
   const double TIME = 5;
   const double TERMINATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
-  const int NUMBER_OF_MAX_CHILD_NODES = 12;
-  const int NUMBER_OF_ROUNDS = 16;
+  const int NUMBER_OF_MAX_CHILD_NODES = 10;
+  const int NUMBER_OF_ROUNDS = 50;
   const char BLACK = 1;
   const char WHITE = 2;
 };
@@ -115,5 +115,5 @@ class State {
 };
 
 void MonteCarloTreeSearch();
-int IsWin(const char* board);
+bool IsEnd(const char* _board, const int pos, const char color);
 #endif

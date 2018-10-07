@@ -169,7 +169,7 @@ int State::Evaluation() {
 
 void State::VirtualPlay(int& win_count) {
   char virtual_board[361];
-  // Copty board to virtual board
+  // Copy board to virtual board
   for (int i = 0; i < 361; i++) {
     virtual_board[i] = board_[i];
   }
@@ -187,24 +187,39 @@ void State::VirtualPlay(int& win_count) {
     int empty_list[4];
     int empty_count = 0;
     int empty_idx = 0;
+    bool is_end;
     while (1) {
       empty_idx = rand() % 361;
       if (virtual_board[empty_idx] == 0) {
         empty_list[empty_count++] = empty_idx;
         if (empty_count == 4) break;
       }
-     }
+    }
     // ==========================
     for (int i = 0; i < 2; i++) {
       // Set opponent's stone
       virtual_board[empty_list[i]] = userColor;
-
+      
+      // Get Result
+      is_end = IsEnd(virtual_board, empty_list[i], userColor);
+      if (is_end) {
+        break;
+      }
+    }
+    for (int i = 0; i < 2; i++) {
       // Set player's stone
       virtual_board[empty_list[i+2]] = my_color;
+
+      // Get Result
+      is_end = IsEnd(virtual_board, empty_list[i+2], my_color);
+      if (is_end) {
+        win_count++;
+        break;
+      } 
     }
   }
   // Check whether win this game
-  win_count += IsWin(virtual_board);
+  // win_count += IsWin(virtual_board);
 }
 
 // With thread
@@ -259,14 +274,121 @@ void State::BestChoice() {
   best_pos2 = child_list_[max_idx]->change_idx_2_;
 }
 
-int IsWin(const char* board) {
+bool IsEnd(const char* _board, const int pos, const char color) {
 
   // ===========================
   // For arbitrary win decision
   //
-  if (rand() & 1) {
-    return 0;
-  } else {
-    return 1;
+  // if (rand() & 1) {
+  //   return 0;
+  // } else {
+  //   return 1;
+  // }
+  // ===========================
+  
+  // ===========================
+  // Detect end condition
+  // Detection operates through finding successive color
+  
+  char board[19][19];
+  int xpos = pos % 19;
+  int ypos = pos / 19;
+  int test_x, test_y;
+  int row;
+  // Copy board_
+  for (int i = 0; i < 19; i++) {
+      row = 19 * i;
+    for (int j = 0; j < 19; j++) {
+      board[i][j] = _board[row + j];
+    }
   }
+  
+  // Horizontal
+  // Horizontal Left
+  if ((test_x = xpos - 3) >= 0 && board[test_x][ypos] == color) {
+    if (board[test_x + 1][ypos] == color && board[test_x + 2][ypos] == color) {
+      if ((test_x - 2) >= 0 && board[test_x - 2][ypos] == color && board[test_x - 1][ypos] == color) {
+        return true;
+      } else if ((xpos + 2) < 19 && board[xpos + 2][ypos] == color && board[xpos + 1][ypos] == color) {
+        return true;
+      }
+    }
+  // Horizontal Right
+  } else if ((test_x = pos + 3) < 19 && board[test_x][ypos] == color) {
+    if (board[test_x - 1][ypos] == color && board[test_x - 2][ypos] == color) {
+      if ((test_x + 2) < 19 && board[test_x + 2][ypos] == color && board[test_x + 1][ypos] == color) {
+        return true;
+      } else if ((xpos - 2) >= 0 && board[xpos - 2][ypos] == color && board[xpos - 1][ypos] == color) {
+        return true;
+      }
+    }
+  }
+
+  // Vertical
+  // Vertical Up
+  if ((test_y = ypos - 3) >= 0 && board[xpos][test_y] == color) {
+    if (board[xpos][test_y + 1] == color && board[xpos][test_y + 2] == color) {
+      if ((test_y - 2) >= 0 && board[xpos][test_y - 2] == color && board[xpos][test_y - 1] == color) {
+        return true;
+      } else if ((ypos + 2) < 19 && board[xpos][ypos + 2] == color && board[xpos][ypos + 1] == color) {
+        return true;
+      }
+    }
+  // Vertical Down
+  } else if ((test_y = ypos + 3) < 19 && board[xpos][test_y] == color) {
+    if (board[xpos][test_y - 1] == color && board[xpos][test_y - 2] == color) {
+      if ((test_y + 2) < 19 && board[xpos][test_y + 2] == color && board[xpos][test_y + 1] == color) {
+        return true;
+      } else if ((ypos - 2) >= 0 && board[xpos][ypos - 2] == color && board[xpos][ypos - 1] == color) {
+        return true;
+      }
+    }
+  }
+
+  // Diagonal Left UP to Right Down
+  // Diagonal LU
+  if ((test_x = xpos - 3) >= 0 && (test_y = ypos - 3) >= 0 && board[test_x][test_y] == color) {
+    if (board[test_x + 1][test_y + 1] == color && board[test_x + 2][test_y + 2] == color) {
+      if ((test_x - 2) >= 0 && (test_y - 2) >= 0 && board[test_x - 2][test_y - 2] == color && board[test_x - 1][test_y - 1] == color) {
+        return true;
+      } else if ((xpos + 2) < 19 && (ypos + 2) < 19 && board[xpos + 2][ypos + 2] == color && board[xpos + 1][ypos + 1] == color) {
+        return true;
+      }
+    } 
+  // Diagonal RD
+  } else if ((test_x = xpos + 3) < 19 && (test_y = ypos + 3) < 19 && board[test_x][test_y] == color) {
+    if (board[test_x - 1][test_y - 1] == color && board[test_x - 2][test_y - 2] == color) {
+      if ((test_x + 2) < 19 && (test_y + 2) < 19 && board[test_x + 2][test_y + 2] == color && board[test_x + 1][test_y + 1] == color) {
+        return true;
+      } else if ((xpos - 2) >= 0 && (ypos - 2) >= 0 && board[xpos - 2][ypos - 2] == color && board[xpos - 1][ypos - 1] == color) {
+        return true;
+      }
+    } 
+  }
+
+  // Diagonal Left Down to Right Up
+  // Diagonal LD
+  if ((test_x = xpos - 3) >= 0 && (test_y = ypos + 3) < 19 && board[test_x][test_y] == color) {
+    if (board[test_x + 1][test_y - 1] == color && board[test_x + 2][test_y - 2] == color) {
+      if ((test_x - 2) >= 0 && (test_y + 2) < 19 && board[test_x - 2][test_y + 2] == color && board[test_x - 1][test_y + 1] == color) {
+        return true;
+      } else if ((xpos + 2) < 19 && (ypos - 2) >=0 && board[xpos + 2][ypos - 2] == color && board[xpos + 1][ypos - 1] == color) {
+        return true;
+      }
+    }
+  // Diagonal RU
+  } else if ((test_x = xpos + 3) < 19 && (test_y = ypos - 3) >= 0 && board[test_x][test_y] == color) {
+    if (board[test_x - 1][test_y + 1] == color && board[test_x - 2][test_y + 2] == color) {
+      if ((test_x + 2) < 19 && (test_y - 2) >= 0 && board[test_x + 2][test_y - 2] == color && board[test_x + 1][test_y - 1] == color) {
+        return true;
+      } else if ((xpos - 2) >= 0 && (ypos + 2) < 19 && board[xpos - 2][ypos + 2] == color && board[xpos - 1][ypos + 1] == color) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
+
+
+
+
