@@ -3,7 +3,7 @@ using namespace std;
 
 // For Debug
 // CS: search chances
-// VR: Virtual result
+// BD: Board draw
 //
 
 char my_color = (userColor & 1) + 1;
@@ -104,6 +104,7 @@ State& State::SelectionAndExpansion() {
         int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES * 2];
         int empty_count = 0;
         int empty_idx = 0;
+        int empty_try = 0;
         // while (1) {
         //   empty_idx = rand() % 361;
         //   if (board_[empty_idx] == 0) {
@@ -116,13 +117,26 @@ State& State::SelectionAndExpansion() {
         //
         while (1) {
           // Near center
-          empty_idx = rand() % 48;
-          empty_idx = mct_const::NEAR_CENTER[empty_idx];
+          if (empty_try < 8) {
+            empty_idx = rand() % 8;
+            empty_idx = mct_const::NEAR_CENTER1[empty_idx];
+          } else if (empty_try < 24) {
+            empty_idx = rand() % 16;
+            empty_idx = mct_const::NEAR_CENTER2[empty_idx];
+          } else if (empty_try < 48) {
+            empty_idx = rand() % 24;
+            empty_idx = mct_const::NEAR_CENTER3[empty_idx];
+          } else if (empty_try < 80) {
+            empty_idx = rand() % 32;
+            empty_idx = mct_const::NEAR_CENTER3[empty_idx];
+          } else {
+            empty_idx = rand() % 361;
+          }
           if (board_[empty_idx] == 0) {
             empty_list[empty_count++] = empty_idx;
             if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
           }
-          
+          empty_try++;
         }
         for (int born = 0; born < mct_const::NUMBER_OF_MAX_CHILD_NODES; born++) {
           //
@@ -209,18 +223,59 @@ void State::VirtualPlay(int& win_count) {
     int empty_list[4];
     int empty_count = 0;
     int empty_idx = 0;
+    int empty_try = 0;
     bool is_end;
+    // while (1) {
+    //   empty_idx = rand() % 361;
+    //   if (virtual_board[empty_idx] == 0) {
+    //   empty_list[empty_count++] = empty_idx;
+    //     if (empty_count == 4) break;
+    //   }
+    // }
+    // ==========================
+    // Strong random
+    //
     while (1) {
-      empty_idx = rand() % 361;
+      // Near center
+      if (empty_try < 8) {
+        empty_idx = rand() % 8;
+        empty_idx = mct_const::NEAR_CENTER1[empty_idx];
+      } else if (empty_try < 24) {
+        empty_idx = rand() % 16;
+        empty_idx = mct_const::NEAR_CENTER2[empty_idx];
+      } else if (empty_try < 48) {
+        empty_idx = rand() % 24;
+        empty_idx = mct_const::NEAR_CENTER3[empty_idx];
+      } else if (empty_try < 80) {
+        empty_idx = rand() % 32;
+        empty_idx = mct_const::NEAR_CENTER3[empty_idx];
+      } else {
+        empty_idx = rand() % 361;
+      }
       if (virtual_board[empty_idx] == 0) {
         empty_list[empty_count++] = empty_idx;
         if (empty_count == 4) break;
       }
+      empty_try++;
     }
-    // ==========================
     for (int i = 0; i < 2; i++) {
       // Set opponent's stone
       virtual_board[empty_list[i]] = userColor;
+        // BD 15
+        for (int k = 0; k < 19; k++) {
+          for (int j = 0; j < 19; j++) {
+            if (virtual_board[19 * k + j] == 0) {
+              cout << "|   ";
+            } else if (virtual_board[19 * k + j] == 1) {
+              cout << "| O ";
+            } else if (virtual_board[19 * k + j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
       
       // Get Result
       is_end = IsEnd(virtual_board, empty_list[i], userColor);
@@ -231,6 +286,21 @@ void State::VirtualPlay(int& win_count) {
     for (int i = 0; i < 2; i++) {
       // Set player's stone
       virtual_board[empty_list[i+2]] = my_color;
+        // BD 15
+        for (int k = 0; k < 19; k++) {
+          for (int j = 0; j < 19; j++) {
+            if (virtual_board[19* k + j] == 0) {
+              cout << "|   ";
+            } else if (virtual_board[19 * k + j]== 1) {
+              cout << "| O ";
+            } else if (virtual_board[19 * k + j]== 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
 
       // Get Result
       is_end = IsEnd(virtual_board, empty_list[i+2], my_color);
@@ -331,8 +401,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if ((test_x = xpos - 3) >= 0 && board[test_x][ypos] == color) {
     if (board[test_x + 1][ypos] == color && board[test_x + 2][ypos] == color) {
       if ((test_x - 2) >= 0 && board[test_x - 2][ypos] == color && board[test_x - 1][ypos] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((xpos + 2) < 19 && board[xpos + 2][ypos] == color && board[xpos + 1][ypos] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     }
@@ -340,8 +440,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   } else if ((test_x = pos + 3) < 19 && board[test_x][ypos] == color) {
     if (board[test_x - 1][ypos] == color && board[test_x - 2][ypos] == color) {
       if ((test_x + 2) < 19 && board[test_x + 2][ypos] == color && board[test_x + 1][ypos] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((xpos - 2) >= 0 && board[xpos - 2][ypos] == color && board[xpos - 1][ypos] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     }
@@ -352,8 +482,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if ((test_y = ypos - 3) >= 0 && board[xpos][test_y] == color) {
     if (board[xpos][test_y + 1] == color && board[xpos][test_y + 2] == color) {
       if ((test_y - 2) >= 0 && board[xpos][test_y - 2] == color && board[xpos][test_y - 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((ypos + 2) < 19 && board[xpos][ypos + 2] == color && board[xpos][ypos + 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     }
@@ -361,8 +521,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   } else if ((test_y = ypos + 3) < 19 && board[xpos][test_y] == color) {
     if (board[xpos][test_y - 1] == color && board[xpos][test_y - 2] == color) {
       if ((test_y + 2) < 19 && board[xpos][test_y + 2] == color && board[xpos][test_y + 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((ypos - 2) >= 0 && board[xpos][ypos - 2] == color && board[xpos][ypos - 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     }
@@ -373,8 +563,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if ((test_x = xpos - 3) >= 0 && (test_y = ypos - 3) >= 0 && board[test_x][test_y] == color) {
     if (board[test_x + 1][test_y + 1] == color && board[test_x + 2][test_y + 2] == color) {
       if ((test_x - 2) >= 0 && (test_y - 2) >= 0 && board[test_x - 2][test_y - 2] == color && board[test_x - 1][test_y - 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((xpos + 2) < 19 && (ypos + 2) < 19 && board[xpos + 2][ypos + 2] == color && board[xpos + 1][ypos + 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     } 
@@ -382,8 +602,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   } else if ((test_x = xpos + 3) < 19 && (test_y = ypos + 3) < 19 && board[test_x][test_y] == color) {
     if (board[test_x - 1][test_y - 1] == color && board[test_x - 2][test_y - 2] == color) {
       if ((test_x + 2) < 19 && (test_y + 2) < 19 && board[test_x + 2][test_y + 2] == color && board[test_x + 1][test_y + 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((xpos - 2) >= 0 && (ypos - 2) >= 0 && board[xpos - 2][ypos - 2] == color && board[xpos - 1][ypos - 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     } 
@@ -394,8 +644,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if ((test_x = xpos - 3) >= 0 && (test_y = ypos + 3) < 19 && board[test_x][test_y] == color) {
     if (board[test_x + 1][test_y - 1] == color && board[test_x + 2][test_y - 2] == color) {
       if ((test_x - 2) >= 0 && (test_y + 2) < 19 && board[test_x - 2][test_y + 2] == color && board[test_x - 1][test_y + 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((xpos + 2) < 19 && (ypos - 2) >=0 && board[xpos + 2][ypos - 2] == color && board[xpos + 1][ypos - 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     }
@@ -403,8 +683,38 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   } else if ((test_x = xpos + 3) < 19 && (test_y = ypos - 3) >= 0 && board[test_x][test_y] == color) {
     if (board[test_x - 1][test_y + 1] == color && board[test_x - 2][test_y + 2] == color) {
       if ((test_x + 2) < 19 && (test_y - 2) >= 0 && board[test_x + 2][test_y - 2] == color && board[test_x + 1][test_y - 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       } else if ((xpos - 2) >= 0 && (ypos + 2) < 19 && board[xpos - 2][ypos + 2] == color && board[xpos - 1][ypos + 1] == color) {
+        // BD 15
+        for (int i = 0; i < 19; i++) {
+          for (int j = 0; j < 19; j++) {
+            if (board[i][j] == 0) {
+              cout << "|   ";
+            } else if (board[i][j] == 1) {
+              cout << "| O ";
+            } else if (board[i][j] == 2) {
+              cout << "| X ";
+            }
+          }
+          cout << "|\n" << endl;
+        }
+        cout << "\n\n" << endl;
+        // =================================
         return true;
       }
     }
