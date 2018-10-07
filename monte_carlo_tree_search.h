@@ -11,16 +11,28 @@
 #include "board.h"
 using namespace std;
 
+extern board* window;
+extern char userColor;
+
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
   const double TIME = 5;
   const double TERMINATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_MAX_CHILD_NODES = 10;
-  const int NUMBER_OF_ROUNDS = 50;
+  const int NUMBER_OF_ROUNDS = 60;
   const char BLACK = 1;
   const char WHITE = 2;
-};
+  const int NEAR_CENTER[48] = {
+    120, 121, 122, 123, 124, 125, 126, 
+    139, 140, 141, 142, 143, 144, 145,
+    158, 159, 160, 161, 162, 163, 164,
+    177, 178, 179,      181, 182, 183,
+    196, 197, 198, 199, 200, 201, 202,
+    215, 216, 217, 218, 219, 220, 221,
+    234, 235, 236, 237, 238, 239, 240
+  };
+}
 
 // Class to save position of stone in board
 class Position {
@@ -116,4 +128,5 @@ class State {
 
 void MonteCarloTreeSearch();
 bool IsEnd(const char* _board, const int pos, const char color);
+
 #endif

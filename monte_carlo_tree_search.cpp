@@ -1,10 +1,11 @@
 #include "monte_carlo_tree_search.h"
 using namespace std;
 
-// Use window variable which is in main.cpp
-extern board* window;
-// Consider user to opponent
-extern char userColor;
+// For Debug
+// CS: search chances
+// VR: Virtual result
+//
+
 char my_color = (userColor & 1) + 1;
 int best_pos1, best_pos2;
 
@@ -22,12 +23,21 @@ void MonteCarloTreeSearch() {
   // Modify received time to return safely
   double rcv_time = mct_const::TIME - mct_const::TERMINATE_TIME_PADDING;
   
+  // CS: Check how many search chances
+  // int search_chance = 0;
+
   // Play game virtually during received time
   while ((chrono::duration<double>(chrono::system_clock::now() - start)).count() < rcv_time) {
     State& best_child = current.SelectionAndExpansion();
     best_child.Update(best_child.Evaluation());
     current.BestChoice();
+    
+    // CS
+    // search_chance++;
   }
+
+  // CS
+  // cout << "We have " << search_chance << " times search. \n"; 
 }
 
 // Recursive version of Selection and Expansion
@@ -94,14 +104,26 @@ State& State::SelectionAndExpansion() {
         int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES * 2];
         int empty_count = 0;
         int empty_idx = 0;
+        // while (1) {
+        //   empty_idx = rand() % 361;
+        //   if (board_[empty_idx] == 0) {
+        //     empty_list[empty_count++] = empty_idx;
+        //     if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+        //   }
+        // }
+        // ================================
+        // Strong random
+        //
         while (1) {
-          empty_idx = rand() % 361;
+          // Near center
+          empty_idx = rand() % 48;
+          empty_idx = mct_const::NEAR_CENTER[empty_idx];
           if (board_[empty_idx] == 0) {
             empty_list[empty_count++] = empty_idx;
             if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
           }
+          
         }
-        // ================================
         for (int born = 0; born < mct_const::NUMBER_OF_MAX_CHILD_NODES; born++) {
           //
           // Make child state with our strategy MakeChildState();
@@ -203,7 +225,7 @@ void State::VirtualPlay(int& win_count) {
       // Get Result
       is_end = IsEnd(virtual_board, empty_list[i], userColor);
       if (is_end) {
-        break;
+        return;
       }
     }
     for (int i = 0; i < 2; i++) {
@@ -214,12 +236,13 @@ void State::VirtualPlay(int& win_count) {
       is_end = IsEnd(virtual_board, empty_list[i+2], my_color);
       if (is_end) {
         win_count++;
-        break;
+        return;
       } 
     }
   }
   // Check whether win this game
   // win_count += IsWin(virtual_board);
+  
 }
 
 // With thread
@@ -269,7 +292,7 @@ void State::BestChoice() {
       max_idx = i;
     }
   }
-
+  
   best_pos1 = child_list_[max_idx]->change_idx_1_;
   best_pos2 = child_list_[max_idx]->change_idx_2_;
 }
