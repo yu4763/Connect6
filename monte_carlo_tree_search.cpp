@@ -25,7 +25,7 @@ void MonteCarloTreeSearch() {
   double rcv_time = mct_const::TIME - mct_const::TERMINATE_TIME_PADDING;
 
   // CS: Check how many search chances
-  int search_chance = 0;
+  // int search_chance = 0;
 
   // Play game virtually during received time
   while ((chrono::duration<double>(chrono::system_clock::now() - start)).count() < rcv_time) {
@@ -34,11 +34,11 @@ void MonteCarloTreeSearch() {
     current.BestChoice();
 
     // CS
-    search_chance++;
+    // search_chance++;
   }
 
   // CS
-  cout << "We have " << search_chance << " times search. \n";
+  // cout << "We have " << search_chance << " times search. \n";
 }
 
 // Recursive version of Selection and Expansion
