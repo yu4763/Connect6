@@ -78,7 +78,7 @@ void initUCT(float* UCT, char* state, int action, Network CalUCT, float *W1, flo
 
 void addUCT(float* DeepUCT, float* UCT){
 	for (int i = 0; i < 361; i++){
-		UCT[i] += DeepUCT[i];
+		DeepUCT[i] += UCT[i];
 	}
 }
 
