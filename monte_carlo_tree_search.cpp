@@ -258,7 +258,7 @@ void State::VirtualPlay(int& win_count) {
       int empty_count = 0;
       int empty_idx1, empty_idx2;
       int empty_tmp;
-      bool is_end;
+      int is_end;
       for (int near1 = 0; near1 < 8; near1++) {
         if(virtual_board[mct_const::NEAR_CENTER1[near1]] == 0) {
           empty_list[empty_count++] = mct_const::NEAR_CENTER1[near1];
@@ -321,14 +321,20 @@ void State::VirtualPlay(int& win_count) {
 
         // Get Result
         is_end = IsEnd(virtual_board, empty_list[empty_idx1], my_color);
-        if (is_end) {
+        if (is_end == 1) {
+          return;
+        } else if (is_end == -1) {
+          win_count++;
           return;
         }
 
         virtual_board[empty_list[empty_idx2]] = my_color;
 
         is_end = IsEnd(virtual_board, empty_list[empty_idx2], my_color);
-        if (is_end) {
+        if (is_end == 1) {
+          return;
+        } else if (is_end == -1) {
+          win_count++;
           return;
         }
       } else if (turn == 1) {
@@ -343,16 +349,20 @@ void State::VirtualPlay(int& win_count) {
 
         // Get Result
         is_end = IsEnd(virtual_board, empty_list[empty_idx1], userColor);
-        if (is_end) {
+        if (is_end == 1) {
           win_count++;
+          return;
+        } else if (is_end == -1) {
           return;
         }
 
         virtual_board[empty_list[empty_idx2]] = userColor;
 
         is_end = IsEnd(virtual_board, empty_list[empty_idx2], userColor);
-        if (is_end) {
+        if (is_end == 1) {
           win_count++;
+          return;
+        } else if (is_end == -1) {
           return;
         }
       }
@@ -418,7 +428,7 @@ void State::BestChoice() {
   // cout << best_pos1 << ", " << best_pos2 << ": " << child_list_[max_idx]->number_of_visiting_ << " " << child_list_[max_idx]->number_of_wins_ << " " << child_list_[max_idx]->uct_value_ << endl;
 }
 
-bool IsEnd(const char* _board, const int pos, const char color) {
+int IsEnd(const char* _board, const int pos, const char color) {
 
   // ===========================
   // For arbitrary win decision
@@ -452,6 +462,10 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if (((test_x = xpos - 3) >= 0) && (board[ypos][test_x] == color)) {
     if ((board[ypos][test_x + 1] == color) && (board[ypos][test_x + 2] == color)) {
       if (((test_x - 2) >= 0) && (board[ypos][test_x - 2] == color) && (board[ypos][test_x - 1] == color)) {
+        // Detect more than 6
+        if ((((test_x - 3) >= 0) && (board[ypos][test_x - 3] == color)) || (((xpos + 1) < 19) && (board[ypos][xpos + 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -468,8 +482,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "horizontal1 " << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       } else if (((xpos + 2) < 19) && (board[ypos][xpos + 2] == color) && (board[ypos][xpos + 1] == color)) {
+        // Detect more than 6
+        if ((((xpos + 3) < 19) && (board[ypos][xpos + 3] == color)) || (((test_x - 1) >= 0) && (board[ypos][test_x - 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -486,13 +504,17 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "horizontal2 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   // Horizontal Right
   } else if (((test_x = xpos + 3) < 19) && (board[ypos][test_x] == color)) {
     if ((board[ypos][test_x - 1] == color) && (board[ypos][test_x - 2] == color)) {
       if (((test_x + 2) < 19) && (board[ypos][test_x + 2] == color) && (board[ypos][test_x + 1] == color)) {
+        // Detect more than 6
+        if ((((test_x + 3) < 19) && (board[ypos][test_x + 3] == color)) || (((xpos - 1) >= 0) && (board[ypos][xpos - 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -509,8 +531,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "horizontal3 " << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       } else if (((xpos - 2) >= 0) && (board[ypos][xpos - 2] == color) && (board[ypos][xpos - 1] == color)) {
+        // Detect more than 6
+        if ((((xpos - 3) >= 0) && (board[ypos][xpos - 3] == color)) || (((test_x + 1) < 19) && (board[ypos][test_x + 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -527,7 +553,7 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "horizontal4 " << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   }
@@ -537,6 +563,10 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if (((test_y = ypos - 3) >= 0) && (board[test_y][xpos] == color)) {
     if ((board[test_y + 1][xpos] == color) && (board[test_y + 2][xpos] == color)) {
       if (((test_y - 2) >= 0) && (board[test_y - 2][xpos] == color) && (board[test_y - 1][xpos] == color)) {
+        // Detect more than 6
+        if ((((test_y - 3) >= 0) && (board[test_y - 3][xpos] == color)) || (((ypos + 1) < 19) && (board[ypos + 1][xpos] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -553,8 +583,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "vertical1 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       } else if (((ypos + 2) < 19) && (board[ypos + 2][xpos] == color) && (board[ypos + 1][xpos] == color)) {
+        // Detect more than 6
+        if ((((ypos + 3) < 19) && (board[ypos + 3][xpos] == color)) || (((test_y - 1) >= 0) && (board[test_y - 1][xpos] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -571,13 +605,17 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "vertical2 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   // Vertical Down
   } else if (((test_y = ypos + 3) < 19) && (board[test_y][xpos] == color)) {
     if ((board[test_y - 1][xpos] == color) && (board[test_y - 2][xpos] == color)) {
       if (((test_y + 2) < 19) && (board[test_y + 2][xpos] == color) && (board[test_y + 1][xpos] == color)) {
+        // Detect more than 6
+        if ((((test_y + 3) < 19) && (board[test_y + 3][xpos] == color)) || (((ypos - 1) >= 0) && (board[ypos - 1][xpos] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -594,8 +632,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "vertical3 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       } else if (((ypos - 2) >= 0) && (board[ypos - 2][xpos] == color) && (board[ypos - 1][xpos] == color)) {
+        // Detect more than 6
+        if ((((ypos - 3) >= 0) && (board[ypos - 3][xpos] == color)) || (((test_y + 1) < 19) && (board[test_y + 1][xpos] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -612,7 +654,7 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "vertical4 "  << ypos << ", " << xpos << "  " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   }
@@ -622,6 +664,10 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if (((test_x = xpos - 3) >= 0) && ((test_y = ypos - 3) >= 0) && (board[test_y][test_x] == color)) {
     if ((board[test_y + 1][test_x + 1] == color) && (board[test_y + 2][test_x + 2] == color)) {
       if (((test_x - 2) >= 0) && ((test_y - 2) >= 0) && (board[test_y - 2][test_x - 2] == color) && (board[test_y - 1][test_x - 1] == color)) {
+        // Detect more than 6
+        if ((((test_x - 3) >= 0) && ((test_y - 3) >= 0) && (board[test_y - 3][test_x - 3] == color)) || (((ypos + 1) < 19) && ((xpos + 1) < 19) && (board[ypos + 1][xpos + 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -638,8 +684,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LU2RD 1 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       } else if (((xpos + 2) < 19) && ((ypos + 2) < 19) && (board[ypos + 2][xpos + 2] == color) && (board[ypos + 1][xpos + 1] == color)) {
+        // Detect more than 6
+        if ((((xpos + 3) < 19) && ((ypos + 3) < 19) && (board[ypos + 3][xpos + 3] == color)) || (((test_x - 1) >= 0) && ((test_y - 1) >= 0) && (board[test_y - 1][test_x - 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -656,13 +706,17 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LU2RD 2 "  << ypos << ", " << xpos << "  " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   // Diagonal RD
   } else if (((test_x = xpos + 3) < 19) && ((test_y = ypos + 3) < 19) && (board[test_y][test_x] == color)) {
     if ((board[test_y - 1][test_x - 1] == color) && (board[test_y - 2][test_x - 2] == color)) {
       if (((test_x + 2) < 19) && ((test_y + 2) < 19) && (board[test_y + 2][test_x + 2] == color) && (board[test_y + 1][test_x + 1] == color)) {
+        // Detect more than 6
+        if ((((test_x + 3) < 19) && ((test_y + 3) < 19) && (board[test_y + 3][test_x + 3] == color)) || (((xpos - 1) >= 0) && ((ypos - 1) >= 0) && (board[ypos - 1][xpos - 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -679,8 +733,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LU2RD 3 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       } else if (((xpos - 2) >= 0) && ((ypos - 2) >= 0) && (board[ypos - 2][xpos - 2] == color) && (board[ypos - 1][xpos - 1] == color)) {
+        // Detect more than 6
+        if ((((xpos - 3) >= 0) && ((ypos - 3) >= 0) && (board[ypos - 3][xpos - 3] == color)) || (((test_x + 1) < 19) && ((test_y + 1) < 19) && (board[test_y + 1][test_x + 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -697,7 +755,7 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LU2RD 4"  << xpos << " " << ypos << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   }
@@ -707,6 +765,10 @@ bool IsEnd(const char* _board, const int pos, const char color) {
   if (((test_x = xpos - 3) >= 0) && ((test_y = ypos + 3) < 19) && (board[test_y][test_x] == color)) {
     if ((board[test_y - 1][test_x + 1] == color) && (board[test_y - 2][test_x + 2] == color)) {
       if (((test_x - 2) >= 0) && ((test_y + 2) < 19) && (board[test_y + 2][test_x - 2] == color) && (board[test_y + 1][test_x - 1] == color)) {
+        // Detect more than 6
+        if ((((test_x - 3) >= 0) && ((test_y + 3) < 19) && (board[test_y + 3][test_x - 3] == color)) || (((xpos + 1) < 19) && ((ypos - 1) >= 0) && (board[ypos - 1][xpos + 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -723,8 +785,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LD2RU 1 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
-      } else if (((xpos + 2) < 19) && ((ypos - 2) >=0) && (board[ypos - 2][xpos + 2] == color) && (board[ypos - 1][xpos + 1] == color)) {
+        return 1;
+      } else if (((xpos + 2) < 19) && ((ypos - 2) >= 0) && (board[ypos - 2][xpos + 2] == color) && (board[ypos - 1][xpos + 1] == color)) {
+        // Detect more than 6
+        if ((((xpos + 3) < 19) && ((ypos - 3) >= 0) && (board[ypos - 3][xpos + 3] == color)) || (((test_x - 1) >= 0) && ((test_y + 1) < 19) && (board[test_y + 1][test_x - 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -741,13 +807,17 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LD2RU 2 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   // Diagonal RU
   } else if (((test_x = xpos + 3) < 19) && ((test_y = ypos - 3) >= 0) && (board[test_y][test_x] == color)) {
     if ((board[test_y + 1][test_x - 1] == color) && (board[test_y + 2][test_x - 2] == color)) {
       if (((test_x + 2) < 19) && ((test_y - 2) >= 0) && (board[test_y - 2][test_x + 2] == color) && (board[test_y - 1][test_x + 1] == color)) {
+        // Detect more than 6
+        if ((((test_x + 3) < 19) && ((test_y - 3) >= 0) && (board[test_y - 3][test_x + 3] == color)) || (((xpos - 1) >= 0) && ((ypos + 1) < 19) && (board[ypos + 1][xpos - 1] == color))) {
+          return -1;
+        }
         // // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -764,8 +834,12 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LD2RU 3 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       } else if (((xpos - 2) >= 0) && ((ypos + 2) < 19) && (board[ypos + 2][xpos - 2] == color) && (board[ypos + 1][xpos - 1] == color)) {
+        // Detect more than 6
+        if ((((xpos - 3) >= 0) && ((ypos + 3) < 19) && (board[ypos + 3][xpos - 3] == color)) || (((test_x + 1) < 19) && ((test_y - 1) >= 0) && (board[test_y - 1][test_x + 1] == color))) {
+          return -1;
+        }
         // BD 16
         // for (int i = 0; i < 19; i++) {
         //   for (int j = 0; j < 19; j++) {
@@ -782,9 +856,9 @@ bool IsEnd(const char* _board, const int pos, const char color) {
         // cout << "Diagonal LD2RU 4 "  << ypos << ", " << xpos << " " << color << endl;
         // cout << "\n\n" << endl;
         // // =================================
-        return true;
+        return 1;
       }
     }
   }
-  return false;
+  return 0;
 }

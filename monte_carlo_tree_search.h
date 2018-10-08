@@ -150,6 +150,6 @@ class State {
 };
 
 void MonteCarloTreeSearch();
-bool IsEnd(const char* _board, const int pos, const char color);
+int IsEnd(const char* _board, const int pos, const char color);
 
 #endif
