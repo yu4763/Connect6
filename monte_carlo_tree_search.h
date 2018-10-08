@@ -20,7 +20,7 @@ namespace mct_const {
   const double TERMINATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_MAX_CHILD_NODES = 10;
-  const int NUMBER_OF_ROUNDS = 60;
+  const int NUMBER_OF_ROUNDS = 20;
   const char BLACK = 1;
   const char WHITE = 2;
   const int NEAR_CENTER1[8] = {
@@ -132,7 +132,7 @@ class State {
       }
     }
     State& SelectionAndExpansion();
-    void MakeChildState(const int child_idx, const int idx_1, const int idx_2, const char color);
+    void MakeChildState(const int child_idx, const int idx_1, const int idx_2, const int opp_idx1, const int opp_idx2, const char color);
     int Evaluation();
     void VirtualPlay(int& win_count);
     void Update(int result);
