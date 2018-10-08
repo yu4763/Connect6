@@ -5,7 +5,17 @@ using namespace std;
 // CS: search chances
 // BD: Board draw
 // CV: Check value
-//
+
+// To do List
+// 1. Modify input and ouput according to relaying interface
+// 2. Modify board row,col to x,y(two dimensional space)
+// 3. Save board with global
+// 4. Check all the output below
+//  - Decide time padding
+//  - State expansion
+//  - State update
+//  - Over6 condition
+//  - Determine best choice
 
 char my_color = (userColor & 1) + 1;
 int best_pos1, best_pos2;
@@ -159,7 +169,8 @@ State& State::SelectionAndExpansion() {
           empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
           empty_idx4 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
 
-          while ((empty_idx1 == empty_idx2) || (empty_idx1 == empty_idx3) || (empty_idx1 == empty_idx4) || (empty_idx2 == empty_idx3) || (empty_idx2 == empty_idx4) || (empty_idx3 == empty_idx4)) {
+          while ((empty_list[empty_idx1] == empty_list[empty_idx2]) || (empty_list[empty_idx1] == empty_list[empty_idx3]) || (empty_list[empty_idx1] == empty_list[empty_idx4]) || \
+                 (empty_list[empty_idx2] == empty_list[empty_idx3]) || (empty_list[empty_idx2] == empty_list[empty_idx4]) || (empty_list[empty_idx3] == empty_list[empty_idx4])) {
             empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
             empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
             empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
