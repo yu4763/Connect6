@@ -4,6 +4,7 @@ using namespace std;
 // For Debug
 // CS: search chances
 // BD: Board draw
+// CV: Check value
 //
 
 char my_color = (userColor & 1) + 1;
@@ -24,7 +25,7 @@ void MonteCarloTreeSearch() {
   double rcv_time = mct_const::TIME - mct_const::TERMINATE_TIME_PADDING;
 
   // CS: Check how many search chances
-  // int search_chance = 0;
+  int search_chance = 0;
 
   // Play game virtually during received time
   while ((chrono::duration<double>(chrono::system_clock::now() - start)).count() < rcv_time) {
@@ -33,11 +34,11 @@ void MonteCarloTreeSearch() {
     current.BestChoice();
 
     // CS
-    // search_chance++;
+    search_chance++;
   }
 
   // CS
-  // cout << "We have " << search_chance << " times search. \n";
+  cout << "We have " << search_chance << " times search. \n";
 }
 
 // Recursive version of Selection and Expansion
@@ -387,9 +388,10 @@ void State::Update(int result) {
 
     // Base state do not need to update uct value
     if (parent_ != NULL) {
+      current_state->uct_value_ = 0;
       current_state->uct_value_ += 2 * log(parent_->number_of_visiting_ + 1);
       current_state->uct_value_ /= current_state->number_of_visiting_;
-      current_state->uct_value_ = sqrt(current_state->uct_value_);
+      current_state->uct_value_ = 1 * sqrt(current_state->uct_value_);
       current_state->uct_value_ += current_state->number_of_wins_ / current_state->number_of_visiting_;
     }
     current_state = current_state->parent_;
@@ -412,6 +414,8 @@ void State::BestChoice() {
 
   best_pos1 = child_list_[max_idx]->change_idx_1_;
   best_pos2 = child_list_[max_idx]->change_idx_2_;
+  // CV
+  // cout << best_pos1 << ", " << best_pos2 << ": " << child_list_[max_idx]->number_of_visiting_ << " " << child_list_[max_idx]->number_of_wins_ << " " << child_list_[max_idx]->uct_value_ << endl;
 }
 
 bool IsEnd(const char* _board, const int pos, const char color) {
