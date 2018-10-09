@@ -19,8 +19,8 @@ namespace mct_const {
   const double TIME = 5;
   const double TERMINATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
-  const int NUMBER_OF_MAX_CHILD_NODES = 10;
-  const int NUMBER_OF_ROUNDS = 20;
+  const int NUMBER_OF_MAX_CHILD_NODES = 12;
+  const int NUMBER_OF_ROUNDS = 55;
   const char BLACK = 1;
   const char WHITE = 2;
   const int NEAR_CENTER1[8] = {
@@ -136,7 +136,8 @@ class State {
     int Evaluation();
     void VirtualPlay(int& win_count);
     void Update(int result);
-    void BestChoice();
+    // void UCTUpdate();
+    State* BestChoice();
 
   private:
     State* parent_;
@@ -147,6 +148,8 @@ class State {
     int change_idx_1_;
     int change_idx_2_;
     char board_[361];
+    // For Debug
+    friend void MonteCarloTreeSearch();
 };
 
 void MonteCarloTreeSearch();
