@@ -80,3 +80,5 @@ void getbestpair(char* state, int* index1, int* index2, float* W1, float* b1, fl
 	}
 }
 
+
+

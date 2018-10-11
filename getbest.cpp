@@ -14,9 +14,8 @@ void getbestindex(char* state, int* indexes, float* W1, float* b1, float* W2, fl
 
 
 void getbestpair(char* state, int* index1, int* index2, float* W1, float* b1, float* W2, float* b2, Network CalDeepUCT, int first, int second, char color){
-	
 	float DeepUCT[361];
-	initUCT(DeepUCT, state, CalDeepUCT, W1, b1, W2, b2);  
+	initUCT(DeepUCT, state, CalDeepUCT, W1, b1, W2, b2);
 	int temp1[first*second];
 	int temp2[first*second];
 	
@@ -35,11 +34,16 @@ void getbestpair(char* state, int* index1, int* index2, float* W1, float* b1, fl
 				for(int j1 =0; j1<second; j1++){
 					if ( (index1[first*i +j] == index2[first*i1 +j1]) && (index2[first*i +j] == index1[first*i1 +j1]) ){
 						index1[first*i +j] = -1;
-						index2[first*i +j] = -2;
 					}
 				}
 			}
 		}
 	}
+	/*
+	for(int i =0; i<first; i++){
+		for(int j =0; j<second; j++){
+			printf("%d %d\n", index1[first*i +j], index2[first*i +j]);
+		}
+	}
+	*/
 }
-	
