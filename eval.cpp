@@ -120,7 +120,7 @@ void secondbest(char* state, float* UCT, int best, int* indexes, int first){
 		}
 		recentmax = max;
 		indexes[j] = maxindex;
-		//printf("%d %d", max, maxindex);
+		//printf("%d %d\n", first, maxindex);
 	}
 }
 
