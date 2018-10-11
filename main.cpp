@@ -24,12 +24,12 @@ int main(void){
 	float b1[batch * hiddensize] = {2,3,4,4,5,6,7,7,2,1,2,3,4,4,5,6,7,7,2,1,2,3,4,4,5,6,7,7,2,1,2,3,4,4,5,6,7,7,2,1};
 	float W2[hiddensize * outputsize] = {2,3,4,4,5,6,7,7,2,1};
 	float b2[batch * outputsize] = {4,2,1,4};
-	int index1[45]; 
-	int index2[45]; 
+	int index1[25]; 
+	int index2[25]; 
 	
 	getbestindex(state, index1, W1, b1, W2, b2, CalDeepUCT, 45);
 	
-	getbestpair(state, index1, index2, W1, b1, W2, b2, CalDeepUCT, 5, 5, 1);
+	getbestpair(state, index1, index2, W1, b1, W2, b2, CalDeepUCT, 3, 5, 1);
 	
 	
 	return 0;
@@ -58,16 +58,16 @@ void getbestpair(char* state, int* index1, int* index2, float* W1, float* b1, fl
 		updateUCT(DeepUCT, state, temp1[i], CalDeepUCT, W1, b1, W2, b2, color);
 		secondbest(state, DeepUCT, second, temp2, temp1[i]);
 		for(int j =0; j<second; j++){
-			index1[first*i +j] = temp1[i];
-			index2[first*i +j] = temp2[j];
+			index1[second*i +j] = temp1[i];
+			index2[second*i +j] = temp2[j];
 		}
 	}	
 	for(int i =0; i<first; i++){
 		for(int j =0; j<second; j++){
 			for(int i1 =0; i1<first; i1++){
 				for(int j1 =0; j1<second; j1++){
-					if ( (index1[first*i +j] == index2[first*i1 +j1]) && (index2[first*i +j] == index1[first*i1 +j1]) ){
-						index1[first*i +j] = -1;
+					if ( (index1[second*i +j] == index2[second*i1 +j1]) && (index2[second*i +j] == index1[second*i1 +j1]) ){
+						index1[second*i +j] = -1;
 					}
 				}
 			}
@@ -75,7 +75,7 @@ void getbestpair(char* state, int* index1, int* index2, float* W1, float* b1, fl
 	}
 	for(int i =0; i<first; i++){
 		for(int j =0; j<second; j++){
-			printf("%d %d\n", index1[first*i +j], index2[first*i +j]);
+			printf("%d %d\n", index1[second*i +j], index2[second*i +j]);
 		}
 	}
 }
