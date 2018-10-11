@@ -2,27 +2,22 @@
 #define __MONTE_CARLO_TREE_SEARCH_H__
 
 #include <cstdlib>
+#include <cstring>
+#include <cstdio>
 #include <cmath>
 #include <ctime>
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <random>
-#include "board.h"
 using namespace std;
-
-extern board* window;
-extern char userColor;
 
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
   const double TIME = 5;
-  const double TERMINATE_TIME_PADDING = 0.01;
-  const int NUMBER_OF_THREADS = 4;
-  const int NUMBER_OF_MAX_CHILD_NODES = 12;
-  const int NUMBER_OF_ROUNDS = 55;
-  const char BLACK = 1;
-  const char WHITE = 2;
+  const double TERMINATE_TIME_PADDING = 0.5;
+  const int NUMBER_OF_MAX_CHILD_NODES = 20;
+  const int NUMBER_OF_ROUNDS = 40;
   const int NEAR_CENTER1[8] = {
     160, 161, 162,
     179,      181,
@@ -76,7 +71,7 @@ class Position {
       return *this;
     }
     int GetPosition() { return pos_; }
-  
+
   private:
     int pos_;
 };
@@ -107,23 +102,6 @@ class State {
         board_[i] = board[i];
       }
     }
-        
-    // Construction using board
-    State(const board& board_ref) 
-      : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_1_(-1), change_idx_2_(-1) {
-      for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
-        child_list_[i] = NULL;
-      }
-      for (int i = 0; i < 19; i++) {
-        for (int j = 0; j < 19; j++) {
-          board_[19 * i + j] = board_ref.stones[i][j]->state;
-        }
-      }
-    }
-    
-    // If it is needed, then implement constructor using stones' chage index
-    State(const int idx1, const int idx2);
-
     ~State() {
       for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         if (child_list_[i]) {
@@ -136,7 +114,6 @@ class State {
     int Evaluation();
     void VirtualPlay(int& win_count);
     void Update(int result);
-    // void UCTUpdate();
     State* BestChoice();
 
   private:
