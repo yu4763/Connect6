@@ -7,12 +7,15 @@ char userColor = 1;
 extern int cnt;
 extern int best_pos1;
 extern int best_pos2;
+int game_len = 0;
+int indexes[361];
 
 extern float W1[110];
 extern float b1[40];
 extern float W2[10];
 extern float b2[4];
 extern Network score_board;
+
 
 board::board() : QWidget(){
 
@@ -97,9 +100,11 @@ void board::FirstHandleClick(){
     int i = 9;
     int k = 9;
     cnt++;
+    indexes[game_len] = i*stoneNum + k;
     stones[i][k]->setUpdatesEnabled(true);
     stones[i][k]->update();
     stones[i][k]->state = -userColor+3;
+
 
 }
 void board::WhiteHandleClick(){
@@ -110,12 +115,18 @@ void board::WhiteHandleClick(){
 
     if(cnt == 1){
 
+        game_len++;
+        indexes[game_len] = best_pos1;
+
         k = best_pos1%stoneNum;
         i = best_pos1/stoneNum;
 
     }
 
     else{
+
+        game_len++;
+        indexes[game_len] = best_pos2;
 
         k = best_pos2%stoneNum;
         i = best_pos2/stoneNum;
@@ -136,12 +147,18 @@ void board::BlackHandleClick(){
 
     if(cnt == 1){
 
+        game_len++;
+        indexes[game_len] = best_pos1;
+
         k = best_pos1%stoneNum;
         i = best_pos1/stoneNum;
 
     }
 
     else{
+
+        game_len++;
+        indexes[game_len] = best_pos2;
 
         k = best_pos2%stoneNum;
         i = best_pos2/stoneNum;
@@ -151,6 +168,8 @@ void board::BlackHandleClick(){
     stones[i][k]->setUpdatesEnabled(true);
     stones[i][k]->update();
     stones[i][k]->state = userColor;
+
+
 }
 
 
