@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = connect61.0.0
-DISTDIR = /home/hanna/connect6/.tmp/connect61.0.0
+DISTDIR = /home/hanna/Connect6/.tmp/connect61.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/hanna/Qt5.11.2/5.11.2/gcc_64/lib
 LIBS          = $(SUBLIBS) -L/home/hanna/Qt5.11.2/5.11.2/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -51,11 +51,13 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = board.cpp \
+		getbest.cpp \
 		main.cpp \
 		stone.cpp \
 		tempCalculation.cpp moc_board.cpp \
 		moc_stone.cpp
 OBJECTS       = board.o \
+		getbest.o \
 		main.o \
 		stone.o \
 		tempCalculation.o \
@@ -250,7 +252,12 @@ DIST          = ../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/yacc.prf \
 		../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/lex.prf \
 		connect6.pro board.h \
+		eval.h \
+		function.h \
+		monte_carlo_tree_search.h \
+		network.h \
 		stone.h board.cpp \
+		getbest.cpp \
 		main.cpp \
 		stone.cpp \
 		tempCalculation.cpp
@@ -665,8 +672,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents board.h stone.h $(DISTDIR)/
-	$(COPY_FILE) --parents board.cpp main.cpp stone.cpp tempCalculation.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents board.h eval.h function.h monte_carlo_tree_search.h network.h stone.h $(DISTDIR)/
+	$(COPY_FILE) --parents board.cpp getbest.cpp main.cpp stone.cpp tempCalculation.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1034,7 +1041,7 @@ moc_board.cpp: ../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QApplication \
 		board.h \
 		moc_predefs.h \
 		../Qt5.11.2/5.11.2/gcc_64/bin/moc
-	/home/hanna/Qt5.11.2/5.11.2/gcc_64/bin/moc $(DEFINES) --include /home/hanna/connect6/moc_predefs.h -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/mkspecs/linux-g++ -I/home/hanna/connect6 -I/home/hanna/connect6 -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtWidgets -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtGui -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include board.h -o moc_board.cpp
+	/home/hanna/Qt5.11.2/5.11.2/gcc_64/bin/moc $(DEFINES) --include /home/hanna/Connect6/moc_predefs.h -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/mkspecs/linux-g++ -I/home/hanna/Connect6 -I/home/hanna/Connect6 -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtWidgets -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtGui -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include board.h -o moc_board.cpp
 
 moc_stone.cpp: ../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QApplication \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qapplication.h \
@@ -1364,7 +1371,7 @@ moc_stone.cpp: ../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QApplication \
 		stone.h \
 		moc_predefs.h \
 		../Qt5.11.2/5.11.2/gcc_64/bin/moc
-	/home/hanna/Qt5.11.2/5.11.2/gcc_64/bin/moc $(DEFINES) --include /home/hanna/connect6/moc_predefs.h -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/mkspecs/linux-g++ -I/home/hanna/connect6 -I/home/hanna/connect6 -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtWidgets -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtGui -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include stone.h -o moc_stone.cpp
+	/home/hanna/Qt5.11.2/5.11.2/gcc_64/bin/moc $(DEFINES) --include /home/hanna/Connect6/moc_predefs.h -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/mkspecs/linux-g++ -I/home/hanna/Connect6 -I/home/hanna/Connect6 -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtWidgets -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtGui -I/home/hanna/Qt5.11.2/5.11.2/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include stone.h -o moc_stone.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1713,8 +1720,15 @@ board.o: board.cpp function.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qlabel.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
-		stone.h
+		stone.h \
+		eval.h \
+		network.h \
+		monte_carlo_tree_search.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o board.o board.cpp
+
+getbest.o: getbest.cpp network.h \
+		eval.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o getbest.o getbest.cpp
 
 main.o: main.cpp ../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/QApplication \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qapplication.h \
@@ -2714,6 +2728,10 @@ tempCalculation.o: tempCalculation.cpp function.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtWidgets/qframe.h \
 		../Qt5.11.2/5.11.2/gcc_64/include/QtCore/QTimer \
 		stone.h \
+		eval.h \
+		network.h \
+		eval.cpp \
+		network.cpp \
 		monte_carlo_tree_search.h \
 		monte_carlo_tree_search.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tempCalculation.o tempCalculation.cpp

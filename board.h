@@ -23,14 +23,14 @@ class board : public QWidget {
         board();
         void paintEvent(QPaintEvent*);
         public slots:
-            void handleButton();
             void changeLabel();
             void emptyLabel();
-            void handleClick();
+            void FirstHandleClick();
+            void BlackHandleClick();
+            void WhiteHandleClick();
 
     private:
         int x, y;
-        QPushButton *startButton;
         QLabel *statusLabel;
     public:
         stone *stones[stoneNum][stoneNum];

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_board_t {
-    QByteArrayData data[6];
-    char stringdata0[55];
+    QByteArrayData data[7];
+    char stringdata0[81];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,15 +32,17 @@ struct qt_meta_stringdata_board_t {
 static const qt_meta_stringdata_board_t qt_meta_stringdata_board = {
     {
 QT_MOC_LITERAL(0, 0, 5), // "board"
-QT_MOC_LITERAL(1, 6, 12), // "handleButton"
-QT_MOC_LITERAL(2, 19, 0), // ""
-QT_MOC_LITERAL(3, 20, 11), // "changeLabel"
-QT_MOC_LITERAL(4, 32, 10), // "emptyLabel"
-QT_MOC_LITERAL(5, 43, 11) // "handleClick"
+QT_MOC_LITERAL(1, 6, 11), // "changeLabel"
+QT_MOC_LITERAL(2, 18, 0), // ""
+QT_MOC_LITERAL(3, 19, 10), // "emptyLabel"
+QT_MOC_LITERAL(4, 30, 16), // "FirstHandleClick"
+QT_MOC_LITERAL(5, 47, 16), // "BlackHandleClick"
+QT_MOC_LITERAL(6, 64, 16) // "WhiteHandleClick"
 
     },
-    "board\0handleButton\0\0changeLabel\0"
-    "emptyLabel\0handleClick"
+    "board\0changeLabel\0\0emptyLabel\0"
+    "FirstHandleClick\0BlackHandleClick\0"
+    "WhiteHandleClick"
 };
 #undef QT_MOC_LITERAL
 
@@ -50,7 +52,7 @@ static const uint qt_meta_data_board[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -58,12 +60,14 @@ static const uint qt_meta_data_board[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   34,    2, 0x0a /* Public */,
-       3,    0,   35,    2, 0x0a /* Public */,
-       4,    0,   36,    2, 0x0a /* Public */,
-       5,    0,   37,    2, 0x0a /* Public */,
+       1,    0,   39,    2, 0x0a /* Public */,
+       3,    0,   40,    2, 0x0a /* Public */,
+       4,    0,   41,    2, 0x0a /* Public */,
+       5,    0,   42,    2, 0x0a /* Public */,
+       6,    0,   43,    2, 0x0a /* Public */,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -78,10 +82,11 @@ void board::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         board *_t = static_cast<board *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->handleButton(); break;
-        case 1: _t->changeLabel(); break;
-        case 2: _t->emptyLabel(); break;
-        case 3: _t->handleClick(); break;
+        case 0: _t->changeLabel(); break;
+        case 1: _t->emptyLabel(); break;
+        case 2: _t->FirstHandleClick(); break;
+        case 3: _t->BlackHandleClick(); break;
+        case 4: _t->WhiteHandleClick(); break;
         default: ;
         }
     }
@@ -113,13 +118,13 @@ int board::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
