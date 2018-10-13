@@ -56,7 +56,7 @@ void board::changeLabel(){
     if(result == 1){
         userStatus = true;
         statusLabel->setText("White Computer Win!!");
-        GameEnd(DATA, LABEL, true);
+        //GameEnd(DATA, LABEL, true);
     }
     else if(result == 2){
         userStatus = true;
