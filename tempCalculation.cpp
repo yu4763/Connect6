@@ -1,5 +1,9 @@
 #include <function.h>
 #include <stdio.h>
+#include "eval.h"
+#include "eval.cpp"
+#include "network.h"
+#include "network.cpp"
 #include "monte_carlo_tree_search.h"
 #include "monte_carlo_tree_search.cpp"
 

@@ -9,6 +9,8 @@
 #include <chrono>
 #include <random>
 #include "board.h"
+#include "eval.h"
+#include "network.h"
 using namespace std;
 
 extern board* window;
@@ -18,9 +20,10 @@ extern char userColor;
 namespace mct_const {
   const double TIME = 5;
   const double TERMINATE_TIME_PADDING = 0.01;
-  const int NUMBER_OF_THREADS = 4;
-  const int NUMBER_OF_MAX_CHILD_NODES = 12;
-  const int NUMBER_OF_ROUNDS = 55;
+  // const int NUMBER_OF_THREADS = 4;
+  const int NUMBER_OF_BEST_POS = 4;
+  const int NUMBER_OF_MAX_CHILD_NODES = 16; // NUMBER_OF_POS ^ 2
+  const int NUMBER_OF_ROUNDS = 40;
   const char BLACK = 1;
   const char WHITE = 2;
   const int NEAR_CENTER1[8] = {
@@ -131,8 +134,8 @@ class State {
         }
       }
     }
-    State& SelectionAndExpansion();
-    void MakeChildState(const int child_idx, const int idx_1, const int idx_2, const int opp_idx1, const int opp_idx2, const char color);
+    State* SelectionAndExpansion();
+    void MakeChildState(const int child_idx, const int idx_1, const int idx_2, const char color);
     int Evaluation();
     void VirtualPlay(int& win_count);
     void Update(int result);

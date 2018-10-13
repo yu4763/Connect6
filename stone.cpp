@@ -60,9 +60,8 @@ void stone::mousePressEvent(QMouseEvent*){
 
 
     if( userStatus && state == 0 ){
-        cnt++;
-        this->setUpdatesEnabled(true);
-
+        //cnt++;
+        //this->setUpdatesEnabled(false);
     }
 
 
