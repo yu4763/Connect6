@@ -17,10 +17,10 @@ using namespace std;
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
   const double TIME = 5;
-  const double TERMINATE_TIME_PADDING = 0.01;
+  const double TERMINATE_TIME_PADDING = 1;
   // const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_BEST_POS = 4;
-  const int NUMBER_OF_MAX_CHILD_NODES = 256; // NUMBER_OF_POS ^ 4
+  const int NUMBER_OF_MAX_CHILD_NODES = 16; // NUMBER_OF_POS ^ 2
   const int NUMBER_OF_ROUNDS = 40;
   const char BLACK = 1;
   const char WHITE = 2;

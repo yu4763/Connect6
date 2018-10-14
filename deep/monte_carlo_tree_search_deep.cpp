@@ -1,8 +1,8 @@
 #include "monte_carlo_tree_search_deep.h"
 using namespace std;
 
-const char my_color = 1;
-const char userColor = 2;
+const char my_color = 2;
+const char userColor = 1;
 int best_pos1, best_pos2;
 
 extern int board[19][19];
@@ -23,10 +23,11 @@ int batch = 4;
 // float score[361] = {0};
 
 Network score_board(batch, input_size, hidden_size, output_size);
-float W1[110] = {0.0};
-float b1[40] = {0.0};
-float W2[10] = {0.0};
-float b2[4] = {1.0, 1.0, 1.0, 1.0};
+float W1[110] = {1, 2, 3, 4, 5, 6, };
+float b1[40] = {2, 3, 4, 4, 5, 6, 7, 7, 2, 1, 2, 3, 4, 4, 5, 6, 7, \
+  7, 2, 1, 2, 3, 4, 4, 5, 6, 7, 7 ,2, 1, 2, 3, 4, 4, 5, 6, 7, 7, 2, 1};
+float W2[10] = {2, 3, 4, 4, 5, 6, 7, 7, 2, 1};
+float b2[4] = {4, 2, 1, 4};
 // ====================================================================
 
 // Main MonteCarloTreeSearch Implemetation
@@ -77,31 +78,29 @@ State& State::SelectionAndExpansion() {
       int index1[mct_const::NUMBER_OF_BEST_POS];
       int index2[mct_const::NUMBER_OF_BEST_POS];
       int sq_pos = pow(mct_const::NUMBER_OF_BEST_POS, 2);
-      int cube_pos = pow(mct_const::NUMBER_OF_BEST_POS, 3);
+      int counter = 0;
       // Set my stones
-      GetBestPair(best_child->board_, index1, index2, W1, b1, W2, b2, score_board, \
-                  mct_const::NUMBER_OF_BEST_POS, mct_const::NUMBER_OF_BEST_POS, my_color);
-      for (int i = 0; i < mct_const::NUMBER_OF_BEST_POS; i++){
+      GetBestIndex(best_child->board_, index1, W1, b1, W2, b2, score_board, mct_const::NUMBER_OF_BEST_POS);
+      for (int i = 0; i < mct_const::NUMBER_OF_BEST_POS; i++) {
         for (int j = 0; j < mct_const::NUMBER_OF_BEST_POS; j++) {
-          for (int k = 0; k < sq_pos; k++) {
-            best_child->MakeChildState(cube_pos * i + sq_pos * j + k , \
-                index1[i], index2[j], my_color);
-          }
+          best_child->MakeChildState(mct_const::NUMBER_OF_BEST_POS * i + j, index1[i], index1[i], my_color);
         }
+      }
+      for (int i = 0; i < mct_const::NUMBER_OF_BEST_POS; i++) {
+        GetBestIndex(best_child->child_list_[mct_const::NUMBER_OF_BEST_POS * i]->board_, index2, W1, b1, W2, b2, score_board, mct_const::NUMBER_OF_BEST_POS);
+        for (int j = 0; j < mct_const::NUMBER_OF_BEST_POS; j++) {
+          best_child->child_list_[mct_const::NUMBER_OF_BEST_POS * i + j]->board_[index2[j]] = my_color;
+          best_child->child_list_[mct_const::NUMBER_OF_BEST_POS * i + j]->change_idx_2_ = index2[j];
+        }
+      }
+      // Set opponent's stones
+      for (int i = 0; i < sq_pos; i ++) {
+        GetBestIndex(best_child->child_list_[i]->board_, index1, W1, b1, W2, b2, score_board, 1);
+        best_child->child_list_[i]->board_[index1[0]] = userColor;
+        GetBestIndex(best_child->child_list_[i]->board_, index2, W1, b1, W2, b2, score_board, 1);
+        best_child->child_list_[i]->board_[index2[0]] = userColor;
       }
 
-      // Set opponent's stones
-      for (int i = 0; i < sq_pos; i++) {
-        GetBestPair(best_child->child_list_[sq_pos * i]->board_, index1, index2, \
-            W1, b1, W2, b2, score_board, \
-            mct_const::NUMBER_OF_BEST_POS, mct_const:: NUMBER_OF_BEST_POS, userColor);
-        for (int j = 0; j < mct_const::NUMBER_OF_BEST_POS; j++) {
-          for (int k = 0; k < mct_const::NUMBER_OF_BEST_POS; k++) {
-            best_child->child_list_[sq_pos * i + mct_const::NUMBER_OF_BEST_POS * j + k]->board_[index1[j]] = userColor;
-            best_child->child_list_[sq_pos * i + mct_const::NUMBER_OF_BEST_POS * j + k]->board_[index2[k]] = userColor;
-          }
-        }
-      }
       // =================================================================================
       return *(best_child->child_list_[0]);
     } else {
