@@ -18,7 +18,7 @@ extern char userColor;
 
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
-  const double TIME = 5;
+  const double TIME = 3;
   const double TERMINATE_TIME_PADDING = 0.01;
   // const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_BEST_POS = 4;

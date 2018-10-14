@@ -10,6 +10,8 @@
 #include <QLabel>
 #include <QTimer>
 #include <stone.h>
+#include "network.h"
+
 
 #define stoneNum 19
 #define stoneSize 40
@@ -36,5 +38,8 @@ class board : public QWidget {
         stone *stones[stoneNum][stoneNum];
 
 };
+
+void saveDATASET(char* DATASET, char* state, int index, int len);
+void GameEnd(char* DATASET1, char* DATASET2, Network score_board, int len1, int len2, bool win);
 
 #endif

@@ -26,7 +26,7 @@ void stone::paintEvent(QPaintEvent*){
             QPen myPen(Qt::white, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
-            state = 2;
+            state = -1;
         }
 
         this->setUpdatesEnabled(false);
@@ -34,7 +34,7 @@ void stone::paintEvent(QPaintEvent*){
 
     }
     else{
-        if(userColor == 2){
+        if(userColor == -1){
             QPen myPen(Qt::black, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
@@ -44,7 +44,7 @@ void stone::paintEvent(QPaintEvent*){
             QPen myPen(Qt::white, Qt::SolidLine);
             painter.setPen(myPen);
             painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
-            state = 2;
+            state = -1;
         }
 
         this->setUpdatesEnabled(false);

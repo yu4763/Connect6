@@ -8,6 +8,7 @@ Network::Network(int _batch, int _inputsize, int _hiddensize, int _outputsize){
 
 void saveWeight(float* W1, float* b1, float* W2, float* b2, bool black){
 	FILE *file;
+	printf("saving");
 	if (black){
 		file = fopen("BlackWeights", "w");
 
@@ -46,11 +47,13 @@ void saveWeight(float* W1, float* b1, float* W2, float* b2, bool black){
 			fprintf(file, "%f ", b2[i]);
 		}		
 	}
+	fclose(file);
+	printf("saving done");
 }
 
 void loadWeight(float* W1, float* b1, float* W2, float* b2,  bool black){
+	FILE *file;
 	if (black){
-		FILE *file;
 		file = fopen("BlackWeights", "r");
 
 		for(int i = 0; i<110; i++){
@@ -70,7 +73,6 @@ void loadWeight(float* W1, float* b1, float* W2, float* b2,  bool black){
 		}
 	}
 	else{
-		FILE *file;
 		file = fopen("BlackWeights", "r");
 
 		for(int i = 0; i<110; i++){
@@ -89,6 +91,7 @@ void loadWeight(float* W1, float* b1, float* W2, float* b2,  bool black){
 			fscanf(file, "%f ", &b2[i]);
 		}	
 	}
+	fclose(file);
 }
 
 void Network::getoutput(float *W1, float *b1, float *W2, float *b2, char* DATA, float* OUTPUT){
