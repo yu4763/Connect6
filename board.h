@@ -26,7 +26,9 @@ class board : public QWidget {
             void handleButton();
             void changeLabel();
             void emptyLabel();
-            void handleClick();
+            void FirstHandleClick();
+            void BlackHandleClick();
+            void WhiteHandleClick();
 
     private:
         int x, y;
