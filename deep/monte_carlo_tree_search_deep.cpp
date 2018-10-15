@@ -1,8 +1,8 @@
 #include "monte_carlo_tree_search_deep.h"
 using namespace std;
 
-const char my_color = 2;
-const char userColor = 1;
+const char my_color = 1;
+const char userColor = -1;
 int best_pos1, best_pos2;
 
 extern int board[19][19];
@@ -40,7 +40,11 @@ void MonteCarloTreeSearch() {
   for (int i = 0; i < 19; i++) {
     int row = 19 * i;
     for (int j = 0; j < 19; j++) {
-          window[row + j] = board[i][j];
+      if (board[i][j] == 2) {
+        window[row + j] = -1;
+      } else {
+        window[row + j] = board[i][j];
+      }
     }
   }
   // Get Board and set current state

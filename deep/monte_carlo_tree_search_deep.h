@@ -22,40 +22,6 @@ namespace mct_const {
   const int NUMBER_OF_BEST_POS = 4;
   const int NUMBER_OF_MAX_CHILD_NODES = 16; // NUMBER_OF_POS ^ 2
   const int NUMBER_OF_ROUNDS = 40;
-  const char BLACK = 1;
-  const char WHITE = 2;
-  const int NEAR_CENTER1[8] = {
-    160, 161, 162,
-    179,      181,
-    198, 199, 200
-  };
-  const int NEAR_CENTER2[16] = {
-    140, 141, 142, 143, 144,
-    159,                163,
-    178,                182,
-    197,                201,
-    216, 217, 218, 219, 220
-  };
-  const int NEAR_CENTER3[24] = {
-    120, 121, 122, 123, 124, 125, 126,
-    139,                          145,
-    158,                          164,
-    177,                          183,
-    196,                          202,
-    215,                          221,
-    234, 235, 236, 237, 238, 239, 240
-  };
-  const int NEAR_CENTER4[32] = {
-    100, 101, 102, 103, 104, 105, 106, 107, 108,
-    119,                                    127,
-    138,                                    146,
-    157,                                    165,
-    176,                                    184,
-    195,                                    203,
-    214,                                    222,
-    233,                                    241,
-    252, 253, 254, 255, 256, 257, 258, 259, 260
-  };
 }
 
 // Class to save position of stone in board
@@ -137,7 +103,7 @@ class State {
     int change_idx_2_;
     char board_[361];
     // For Debug
-    friend void MonteCarloTreeSearch();
+    // friend void MonteCarloTreeSearch();
 };
 
 void MonteCarloTreeSearch();
