@@ -1,18 +1,39 @@
-#include "monte_carlo_tree_search.h"
+#include "monte_carlo_tree_search_deep.h"
 using namespace std;
 
-const char my_color = 2;
+const char my_color = -1;
 const char userColor = 1;
 int best_pos1, best_pos2;
 
 extern int board[19][19];
 
+// ====================================================================
+// ************************** < Deep Learning > ***********************
+//                               * Change *
+//                             state => bstate
+//                               UCT => score
+//                        CalDeepUCT => score_board
+//
+int input_size = 11;
+int hidden_size = 10;
+int output_size = 1;
+int batch = 4;
+
+// char bstate[361];
+// float score[361] = {0};
+
+Network score_board(batch, input_size, hidden_size, output_size);
+float W1[110] = {0.4861,0.7128,-0.2039,-0.2234,0.5542,0.4818,1.1016,0.5619,0.1123,-0.2307,0.6434,1.0494,-0.3328,-0.7888,0.7962,0.7770,1.6928,-0.1019,-0.4037,-0.5478,0.6584,12.9292,-0.0486,-1.1102,1.5440,0.4683,-3.6548,0.6664,-0.7352,-1.1583,19.0214,-6.4903,2.0214,-0.8613,3.0790,0.5439,\
+  -4.2066,0.7813,-1.4816,-1.4619,-13.6157,-2.0031,1.6530,-0.2923,3.3260,0.7729,4.6276,1.5423,-1.9160,-2.0843,0.5079,-1.1777,0.1840,-0.4112,1.3126,0.3635,-0.8112,-0.4158,0.4746,-1.1001,2.8636,1.7081,-11.3290,1.1701,18.5662,-2.0117,0.5348,-1.6124,-0.1008,-2.4072,2.5549,1.1915,-1.4798,1.3488,\
+  -15.6656,3.0098,-0.4666,-2.3336,0.3723,-1.7225,1.6522,0.6421,11.4877,0.8859,1.9072,-0.1442,-1.7397,4.7702,0.5818,-1.1990,1.3050,0.0884,3.3730,0.5116,1.2800,0.4814,0.4004,0.9201,0.5790,-0.6684,0.4874,0.7251,0.1224,-0.0620,0.7607,0.2064,1.9619,0.5380,0.2100,-0.2411};
+float b1[40] = {10.6849,6.0581,-3.7608,-2.8541,9.4082,0.9127,0.9896,2.0188,2.9215,-3.2534,10.6849,6.0581,-3.7608,-2.8541,9.4082,0.9127,0.9896,2.0188,2.9215,-3.2534,10.6849,6.0581,-3.7608,-2.8541,9.4082,0.9127,0.9896,2.0188,2.9215,-3.2534,10.6849,6.0581,-3.7608,-2.8541,9.4082,0.9127,0.9896,\
+  2.0188,2.9215,-3.2534};
+float W2[10] = {10.6010,8.9444,-3.2706,37.4749,9.7365,14.5639,6.8975,9.1706,-33.1780,42.8233};
+float b2[4] = {-3.9451,-3.9451,-3.9451,-3.9451};
+// ====================================================================
+
 // Main MonteCarloTreeSearch Implemetation
 void MonteCarloTreeSearch() {
-  // Test
-  ofstream out("out.txt", ios::app);
-  out << "white" << endl;
-  out.close();
   // Calculate start time
   chrono::system_clock::time_point start = chrono::system_clock::now();
 
@@ -21,7 +42,11 @@ void MonteCarloTreeSearch() {
   for (int i = 0; i < 19; i++) {
     int row = 19 * i;
     for (int j = 0; j < 19; j++) {
-          window[row + j] = board[i][j];
+      if (board[i][j] == 2) {
+        window[row + j] = -1;
+      } else {
+        window[row + j] = board[i][j];
+      }
     }
   }
   // Get Board and set current state
@@ -53,59 +78,36 @@ State& State::SelectionAndExpansion() {
     double max_uct_value = 0;
     // Case1) No child
     if (best_child->child_list_[0] == NULL) {
-      int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES * 2];
-      int empty_count = 0;
-      int empty_tmp;
-      int empty_idx1, empty_idx2, empty_idx3, empty_idx4;
-      for (int near1 = 0; near1 < 8; near1++) {
-        if(board_[mct_const::NEAR_CENTER1[near1]] == 0) {
-          empty_list[empty_count++] = mct_const::NEAR_CENTER1[near1];
+      // =================================================================================
+      // < Deep Learning >
+      // For get one pair of indexes at once
+      int index1[mct_const::NUMBER_OF_BEST_POS];
+      int index2[mct_const::NUMBER_OF_BEST_POS];
+      int sq_pos = pow(mct_const::NUMBER_OF_BEST_POS, 2);
+      int counter = 0;
+      // Set my stones
+      GetBestIndex(best_child->board_, index1, W1, b1, W2, b2, score_board, mct_const::NUMBER_OF_BEST_POS);
+      for (int i = 0; i < mct_const::NUMBER_OF_BEST_POS; i++) {
+        for (int j = 0; j < mct_const::NUMBER_OF_BEST_POS; j++) {
+          best_child->MakeChildState(mct_const::NUMBER_OF_BEST_POS * i + j, index1[i], index1[i], my_color);
         }
       }
-      for (int near2 = 0; near2 < 16; near2++) {
-        if(board_[mct_const::NEAR_CENTER2[near2]] == 0) {
-          empty_list[empty_count++] = mct_const::NEAR_CENTER2[near2];
-          if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+      for (int i = 0; i < mct_const::NUMBER_OF_BEST_POS; i++) {
+        GetBestIndex(best_child->child_list_[mct_const::NUMBER_OF_BEST_POS * i]->board_, index2, W1, b1, W2, b2, score_board, mct_const::NUMBER_OF_BEST_POS);
+        for (int j = 0; j < mct_const::NUMBER_OF_BEST_POS; j++) {
+          best_child->child_list_[mct_const::NUMBER_OF_BEST_POS * i + j]->board_[index2[j]] = my_color;
+          best_child->child_list_[mct_const::NUMBER_OF_BEST_POS * i + j]->change_idx_2_ = index2[j];
         }
       }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
-        for (int near3 = 0; near3 < 24; near3++) {
-          if(board_[mct_const::NEAR_CENTER3[near3]] == 0) {
-            empty_list[empty_count++] = mct_const::NEAR_CENTER3[near3];
-            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
-          }
-        }
+      // Set opponent's stones
+      for (int i = 0; i < sq_pos; i ++) {
+        GetBestIndex(best_child->child_list_[i]->board_, index1, W1, b1, W2, b2, score_board, 1);
+        best_child->child_list_[i]->board_[index1[0]] = userColor;
+        GetBestIndex(best_child->child_list_[i]->board_, index2, W1, b1, W2, b2, score_board, 1);
+        best_child->child_list_[i]->board_[index2[0]] = userColor;
       }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
-        for (int near4 = 0; near4 < 32; near4++) {
-           if(board_[mct_const::NEAR_CENTER4[near4]] == 0) {
-             empty_list[empty_count++] = mct_const::NEAR_CENTER4[near4];
-             if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
-          }
-        }
-      }
-      while (empty_count < mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
-        empty_tmp = rand() % 361;
-        if (board_[empty_tmp] == 0) {
-          empty_list[empty_count++] = empty_tmp;
-        }
-      }
-      for (int iter = 0; iter < mct_const::NUMBER_OF_MAX_CHILD_NODES; iter++) {
-        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx4 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
 
-        while ((empty_list[empty_idx1] == empty_list[empty_idx2]) || (empty_list[empty_idx1] == empty_list[empty_idx3]) || (empty_list[empty_idx1] == empty_list[empty_idx4]) || \
-               (empty_list[empty_idx2] == empty_list[empty_idx3]) || (empty_list[empty_idx2] == empty_list[empty_idx4]) || (empty_list[empty_idx3] == empty_list[empty_idx4])) {
-          empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-          empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-          empty_idx4 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        }
-        // Make with my color
-        best_child->MakeChildState(iter, empty_list[empty_idx1], empty_list[empty_idx2], empty_list[empty_idx3], empty_list[empty_idx4], my_color);
-        }
+      // =================================================================================
       return *(best_child->child_list_[0]);
     } else {
       // There are child nodes
@@ -127,21 +129,19 @@ State& State::SelectionAndExpansion() {
           max_uct_value = child_state->uct_value_;
         }
       }
-    }
+      }
     // Update Best child
     best_child = best_child->child_list_[max_idx];
   }
 }
 
-void State::MakeChildState(const int child_idx, const int idx_1, const int idx_2, const int opp_idx1, const int opp_idx2, const char color) {
+void State::MakeChildState(const int child_idx, const int idx_1, const int idx_2, const char color) {
   child_list_[child_idx] = new State(*this);
   child_list_[child_idx]->parent_ = this;
 
   // Set with my_color
   child_list_[child_idx]->board_[idx_1] = color;
   child_list_[child_idx]->board_[idx_2] = color;
-  child_list_[child_idx]->board_[opp_idx1] = (color & 1) + 1;
-  child_list_[child_idx]->board_[opp_idx2] = (color & 1) + 1;
 
   child_list_[child_idx]->change_idx_1_ = idx_1;
   child_list_[child_idx]->change_idx_2_ = idx_2;
@@ -165,100 +165,50 @@ void State::VirtualPlay(int& win_count) {
 
   // Do Connect6 randomly according to expected strategy
   for (int round = 0; round < mct_const::NUMBER_OF_ROUNDS; round++) {
-    for (int turn = 0; turn < 2; turn++) {
-      int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES * 2];
-      int empty_count = 0;
-      int empty_idx1, empty_idx2;
-      int empty_tmp;
-      int is_end;
-      for (int near1 = 0; near1 < 8; near1++) {
-        if(virtual_board[mct_const::NEAR_CENTER1[near1]] == 0) {
-          empty_list[empty_count++] = mct_const::NEAR_CENTER1[near1];
-        }
-      }
-      for (int near2 = 0; near2 < 16; near2++) {
-        if(virtual_board[mct_const::NEAR_CENTER2[near2]] == 0) {
-          empty_list[empty_count++] = mct_const::NEAR_CENTER2[near2];
-          if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
-        }
-      }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
-        for (int near3 = 0; near3 < 24; near3++) {
-          if(virtual_board[mct_const::NEAR_CENTER3[near3]] == 0) {
-            empty_list[empty_count++] = mct_const::NEAR_CENTER3[near3];
-            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
-          }
-        }
-      }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
-        for (int near4 = 0; near4 < 32; near4++) {
-          if(virtual_board[mct_const::NEAR_CENTER4[near4]] == 0) {
-            empty_list[empty_count++] = mct_const::NEAR_CENTER4[near4];
-            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
-          }
-        }
-      }
-      while (empty_count < mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
-        empty_tmp = rand() % 361;
-        if (virtual_board[empty_tmp] == 0) {
-          empty_list[empty_count++] = empty_tmp;
-        }
-      }
-
-      if (turn == 0) {
-        // Set my stone
-        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        while (empty_list[empty_idx1] == empty_list[empty_idx2]) {
-          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        }
-
-        virtual_board[empty_list[empty_idx1]] = my_color;
-        // Get Result
-        is_end = IsEnd(virtual_board, empty_list[empty_idx1], my_color);
-        if (is_end == 1) {
-          win_count++;
-          return;
-        } else if (is_end == -1) {
-          return;
-        }
-
-        virtual_board[empty_list[empty_idx2]] = my_color;
-        is_end = IsEnd(virtual_board, empty_list[empty_idx2], my_color);
-        if (is_end == 1) {
-          win_count++;
-          return;
-        } else if (is_end == -1) {
-          return;
-        }
-      } else if (turn == 1) {
-        // Set opponent stone
-        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        while (empty_list[empty_idx1] == empty_list[empty_idx2]) {
-          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        }
-
-        virtual_board[empty_list[empty_idx1]] = userColor;
-        // Get Result
-        is_end = IsEnd(virtual_board, empty_list[empty_idx1], userColor);
-        if (is_end == 1) {
-          return;
-        } else if (is_end == -1) {
-          win_count++;
-          return;
-        }
-
-        virtual_board[empty_list[empty_idx2]] = userColor;
-
-        is_end = IsEnd(virtual_board, empty_list[empty_idx2], userColor);
-        if (is_end == 1) {
-          return;
-        } else if (is_end == -1) {
-          win_count++;
-          return;
-        }
-      }
+    // < Deep Learning >
+    int index[mct_const::NUMBER_OF_BEST_POS];
+    int select_idx;
+    int is_end;
+    // Set my stones
+    // Set my first stone
+    GetBestIndex(virtual_board, index, W1, b1, W2, b2, score_board, mct_const::NUMBER_OF_BEST_POS);
+    select_idx = rand() % mct_const::NUMBER_OF_BEST_POS;
+    virtual_board[index[select_idx]] = my_color;
+    is_end = IsEnd(virtual_board, index[select_idx], my_color);
+    if (is_end == 1) {
+      win_count++;
+      return;
+    } else if (is_end == -1) {
+      return;
+    }
+    GetBestIndex(virtual_board, index, W1, b1, W2, b2, score_board, mct_const::NUMBER_OF_BEST_POS);
+    select_idx = rand() % mct_const::NUMBER_OF_BEST_POS;
+    virtual_board[index[select_idx]] = my_color;
+    is_end = IsEnd(virtual_board, index[select_idx], my_color);
+    if (is_end == 1) {
+      win_count++;
+      return;
+    } else if (is_end == -1) {
+      return;
+    }
+    GetBestIndex(virtual_board, index, W1, b1, W2, b2, score_board, mct_const::NUMBER_OF_BEST_POS);
+    select_idx = rand() % mct_const::NUMBER_OF_BEST_POS;
+    virtual_board[index[select_idx]] = userColor;
+    is_end = IsEnd(virtual_board, index[select_idx], userColor);
+    if (is_end == 1) {
+      return;
+    } else if (is_end == -1) {
+      win_count++;
+      return;
+    }
+    select_idx = rand() % mct_const::NUMBER_OF_BEST_POS;
+    virtual_board[index[select_idx]] = userColor;
+    is_end = IsEnd(virtual_board, index[select_idx], userColor);
+    if (is_end == 1) {
+      return;
+    } else if (is_end == -1) {
+      win_count++;
+      return;
     }
   }
 }

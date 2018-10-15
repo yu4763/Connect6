@@ -7,6 +7,7 @@
 #include <cmath>
 #include <ctime>
 #include <iostream>
+#include <fstream>
 #include <thread>
 #include <chrono>
 #include <random>
