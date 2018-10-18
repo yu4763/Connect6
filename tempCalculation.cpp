@@ -27,7 +27,7 @@ int wheretoPut( board *b ){
     // }
     // =======================================
     // Using monte carlo search
-    if (is_first) { 
+    if (is_first) {
       MonteCarloTreeSearch();
       is_first = false;
       return best_pos1;
@@ -64,6 +64,8 @@ int checkEnd( stone *s[19][19], char state){
             cnt = 1;
             if(s[i][k]->state==state){
                 for(j=k+1; j<k+6; j++){
+                    if(j>=stoneNum)
+                        break;
                     if(s[i][j]->state != state){
                         break;
                     }
@@ -94,6 +96,8 @@ int checkEnd( stone *s[19][19], char state){
             cnt = 1;
             if(s[k][i]->state==state){
                 for(j=k+1; j<k+6; j++){
+                    if(j>=stoneNum)
+                        break;
                     if(s[j][i]->state != state){
                         break;
                     }
@@ -124,6 +128,8 @@ int checkEnd( stone *s[19][19], char state){
             cnt = 1;
             if(s[i][k]->state==state){
                 for(j=1; j<6; j++){
+                    if(i+j >= stoneNum || k+j >= stoneNum)
+                        break;
                     if(s[i+j][k+j]->state != state){
                         break;
                     }
@@ -154,6 +160,8 @@ int checkEnd( stone *s[19][19], char state){
             cnt = 1;
             if(s[i][k]->state==state){
                 for(j=1; j<6; j++){
+                    if(i+j >= stoneNum || k-j>=stoneNum)
+                        break;
                     if(s[i+j][k-j]->state != state){
                         break;
                     }

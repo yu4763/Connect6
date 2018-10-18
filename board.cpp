@@ -50,9 +50,39 @@ void board::changeLabel(){
         statusLabel->setText("You Win!!");
     }
     else if(result == 0 && cnt == 2){
+        int pos1, pos2, exist4;
+        exist4 = check4(stones, userColor, pos1, pos2);
+
         userStatus = true;
         statusLabel->setText("Your Turn");
         cnt = 0;
+        int i, k;
+
+        if(exist4 == 1){
+
+            k = pos1%stoneNum;
+            i = pos1/stoneNum;
+            stones[i][k]->setUpdatesEnabled(true);
+            stones[i][k]->update();
+            stones[i][k]->state = userColor;
+
+        }
+        else if(exist4 == 2){
+
+            k = pos1%stoneNum;
+            i = pos1/stoneNum;
+            stones[i][k]->setUpdatesEnabled(true);
+            stones[i][k]->update();
+            stones[i][k]->state = userColor;
+
+            k = pos2%stoneNum;
+            i = pos2/stoneNum;
+            stones[i][k]->setUpdatesEnabled(true);
+            stones[i][k]->update();
+            stones[i][k]->state = userColor;
+
+        }
+
     }
 }
 
@@ -72,8 +102,8 @@ void board::emptyLabel(){
         userStatus = false;
         statusLabel->setText("computer");
         MonteCarloTreeSearch();
-        QTimer::singleShot(500, this, SLOT(handleClick()));
-        QTimer::singleShot(1000, this, SLOT(handleClick()));
+        QTimer::singleShot(5, this, SLOT(handleClick()));
+        QTimer::singleShot(10, this, SLOT(handleClick()));
         cnt = 0;
     }
 
