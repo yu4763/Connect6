@@ -4,11 +4,14 @@
 #include <string>
 #include <ctime>
 
+#include "monte_carlo_tree_search_strong.h"
+extern int best_pos1, best_pos2;
+
 #define		BUF_SIZE	1024
 #define		IPAddress	"127.0.0.1"
 #define		PORT		8052	// white: 8052 black: 8053
 #define		WIDTH		19
-#define		HEIGHT		19
+#define		HEIGHT	19
 #define		CNT			2
 #define		CORD_X(X)	((WIDTH - 1) - X)
 #define		CORD_Y(Y)	(Y)
@@ -45,11 +48,17 @@ int isFree(int X, int Y) {
 }
 
 void put_stone() {
-
+	MonteCarloTreeSearch();
 	// YOUT ALGORITHM
 	for (int i = 0; i < CNT; i++) {
 		do {
-			
+			if (i == 0) {
+				x[i] = best_pos1 % 19;
+				y[i] = 18 - (best_pos1 / 19);
+			} else if (i == 1) {
+				x[i] = best_pos2 % 19;
+				y[i] = 18 - (best_pos2 / 19);
+			}
 			CORD(x[i], y[i]);
 		} while (!isFree(x[i], y[i]));
 		CORD(x[i], y[i]);

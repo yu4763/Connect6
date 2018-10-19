@@ -1,6 +1,11 @@
-#include "monte_carlo_tree_search.h"
+#include "monte_carlo_tree_search_strong.h"
 using namespace std;
 
+// For Black
+const char my_color = 1;
+const char userColor = 2;
+
+// For white
 const char my_color = 2;
 const char userColor = 1;
 int best_pos1, best_pos2;

@@ -16,7 +16,7 @@ using namespace std;
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
   const double TIME = 5;
-  const double TERMINATE_TIME_PADDING = 0.5;
+  const double TERMINATE_TIME_PADDING = 1;
   const int NUMBER_OF_MAX_CHILD_NODES = 20;
   const int NUMBER_OF_ROUNDS = 40;
   const int NEAR_CENTER1[8] = {
