@@ -2,11 +2,11 @@
 using namespace std;
 
 // For Black
-const char my_color = 1;
-const char userColor = 2;
+// const char my_color = 1;
+// const char userColor = 2;
 // For White
-// const char my_color = 2;
-// const char userColor = 1;
+const char my_color = 2;
+const char userColor = 1;
 
 int best_pos1, best_pos2;
 
@@ -54,7 +54,7 @@ State& State::SelectionAndExpansion() {
     double max_uct_value = 0;
     // Case1) No child
     if (best_child->child_list_[0] == NULL) {
-      int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES * 2];
+      int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES];
       int empty_count = 0;
       int empty_tmp;
       int empty_idx1, empty_idx2, empty_idx3, empty_idx4;
@@ -66,43 +66,43 @@ State& State::SelectionAndExpansion() {
       for (int near2 = 0; near2 < 16; near2++) {
         if(board_[mct_const::NEAR_CENTER2[near2]] == 0) {
           empty_list[empty_count++] = mct_const::NEAR_CENTER2[near2];
-          if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+          if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES) break;
         }
       }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
+      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES) {
         for (int near3 = 0; near3 < 24; near3++) {
           if(board_[mct_const::NEAR_CENTER3[near3]] == 0) {
             empty_list[empty_count++] = mct_const::NEAR_CENTER3[near3];
-            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES) break;
           }
         }
       }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
+      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES) {
         for (int near4 = 0; near4 < 32; near4++) {
            if(board_[mct_const::NEAR_CENTER4[near4]] == 0) {
              empty_list[empty_count++] = mct_const::NEAR_CENTER4[near4];
-             if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+             if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES) break;
           }
         }
       }
-      while (empty_count < mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
+      while (empty_count < mct_const::NUMBER_OF_MAX_CHILD_NODES) {
         empty_tmp = rand() % 361;
         if (board_[empty_tmp] == 0) {
           empty_list[empty_count++] = empty_tmp;
         }
       }
       for (int iter = 0; iter < mct_const::NUMBER_OF_MAX_CHILD_NODES; iter++) {
-        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx4 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
+        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+        empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+        empty_idx4 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
 
         while ((empty_list[empty_idx1] == empty_list[empty_idx2]) || (empty_list[empty_idx1] == empty_list[empty_idx3]) || (empty_list[empty_idx1] == empty_list[empty_idx4]) || \
                (empty_list[empty_idx2] == empty_list[empty_idx3]) || (empty_list[empty_idx2] == empty_list[empty_idx4]) || (empty_list[empty_idx3] == empty_list[empty_idx4])) {
-          empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-          empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-          empty_idx4 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
+          empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+          empty_idx3 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+          empty_idx4 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
         }
         // Make with my color
         best_child->MakeChildState(iter, empty_list[empty_idx1], empty_list[empty_idx2], empty_list[empty_idx3], empty_list[empty_idx4], my_color);
@@ -167,7 +167,7 @@ void State::VirtualPlay(int& win_count) {
   // Do Connect6 randomly according to expected strategy
   for (int round = 0; round < mct_const::NUMBER_OF_ROUNDS; round++) {
     for (int turn = 0; turn < 2; turn++) {
-      int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES * 2];
+      int empty_list[mct_const::NUMBER_OF_MAX_CHILD_NODES];
       int empty_count = 0;
       int empty_idx1, empty_idx2;
       int empty_tmp;
@@ -180,26 +180,26 @@ void State::VirtualPlay(int& win_count) {
       for (int near2 = 0; near2 < 16; near2++) {
         if(virtual_board[mct_const::NEAR_CENTER2[near2]] == 0) {
           empty_list[empty_count++] = mct_const::NEAR_CENTER2[near2];
-          if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+          if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES) break;
         }
       }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
+      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES) {
         for (int near3 = 0; near3 < 24; near3++) {
           if(virtual_board[mct_const::NEAR_CENTER3[near3]] == 0) {
             empty_list[empty_count++] = mct_const::NEAR_CENTER3[near3];
-            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES) break;
           }
         }
       }
-      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
+      if (empty_count != mct_const::NUMBER_OF_MAX_CHILD_NODES) {
         for (int near4 = 0; near4 < 32; near4++) {
           if(virtual_board[mct_const::NEAR_CENTER4[near4]] == 0) {
             empty_list[empty_count++] = mct_const::NEAR_CENTER4[near4];
-            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) break;
+            if (empty_count == mct_const::NUMBER_OF_MAX_CHILD_NODES) break;
           }
         }
       }
-      while (empty_count < mct_const::NUMBER_OF_MAX_CHILD_NODES * 2) {
+      while (empty_count < mct_const::NUMBER_OF_MAX_CHILD_NODES) {
         empty_tmp = rand() % 361;
         if (virtual_board[empty_tmp] == 0) {
           empty_list[empty_count++] = empty_tmp;
@@ -208,10 +208,10 @@ void State::VirtualPlay(int& win_count) {
 
       if (turn == 0) {
         // Set my stone
-        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
+        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
         while (empty_list[empty_idx1] == empty_list[empty_idx2]) {
-          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
+          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
         }
 
         virtual_board[empty_list[empty_idx1]] = my_color;
@@ -234,10 +234,10 @@ void State::VirtualPlay(int& win_count) {
         }
       } else if (turn == 1) {
         // Set opponent stone
-        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
-        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
+        empty_idx1 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
+        empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
         while (empty_list[empty_idx1] == empty_list[empty_idx2]) {
-          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES * 2);
+          empty_idx2 = rand() % (mct_const::NUMBER_OF_MAX_CHILD_NODES);
         }
 
         virtual_board[empty_list[empty_idx1]] = userColor;

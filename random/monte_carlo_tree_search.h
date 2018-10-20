@@ -17,8 +17,8 @@ using namespace std;
 namespace mct_const {
   const double TIME = 5;
   const double TERMINATE_TIME_PADDING = 1;
-  const int NUMBER_OF_MAX_CHILD_NODES = 20;
-  const int NUMBER_OF_ROUNDS = 40;
+  const int NUMBER_OF_MAX_CHILD_NODES = 30;
+  const int NUMBER_OF_ROUNDS = 50;
   const int NEAR_CENTER1[8] = {
     160, 161, 162,
     179,      181,
