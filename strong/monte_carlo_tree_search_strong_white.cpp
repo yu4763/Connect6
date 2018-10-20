@@ -67,8 +67,8 @@ State& State::SelectionAndExpansion() {
       for (int i = 0; i < mct_const::FIRST_PICK; i++) {
         int iter = mct_const::SECOND_PICK * i;
         for (int j = 0; j < mct_const::SECOND_PICK; j++) {
-          best_child->child_list_[iter + j] = new State(*this);
-          best_child->child_list_[iter + j]->parent_ = this;
+          best_child->child_list_[iter + j] = new State(*best_child);
+          best_child->child_list_[iter + j]->parent_ = best_child;
           best_child->child_list_[iter + j]->board_[indexes1[i]] = my_color;
           best_child->child_list_[iter + j]->change_idx_1_ = indexes1[i];
         }
