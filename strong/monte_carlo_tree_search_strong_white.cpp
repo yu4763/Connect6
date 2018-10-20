@@ -100,7 +100,7 @@ State& State::SelectionAndExpansion() {
         child_state->uct_value_ = 0;
         child_state->uct_value_ += 2 * log(best_child->number_of_visiting_);
         child_state->uct_value_ /= child_state->number_of_visiting_;
-        child_state->uct_value_ = 1 * sqrt(child_state->uct_value_);
+        child_state->uct_value_ = 0.5 * sqrt(child_state->uct_value_);
         child_state->uct_value_ += (double)child_state->number_of_wins_ / child_state->number_of_visiting_;
         // Case3) There is node who has larger uct_value_ than max
         if (child_state->uct_value_ > max_uct_value) {
@@ -176,7 +176,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (j <= (19 - (7 - hori_connect))) {
             if (board[row + j + (7 - hori_connect)] == color) {
               tmp_score = 0;
-              score[row + j] -= 512;
             }
           }
           // Rearrange score
@@ -200,7 +199,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (hori_block >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)] == color) {
                 tmp_score = 0;
-                score[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -242,7 +240,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (hori_block >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)] == color) {
                 tmp_score = 0;
-                score[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -286,7 +283,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (i <= (19 - (7 - vert_connect[j]))) {
             if (board[row + j + (7 - vert_connect[j])*(19)] == color) {
               tmp_score = 0;
-              score[row + j] -= 512;
             }
           }
           // Rearrange score
@@ -310,7 +306,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (vert_block[j] >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)*(19)] == color) {
                 tmp_score = 0;
-                score[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -352,7 +347,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (vert_block[j] >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)*(19)] == color) {
                 tmp_score = 0;
-                score[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -397,7 +391,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if ((j <= (19 - (7 - diagLU_connect[i-j+13]))) && (i <= (19 - (7 - diagLU_connect[i-j+13])))) {
               if (board[row + j + (7 - diagLU_connect[i-j+13])*(19 + 1)] == color) {
                 tmp_score = 0;
-                score[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -421,7 +414,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 + 1)] == color) {
                   tmp_score = 0;
-                  score[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -464,7 +456,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 + 1)] == color) {
                   tmp_score = 0;
-                  score[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -510,7 +501,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (i <= (19 - (7 - diagRU_connect[i+j-5])) && (j >= 6 - diagRU_connect[i+j-5])) {
               if (board[row + j + (7 - diagRU_connect[i+j-5])*(19 - 1)] == color) {
                 tmp_score = 0;
-                score[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -534,7 +524,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 - 1)] == color) {
                   tmp_score = 0;
-                  score[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -577,7 +566,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 - 1)] == color) {
                   tmp_score = 0;
-                  score[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -610,6 +598,18 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
       }
     }
   }
+
+  // Test Score
+  // ofstream out("out.txt", ios::app);
+  // out << endl;
+  // for (int i = 0; i < 19; i++) {
+  //   int iter = 19 * i;
+  //   for (int j = 0; j < 19; j++) {
+  //     out << score[iter + j] << "  ";
+  //   }
+  //   out << endl;
+  // }
+  // out.close();
 
   // Get opponent's score
   for (int i = 0; i < 19; i++) {
@@ -669,7 +669,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (j <= (19 - (7 - hori_connect))) {
             if (board[row + j + (7 - hori_connect)] == opp_color) {
               tmp_score = 0;
-              score_opp[row + j] -= 512;
             }
           }
           // Rearrange score
@@ -693,7 +692,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (hori_block >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)] == opp_color) {
                 tmp_score = 0;
-                score_opp[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -735,7 +733,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (hori_block >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)] == opp_color) {
                 tmp_score = 0;
-                score_opp[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -779,7 +776,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (i <= (19 - (7 - vert_connect[j]))) {
             if (board[row + j + (7 - vert_connect[j])*(19)] == opp_color) {
               tmp_score = 0;
-              score_opp[row + j] -= 512;
             }
           }
           // Rearrange score
@@ -803,7 +799,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (vert_block[j] >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)*(19)] == opp_color) {
                 tmp_score = 0;
-                score_opp[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -845,7 +840,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (vert_block[j] >= (7 - succ_score)) {
               if (board[row + j - (7 - succ_score)*(19)] == opp_color) {
                 tmp_score = 0;
-                score_opp[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -890,7 +884,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if ((j <= (19 - (7 - diagLU_connect[i-j+13]))) && (i <= (19 - (7 - diagLU_connect[i-j+13])))) {
               if (board[row + j + (7 - diagLU_connect[i-j+13])*(19 + 1)] == opp_color) {
                 tmp_score = 0;
-                score_opp[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -914,7 +907,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 + 1)] == opp_color) {
                   tmp_score = 0;
-                  score_opp[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -957,7 +949,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 + 1)] == opp_color) {
                   tmp_score = 0;
-                  score_opp[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -1003,7 +994,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (i <= (19 - (7 - diagRU_connect[i+j-5])) && (j >= 6 - diagRU_connect[i+j-5])) {
               if (board[row + j + (7 - diagRU_connect[i+j-5])*(19 - 1)] == opp_color) {
                 tmp_score = 0;
-                score_opp[row + j] -= 512;
               }
             }
             // Rearrange score
@@ -1027,7 +1017,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 - 1)] == opp_color) {
                   tmp_score = 0;
-                  score_opp[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -1070,7 +1059,6 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 - 1)] == opp_color) {
                   tmp_score = 0;
-                  score_opp[row + j] -= 512;
                 }
               }
               // Rearrange score
@@ -1215,13 +1203,13 @@ void State::Update(int result) {
 }
 
 // Select Best
-// The most visited
+// The biggest uct
 State* State::BestChoice() {
   int max_idx = 0;
-  int max_visited = child_list_[0]->number_of_visiting_;
+  double max_uct = child_list_[0]->uct_value_;
   for (int i = 1; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
-    if (child_list_[i]->number_of_visiting_ > max_visited) {
-      max_visited = child_list_[i]->number_of_visiting_;
+    if (child_list_[i]->uct_value_ > max_uct) {
+      max_uct = child_list_[i]->uct_value_;
       max_idx = i;
     }
   }
