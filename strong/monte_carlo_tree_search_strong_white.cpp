@@ -1112,6 +1112,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
   // Select (num) Best picks
   int min_idx = 0;
   int min = score[0];
+  indexes[0] = 0;
   for (int i = 1; i < num; i++) {
     indexes[i] = i;
     if (score[i] < min) {

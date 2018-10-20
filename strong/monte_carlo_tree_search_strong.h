@@ -22,7 +22,7 @@ namespace mct_const {
   const int FIRST_PICK = 4;
   const int SECOND_PICK = 8;
   const int NUMBER_OF_MAX_CHILD_NODES = 32; // It sholud be same as FIRST_PICK * SECOND_PICK
-  const int NUMBER_OF_ROUNDS = 60;
+  const int NUMBER_OF_ROUNDS = 50;
 }
 
 // Class to save position of stone in board
