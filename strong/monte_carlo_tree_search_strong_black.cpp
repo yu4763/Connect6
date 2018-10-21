@@ -146,9 +146,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
       if (board[row + j] == 0) {
         // tmp_score: Save the number of my stones after Position
         // succ_score: Save the number of succesive my stones after Position
-        // tmp_block: Save whether disconnection is caused by opponent
         int tmp_score = 0;
-        int tmp_block = 7;
         int succ_score = 0;
         bool is_succ = true;
         // Get Horizontal score
@@ -158,7 +156,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*1] == color) {
               tmp_score++;
             } else if (board[row + j + k*1] == opp_color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -167,20 +165,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               }
             }
           }
-          // All closed
-          if (tmp_block + hori_block < 7) {
-            tmp_score = 0;
-          }
           // Check whether stones pattern can be c7
           // This position makes c7
           if (j <= (19 - (7 - hori_connect))) {
-            if (board[row + j + (7 - hori_connect)] == color) {
-              tmp_score = 0;
+            if (board[row + j + (6 - hori_connect)] == color) {
+              tmp_score = -32;
             }
           }
           // Rearrange score
           if (tmp_score + hori_connect == 5) {
-            score[row + j] += 128;
+            score[row + j] += 512;
+          } else if (tmp_score + hori_connect == 4) {
+            score[row + j] += 32;
+          } else if (tmp_score + hori_connect == 3) {
+            score[row + j] += 8;
           // Others
           // To differentiate filled positoin, add 1 to score
           } else {
@@ -197,13 +195,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (hori_block >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)] == color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)] == color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score[row + j] += 128;
+              score[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -217,7 +219,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*1] == color) {
               tmp_score++;
             } else if (board[row + j + k*1] == opp_color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -238,13 +240,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (hori_block >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)] == color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)] == color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score[row + j] += 128;
+              score[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -265,7 +271,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*(19)] == color) {
               tmp_score++;
             } else if (board[row + j + k*(19)] == opp_color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -274,20 +280,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               }
             }
           }
-          // All closed
-          if (tmp_block + vert_block[j] < 7) {
-            tmp_score = 0;
-          }
           // Check whether stones pattern can be c7
           // This position makes c7
           if (i <= (19 - (7 - vert_connect[j]))) {
-            if (board[row + j + (7 - vert_connect[j])*(19)] == color) {
-              tmp_score = 0;
+            if (board[row + j + (6 - vert_connect[j])*(19)] == color) {
+            tmp_score = -32;
             }
           }
           // Rearrange score
           if (tmp_score + vert_connect[j] == 5) {
-            score[row + j] += 128;
+            score[row + j] += 512;
+          } else if (tmp_score + vert_connect[j] == 4) {
+            score[row + j] += 32;
+          } else if (tmp_score + vert_connect[j] == 3) {
+            score[row + j] += 8;
           // Others
           // To differentiate filled positoin, add 1 to score
           } else {
@@ -304,13 +310,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (vert_block[j] >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)*(19)] == color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)*(19)] == color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score[row + j] += 128;
+              score[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -324,7 +334,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*(19)] == color) {
               tmp_score++;
             } else if (board[row + j + k*(19)] == opp_color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -345,13 +355,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (vert_block[j] >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)*(19)] == color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)*(19)] == color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score[row + j] += 128;
+              score[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -373,7 +387,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 + 1)] == color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 + 1)] == opp_color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -382,20 +396,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
                 }
               }
             }
-            // All closed
-            if (tmp_block + diagLU_block[i-j+13] < 7) {
-              tmp_score = 0;
-            }
             // Check whether stones pattern can be c7
             // This position makes c7
             if ((j <= (19 - (7 - diagLU_connect[i-j+13]))) && (i <= (19 - (7 - diagLU_connect[i-j+13])))) {
-              if (board[row + j + (7 - diagLU_connect[i-j+13])*(19 + 1)] == color) {
-                tmp_score = 0;
+              if (board[row + j + (6 - diagLU_connect[i-j+13])*(19 + 1)] == color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + diagLU_connect[i-j+13] == 5) {
-              score[row + j] += 128;
+              score[row + j] += 512;
+            } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
+              score[row + j] += 32;
+            } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
+              score[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -412,13 +426,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // Check whether stones pattern can be c7
               // This position makes c7
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 + 1)] == color) {
-                  tmp_score = 0;
+                if (board[row + j - (6 - succ_score)*(19 + 1)] == color) {
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score[row + j] += 128;
+                score[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -433,7 +451,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 + 1)] == color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 + 1)] == opp_color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -454,13 +472,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // Check whether stones pattern can be c7
               // This position makes c7
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 + 1)] == color) {
-                  tmp_score = 0;
+                if (board[row + j - (6 - succ_score)*(19 + 1)] == color) {
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score[row + j] += 128;
+                score[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -483,7 +505,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 - 1)] == color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 - 1)] == opp_color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -492,20 +514,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
                 }
               }
             }
-            // All closed
-            if (tmp_block + diagRU_block[i+j-5] < 7) {
-              tmp_score = 0;
-            }
             // Check whether stones pattern can be c7
             // This position makes c7
             if (i <= (19 - (7 - diagRU_connect[i+j-5])) && (j >= 6 - diagRU_connect[i+j-5])) {
-              if (board[row + j + (7 - diagRU_connect[i+j-5])*(19 - 1)] == color) {
-                tmp_score = 0;
+              if (board[row + j + (6 - diagRU_connect[i+j-5])*(19 - 1)] == color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + diagRU_connect[i+j-5] == 5) {
-              score[row + j] += 128;
+              score[row + j] += 512;
+            } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
+              score[row + j] += 32;
+            } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
+              score[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -522,13 +544,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // Check whether stones pattern can be c7
               // This position makes c7
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 - 1)] == color) {
-                  tmp_score = 0;
+                if (board[row + j - (6 - succ_score)*(19 - 1)] == color) {
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score[row + j] += 128;
+                score[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -543,7 +569,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 - 1)] == color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 - 1)] == opp_color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -564,13 +590,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // Check whether stones pattern can be c7
               // This position makes c7
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 - 1)] == color) {
-                  tmp_score = 0;
+                if (board[row + j - (6 - succ_score)*(19 - 1)] == color) {
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score[row + j] += 128;
+                score[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -639,9 +669,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
       if (board[row + j] == 0) {
         // tmp_score: Save the number of my stones after Position
         // succ_score: Save the number of succesive my stones after Position
-        // tmp_block: Save whether disconnection is caused by opponent
         int tmp_score = 0;
-        int tmp_block = 7;
         int succ_score = 0;
         bool is_succ = true;
         // Get Horizontal score
@@ -651,7 +679,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*1] == opp_color) {
               tmp_score++;
             } else if (board[row + j + k*1] == color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -660,20 +688,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               }
             }
           }
-          // All closed
-          if (tmp_block + hori_block < 7) {
-            tmp_score = 0;
-          }
           // Check whether stones pattern can be c7
           // This position makes c7
           if (j <= (19 - (7 - hori_connect))) {
-            if (board[row + j + (7 - hori_connect)] == opp_color) {
-              tmp_score = 0;
+            if (board[row + j + (6 - hori_connect)] == opp_color) {
+            tmp_score = -32;
             }
           }
           // Rearrange score
           if (tmp_score + hori_connect == 5) {
-            score_opp[row + j] += 128;
+            score_opp[row + j] += 512;
+          } else if (tmp_score + hori_connect == 4) {
+            score_opp[row + j] += 32;
+          } else if (tmp_score + hori_connect == 3) {
+            score_opp[row + j] += 8;
           // Others
           // To differentiate filled positoin, add 1 to score
           } else {
@@ -690,13 +718,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (hori_block >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)] == opp_color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)] == opp_color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score_opp[row + j] += 128;
+              score_opp[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score_opp[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score_opp[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -710,7 +742,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*1] == opp_color) {
               tmp_score++;
             } else if (board[row + j + k*1] == color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -731,13 +763,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (hori_block >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)] == opp_color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)] == opp_color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score_opp[row + j] += 128;
+              score_opp[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score_opp[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score_opp[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -758,7 +794,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*(19)] == opp_color) {
               tmp_score++;
             } else if (board[row + j + k*(19)] == color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -767,20 +803,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               }
             }
           }
-          // All closed
-          if (tmp_block + vert_block[j] < 7) {
-            tmp_score = 0;
-          }
           // Check whether stones pattern can be c7
           // This position makes c7
           if (i <= (19 - (7 - vert_connect[j]))) {
-            if (board[row + j + (7 - vert_connect[j])*(19)] == opp_color) {
-              tmp_score = 0;
+            if (board[row + j + (6 - vert_connect[j])*(19)] == opp_color) {
+            tmp_score = -32;
             }
           }
           // Rearrange score
           if (tmp_score + vert_connect[j] == 5) {
-            score_opp[row + j] += 128;
+            score_opp[row + j] += 512;
+          } else if (tmp_score + vert_connect[j] == 4) {
+            score_opp[row + j] += 32;
+          } else if (tmp_score + vert_connect[j] == 3) {
+            score_opp[row + j] += 8;
           // Others
           // To differentiate filled positoin, add 1 to score
           } else {
@@ -797,13 +833,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (vert_block[j] >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)*(19)] == opp_color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)*(19)] == opp_color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score_opp[row + j] += 128;
+              score_opp[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score_opp[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score_opp[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -817,7 +857,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (board[row + j + k*(19)] == opp_color) {
               tmp_score++;
             } else if (board[row + j + k*(19)] == color) {
-              tmp_block = k;
+              tmp_score = 0;
               break;
             } else {
               if (is_succ) {
@@ -838,13 +878,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             // Check whether stones pattern can be c7
             // This position makes c7
             if (vert_block[j] >= (7 - succ_score)) {
-              if (board[row + j - (7 - succ_score)*(19)] == opp_color) {
-                tmp_score = 0;
+              if (board[row + j - (6 - succ_score)*(19)] == opp_color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + succ_score == 5) {
-              score_opp[row + j] += 128;
+              score_opp[row + j] += 512;
+            } else if (tmp_score + succ_score == 4) {
+              score_opp[row + j] += 32;
+            } else if (tmp_score + succ_score == 3) {
+              score_opp[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -866,7 +910,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 + 1)] == opp_color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 + 1)] == color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -875,20 +919,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
                 }
               }
             }
-            // All closed
-            if (tmp_block + diagLU_block[i-j+13] < 7) {
-              tmp_score = 0;
-            }
             // Check whether stones pattern can be c7
             // This position makes c7
             if ((j <= (19 - (7 - diagLU_connect[i-j+13]))) && (i <= (19 - (7 - diagLU_connect[i-j+13])))) {
-              if (board[row + j + (7 - diagLU_connect[i-j+13])*(19 + 1)] == opp_color) {
-                tmp_score = 0;
+              if (board[row + j + (6 - diagLU_connect[i-j+13])*(19 + 1)] == opp_color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + diagLU_connect[i-j+13] == 5) {
-              score_opp[row + j] += 128;
+              score_opp[row + j] += 512;
+            } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
+              score_opp[row + j] += 32;
+            } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
+              score_opp[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -905,13 +949,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // Check whether stones pattern can be c7
               // This position makes c7
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 + 1)] == opp_color) {
-                  tmp_score = 0;
+                if (board[row + j - (6 - succ_score)*(19 + 1)] == opp_color) {
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 128;
+                score_opp[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score_opp[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score_opp[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -926,7 +974,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 + 1)] == opp_color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 + 1)] == color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -947,13 +995,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // Check whether stones pattern can be c7
               // This position makes c7
               if (diagLU_block[i-j+13] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 + 1)] == opp_color) {
-                  tmp_score = 0;
+                if (board[row + j - (6 - succ_score)*(19 + 1)] == opp_color) {
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 128;
+                score_opp[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score_opp[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score_opp[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -976,7 +1028,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 - 1)] == opp_color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 - 1)] == color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -985,20 +1037,20 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
                 }
               }
             }
-            // All closed
-            if (tmp_block + diagRU_block[i+j-5] < 7) {
-              tmp_score = 0;
-            }
             // Check whether stones pattern can be c7
             // This position makes c7
             if (i <= (19 - (7 - diagRU_connect[i+j-5])) && (j >= 6 - diagRU_connect[i+j-5])) {
-              if (board[row + j + (7 - diagRU_connect[i+j-5])*(19 - 1)] == opp_color) {
-                tmp_score = 0;
+              if (board[row + j + (6 - diagRU_connect[i+j-5])*(19 - 1)] == opp_color) {
+              tmp_score = -32;
               }
             }
             // Rearrange score
             if (tmp_score + diagRU_connect[i+j-5] == 5) {
-              score_opp[row + j] += 128;
+              score_opp[row + j] += 512;
+            } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
+              score_opp[row + j] += 32;
+            } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
+              score_opp[row + j] += 8;
             // Others
             // To differentiate filled positoin, add 1 to score
             } else {
@@ -1015,13 +1067,17 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // Check whether stones pattern can be c7
               // This position makes c7
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 - 1)] == opp_color) {
-                  tmp_score = 0;
+                if (board[row + j - (6 - succ_score)*(19 - 1)] == opp_color) {
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 128;
+                score_opp[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score_opp[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score_opp[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -1036,7 +1092,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (board[row + j + k*(19 - 1)] == opp_color) {
                 tmp_score++;
               } else if (board[row + j + k*(19 - 1)] == color) {
-                tmp_block = k;
+                tmp_score = 0;
                 break;
               } else {
                 if (is_succ) {
@@ -1058,12 +1114,16 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               // This position makes c7
               if (diagRU_block[i+j-5] >= (7 - succ_score)) {
                 if (board[row + j - (7 - succ_score)*(19 - 1)] == opp_color) {
-                  tmp_score = 0;
+                tmp_score = -32;
                 }
               }
               // Rearrange score
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 128;
+                score_opp[row + j] += 512;
+              } else if (tmp_score + succ_score == 4) {
+                score_opp[row + j] += 32;
+              } else if (tmp_score + succ_score == 3) {
+                score_opp[row + j] += 8;
               // Others
               // To differentiate filled positoin, add 1 to score
               } else {
@@ -1094,7 +1154,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
 
   // Add score Arrays
   for (int i = 0; i < 361; i++) {
-    score[i] += score_opp[i];
+    score[i] += 3 * (score_opp[i] + score[i]);
   }
 
   // Select (num) Best picks
