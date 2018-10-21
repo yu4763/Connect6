@@ -83,7 +83,6 @@ class State {
       }
     }
     State& SelectionAndExpansion();
-    void GetBestPositions(char* board, int* indexes, int num, char color);
     int Evaluation();
     void VirtualPlay(int& win_count);
     void Update(int result);
@@ -104,5 +103,6 @@ class State {
 
 void MonteCarloTreeSearch();
 int IsEnd(const char* _board, const int pos, const char color);
+void GetBestPositions(char* board, int* indexes, int num, char color);
 
 #endif

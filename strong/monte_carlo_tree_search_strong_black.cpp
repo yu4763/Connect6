@@ -114,7 +114,7 @@ State& State::SelectionAndExpansion() {
   }
 }
 
-void State::GetBestPositions(char* board, int* indexes, int num, char color) {
+void GetBestPositions(char* board, int* indexes, int num, char color) {
   // score: Save the value of positions
   // *_connect: Save the number of connected stones before
   // *_block: Save the distance from blocking factors(opponent's stone / wall)
@@ -176,7 +176,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (tmp_score + hori_connect == 5) {
             score[row + j] += 512;
           } else if (tmp_score + hori_connect == 4) {
-            score[row + j] += 32;
+            score[row + j] += 64;
           } else if (tmp_score + hori_connect == 3) {
             score[row + j] += 8;
           // Others
@@ -203,7 +203,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score[row + j] += 32;
+              score[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score[row + j] += 8;
             // Others
@@ -248,7 +248,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score[row + j] += 32;
+              score[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score[row + j] += 8;
             // Others
@@ -291,7 +291,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (tmp_score + vert_connect[j] == 5) {
             score[row + j] += 512;
           } else if (tmp_score + vert_connect[j] == 4) {
-            score[row + j] += 32;
+            score[row + j] += 64;
           } else if (tmp_score + vert_connect[j] == 3) {
             score[row + j] += 8;
           // Others
@@ -318,7 +318,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score[row + j] += 32;
+              score[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score[row + j] += 8;
             // Others
@@ -363,7 +363,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score[row + j] += 32;
+              score[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score[row + j] += 8;
             // Others
@@ -407,7 +407,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + diagLU_connect[i-j+13] == 5) {
               score[row + j] += 512;
             } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
-              score[row + j] += 32;
+              score[row + j] += 64;
             } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
               score[row + j] += 8;
             // Others
@@ -434,7 +434,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score[row + j] += 32;
+                score[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score[row + j] += 8;
               // Others
@@ -480,7 +480,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score[row + j] += 32;
+                score[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score[row + j] += 8;
               // Others
@@ -525,7 +525,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + diagRU_connect[i+j-5] == 5) {
               score[row + j] += 512;
             } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
-              score[row + j] += 32;
+              score[row + j] += 64;
             } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
               score[row + j] += 8;
             // Others
@@ -552,7 +552,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score[row + j] += 32;
+                score[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score[row + j] += 8;
               // Others
@@ -598,7 +598,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score[row + j] += 32;
+                score[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score[row + j] += 8;
               // Others
@@ -699,7 +699,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (tmp_score + hori_connect == 5) {
             score_opp[row + j] += 512;
           } else if (tmp_score + hori_connect == 4) {
-            score_opp[row + j] += 32;
+            score_opp[row + j] += 64;
           } else if (tmp_score + hori_connect == 3) {
             score_opp[row + j] += 8;
           // Others
@@ -726,7 +726,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score_opp[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score_opp[row + j] += 32;
+              score_opp[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score_opp[row + j] += 8;
             // Others
@@ -771,7 +771,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score_opp[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score_opp[row + j] += 32;
+              score_opp[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score_opp[row + j] += 8;
             // Others
@@ -814,7 +814,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
           if (tmp_score + vert_connect[j] == 5) {
             score_opp[row + j] += 512;
           } else if (tmp_score + vert_connect[j] == 4) {
-            score_opp[row + j] += 32;
+            score_opp[row + j] += 64;
           } else if (tmp_score + vert_connect[j] == 3) {
             score_opp[row + j] += 8;
           // Others
@@ -841,7 +841,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score_opp[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score_opp[row + j] += 32;
+              score_opp[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score_opp[row + j] += 8;
             // Others
@@ -886,7 +886,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + succ_score == 5) {
               score_opp[row + j] += 512;
             } else if (tmp_score + succ_score == 4) {
-              score_opp[row + j] += 32;
+              score_opp[row + j] += 64;
             } else if (tmp_score + succ_score == 3) {
               score_opp[row + j] += 8;
             // Others
@@ -930,7 +930,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + diagLU_connect[i-j+13] == 5) {
               score_opp[row + j] += 512;
             } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
-              score_opp[row + j] += 32;
+              score_opp[row + j] += 64;
             } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
               score_opp[row + j] += 8;
             // Others
@@ -957,7 +957,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score_opp[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 32;
+                score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 8;
               // Others
@@ -1003,7 +1003,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score_opp[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 32;
+                score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 8;
               // Others
@@ -1048,7 +1048,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
             if (tmp_score + diagRU_connect[i+j-5] == 5) {
               score_opp[row + j] += 512;
             } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
-              score_opp[row + j] += 32;
+              score_opp[row + j] += 64;
             } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
               score_opp[row + j] += 8;
             // Others
@@ -1075,7 +1075,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score_opp[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 32;
+                score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 8;
               // Others
@@ -1121,7 +1121,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
               if (tmp_score + succ_score == 5) {
                 score_opp[row + j] += 512;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 32;
+                score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 8;
               // Others
@@ -1154,7 +1154,7 @@ void State::GetBestPositions(char* board, int* indexes, int num, char color) {
 
   // Add score Arrays
   for (int i = 0; i < 361; i++) {
-    score[i] += 3 * (score_opp[i] + score[i]);
+    score[i] += 2 * (score_opp[i] + score[i]);
   }
 
   // Select (num) Best picks
