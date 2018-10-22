@@ -20,9 +20,9 @@ namespace mct_const {
   const double TIME = 5;
   const double TERMINATE_TIME_PADDING = 1;
   const int FIRST_PICK = 2;
-  const int SECOND_PICK = 4;
-  const int NUMBER_OF_MAX_CHILD_NODES = 8; // It sholud be same as FIRST_PICK * SECOND_PICK
-  const int NUMBER_OF_ROUNDS = 40;
+  const int SECOND_PICK = 2;
+  const int NUMBER_OF_MAX_CHILD_NODES = 4; // It sholud be same as FIRST_PICK * SECOND_PICK
+  const int NUMBER_OF_ROUNDS = 50;
 }
 
 // Class to save position of stone in board
@@ -103,6 +103,6 @@ class State {
 
 void MonteCarloTreeSearch();
 int IsEnd(const char* _board, const int pos, const char color);
-void GetBestPositions(char* board, int* indexes, int num, char color);
+void GetBestPositions(char* board, int* indexes, int num, char color, int turn);
 
 #endif
