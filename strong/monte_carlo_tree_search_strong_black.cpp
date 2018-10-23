@@ -868,15 +868,16 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
         vert_connect[j]++;
         diagLU_connect[i-j+13]++;
         diagRU_connect[i+j-5]++;
-        hori_block = 0;
-        vert_block[j] = 0;
-        diagLU_block[i-j+13] = 0;
-        diagRU_block[i+j-5] = 0;
+
       } else {
         hori_connect = 0;
         vert_connect[j] = 0;
         diagLU_connect[i-j+13] = 0;
         diagRU_connect[i+j-5] = 0;
+        hori_block = 0;
+        vert_block[j] = 0;
+        diagLU_block[i-j+13] = 0;
+        diagRU_block[i+j-5] = 0;
       }
     }
   }
@@ -1456,15 +1457,15 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
         vert_connect[j]++;
         diagLU_connect[i-j+13]++;
         diagRU_connect[i+j-5]++;
-        hori_block = 0;
-        vert_block[j] = 0;
-        diagLU_block[i-j+13] = 0;
-        diagRU_block[i+j-5] = 0;
       } else {
         hori_connect = 0;
         vert_connect[j] = 0;
         diagLU_connect[i-j+13] = 0;
         diagRU_connect[i+j-5] = 0;
+        hori_block = 0;
+        vert_block[j] = 0;
+        diagLU_block[i-j+13] = 0;
+        diagRU_block[i+j-5] = 0;
       }
     }
   }

@@ -128,6 +128,11 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
   int diagLU_block[27] = {0};
   int diagRU_block[27] = {0};
 
+  // // Test Score
+  // ofstream out1("out1.txt", ios::app);
+  // ofstream out2("out2.txt", ios::app);
+  // ofstream total("total.txt", ios::app);
+
   // Get our score
   for (int i = 0; i < 19; i++) {
     int row = 19 * i;
@@ -868,30 +873,29 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
         vert_connect[j]++;
         diagLU_connect[i-j+13]++;
         diagRU_connect[i+j-5]++;
-        hori_block = 0;
-        vert_block[j] = 0;
-        diagLU_block[i-j+13] = 0;
-        diagRU_block[i+j-5] = 0;
       } else {
         hori_connect = 0;
         vert_connect[j] = 0;
         diagLU_connect[i-j+13] = 0;
         diagRU_connect[i+j-5] = 0;
+        hori_block = 0;
+        vert_block[j] = 0;
+        diagLU_block[i-j+13] = 0;
+        diagRU_block[i+j-5] = 0;
       }
     }
   }
 
-  // Test Score
-  // ofstream out("out.txt", ios::app);
-  // out << endl;
+  // // Test Score
+  // out1 << endl;
   // for (int i = 0; i < 19; i++) {
   //   int iter = 19 * i;
   //   for (int j = 0; j < 19; j++) {
-  //     out << score[iter + j] << "  ";
+  //     out1 << score[iter + j] << "  ";
   //   }
-  //   out << endl;
+  //   out1 << endl;
   // }
-  // out.close();
+  // out1.close();
 
   // Get opponent's score
   for (int i = 0; i < 19; i++) {
@@ -1456,23 +1460,45 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
         vert_connect[j]++;
         diagLU_connect[i-j+13]++;
         diagRU_connect[i+j-5]++;
-        hori_block = 0;
-        vert_block[j] = 0;
-        diagLU_block[i-j+13] = 0;
-        diagRU_block[i+j-5] = 0;
       } else {
         hori_connect = 0;
         vert_connect[j] = 0;
         diagLU_connect[i-j+13] = 0;
         diagRU_connect[i+j-5] = 0;
+        hori_block = 0;
+        vert_block[j] = 0;
+        diagLU_block[i-j+13] = 0;
+        diagRU_block[i+j-5] = 0;
       }
     }
   }
+
+  // // Test Score
+  // out2 << endl;
+  // for (int i = 0; i < 19; i++) {
+  //   int iter = 19 * i;
+  //   for (int j = 0; j < 19; j++) {
+  //     out2 << score_opp[iter + j] << "  ";
+  //   }
+  //   out2 << endl;
+  // }
+  // out2.close();
 
   // Add score Arrays
   for (int i = 0; i < 361; i++) {
     score[i] += (score_opp[i] + score[i]);
   }
+
+  // // Test Score
+  // total << endl;
+  // for (int i = 0; i < 19; i++) {
+  //   int iter = 19 * i;
+  //   for (int j = 0; j < 19; j++) {
+  //     total << score[iter + j] << "  ";
+  //   }
+  //   total << endl;
+  // }
+  // total.close();
 
   // Select (num) Best picks
   int min_idx = 0;
