@@ -2,34 +2,37 @@
 char black = 1;
 char white = -1;
 char board[361] = {0,};
-	//	ValueTable	  0		1	  2		3	  4		5	  6		7	  8		9	 10	   11	 12	   13	 14    15    16    17    18
-float value[361] = {-0.8, -0.7, -0.6, -0.5, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.5, -0.6, -0.7, -0.8, // 0
-					-0.7, -0.6, -0.5, -0.4, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.4, -0.5, -0.6, -0.7, // 1
-					-0.6, -0.5, -0.4, -0.3, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.3, -0.4, -0.5, -0.6, // 2
-					-0.5, -0.4, -0.3, -0.2, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.2, -0.3, -0.4, -0.5, // 3
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 4
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 5
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 6
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 7
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 8
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 9
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //10
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //11
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //12
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //13
-					-0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //14
-					-0.5, -0.4, -0.3, -0.2, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.2, -0.3, -0.4, -0.5, //15
-					-0.6, -0.5, -0.4, -0.3, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.3, -0.4, -0.5, -0.6, //16
-					-0.7, -0.6, -0.5, -0.4, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.4, -0.5, -0.6, -0.7, //17
-					-0.8, -0.7, -0.6, -0.5, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.5, -0.6, -0.7, -0.8  //18
+	//	ValueTable	        0  	  1	    2 	  3	    4	  5	    6	 7	    8	  9	    10	  11    12	  13	14    15    16    17    18
+float defaultValue[361] = {-0.8, -0.7, -0.6, -0.5, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.5, -0.6, -0.7, -0.8, // 0
+						   -0.7, -0.6, -0.5, -0.4, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.4, -0.5, -0.6, -0.7, // 1
+						   -0.6, -0.5, -0.4, -0.3, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.3, -0.4, -0.5, -0.6, // 2
+						   -0.5, -0.4, -0.3, -0.2, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.2, -0.3, -0.4, -0.5, // 3
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 4
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 5
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 6
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 7
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 8
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, // 9
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //10
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //11
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //12
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //13
+						   -0.4, -0.3, -0.2, -0.1, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.1, -0.2, -0.3, -0.4, //14
+						   -0.5, -0.4, -0.3, -0.2, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.2, -0.3, -0.4, -0.5, //15
+						   -0.6, -0.5, -0.4, -0.3, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.3, -0.4, -0.5, -0.6, //16
+						   -0.7, -0.6, -0.5, -0.4, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.3, -0.4, -0.5, -0.6, -0.7, //17
+						   -0.8, -0.7, -0.6, -0.5, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.5, -0.6, -0.7, -0.8  //18
 };
+
+float Value[361] = {0,};
+char allowed[361] = {0, }; // 0 : now allowed, 1: allowed because it is pattern, 2 ~ 7 : allowed but not pattern,
 /*
 
 TypeA x 5	+	TypeB x 5   = Total 10 patterns.
-- O - -			- - O -
-- X X O			O X X -
-O X X -			- X X O
 - - O -			- O - -
+O - - -			- - - O
+- - - O			O - - -
+- O - -			- - O -
 
 */
 
@@ -37,7 +40,7 @@ O X X -			- X X O
 char PATTERN0[5] = {2,0,3,1,4}; char PATTERN1[5] = {0,3,1,4,2}; char PATTERN2[5] = {3,1,4,2,0}; char PATTERN3[5] = {1,4,2,0,3}; char PATTERN4[5] = {4,2,0,3,1}; // 아마 모르셔도 될 거 같은데 궁금하면 물어보세욤 
 
 // TypeB x5
-char PATTERN5[5] = {0,2,4,1,3}; char PATTERN6[5] = {2,4,1,3,0}; char PATTERN7[5] = {4,1,3,0,2}; char PATTERN8[5] = {1,3,0,2,5}; char PATTERN9[5] = {4,2,0,5,1};
+char PATTERN5[5] = {0,2,4,1,3}; char PATTERN6[5] = {2,4,1,3,0}; char PATTERN7[5] = {4,1,3,0,2}; char PATTERN8[5] = {1,3,0,2,4}; char PATTERN9[5] = {3,2,0,4,1};
 
 char* PATTERNS[10] = {PATTERN0, PATTERN1, PATTERN2, PATTERN3, PATTERN4,
 					  PATTERN5, PATTERN6, PATTERN7, PATTERN8, PATTERN9};
@@ -45,9 +48,10 @@ char* PATTERNS[10] = {PATTERN0, PATTERN1, PATTERN2, PATTERN3, PATTERN4,
 void update(int index, int gameLenth, bool Black);
 void drawBoard(int gameLength);
 void drawValue(int gameLength);
-void updateValue(int index, bool Black);
+void clenaValue();
+void updateValue(int index);
 int runDefenceAlgorithm(char parameter);
-char initializeDefenceAlgorithm();
+char initializeDefenceAlgorithm(bool Black);
 
 int main(void){
 
@@ -66,7 +70,7 @@ int main(void){
 	gameLength++;
 	
 	// Get parameter which is required for DefenceAlgorithm. (Run it once, First Turn of Black!)
-	parameter = initializeDefenceAlgorithm();
+	parameter = initializeDefenceAlgorithm(true);
 	
 	// First turn of Black
 	index = runDefenceAlgorithm(parameter);
@@ -77,9 +81,38 @@ int main(void){
 	update(index, gameLength, true);
 	gameLength++;
 	
+	// Second White turn
+	update(159, gameLength, false);
+	gameLength++;
+	update(160, gameLength, false);
+	gameLength++;
+	
+	// Second turn of Black
+	index = runDefenceAlgorithm(parameter);
+	update(index, gameLength, true);
+	gameLength++;
+	
+	index = runDefenceAlgorithm(parameter);
+	update(index, gameLength, true);
+	gameLength++;
+	
+	// Second White turn
+	update(161, gameLength, false);
+	gameLength++;
+	update(162, gameLength, false);
+	gameLength++;
+
+	index = runDefenceAlgorithm(parameter);
+	update(index, gameLength, true);
+	gameLength++;
+	
+	index = runDefenceAlgorithm(parameter);
+	update(index, gameLength, true);
+	gameLength++;
+	
 	return 0;
 }
-char initializeDefenceAlgorithm(){ //패턴의 각 자리의 가치의 총합이 가장 높은 패턴을 계산해 반환 
+char initializeDefenceAlgorithm(bool Black){ //패턴의 각 자리의 가치의 총합이 가장 높은 패턴을 계산해 반환 
 	float table[10] = {0,};
 	int index;
 	for (int i=0; i<10; i++){
@@ -87,12 +120,25 @@ char initializeDefenceAlgorithm(){ //패턴의 각 자리의 가치의 총합이 가장 높은 패
 			index = PATTERNS[i][j % 5];
 			if ( index == 4 ){
 				for (int k=0; k<3; k++){
-					table[i] = table[i] + value[19*j + index + 5 * k];
+					table[i] = table[i] + Value[19*j + index + 5 * k];
+					if (Black){
+						if ( board[19*j + index + 5 * k] == black ){
+							table[i] = table[i] + 100;
+						} else if ( board[19*j + index + 5 * k] == white ){
+							table[i] = table[i] - 100;
+						}
+					} else{
+						if ( board[19*j + index + 5 * k] == black ){
+							table[i] = table[i] - 100;
+						} else if ( board[19*j + index + 5 * k] == white ){
+							table[i] = table[i] + 100;
+						}
+					}
 				}
 			}
 			else{
 				for (int k=0; k<4; k++){
-					table[i] = table[i] + value[19*j + index + 5 * k];
+					table[i] = table[i] + Value[19*j + index + 5 * k];
 				}
 			}
 		}	
@@ -107,30 +153,72 @@ char initializeDefenceAlgorithm(){ //패턴의 각 자리의 가치의 총합이 가장 높은 패
 			maxindex = i;
 		}
 	}
-	return maxindex;
-}
-int runDefenceAlgorithm(char parameter){ // 이제 정해진 패턴에서 가장 가치가 높은 index를 계산해 반환 (패턴 중 가장 급하게 막아야 되는 곳) 
-	float max = value[PATTERNS[parameter][0]];
-	int maxindex = PATTERNS[parameter][0];
+	
+
 	for (int i=0; i<19; i++){
-		if (PATTERNS[parameter][i % 5] == 4){
+		if (PATTERNS[maxindex][i % 5] == 4){
 			for (int j=0; j<3; j++){
-				if ( (value[i*19 + PATTERNS[parameter][i % 5] + 5*j] > max) && (board[i*19 + PATTERNS[parameter][i % 5] + 5*j] == 0) ){
-					max = value[i*19 + PATTERNS[parameter][i % 5] + 5*j];
-					maxindex = i*19 + PATTERNS[parameter][i % 5] + 5*j;
+				if ( board[i*19 + PATTERNS[maxindex][i % 5] + 5*j] == 0 ){
+					allowed[i*19 + PATTERNS[maxindex][i % 5] + 5*j ] = 1;
 				}
 			}
 		}
 		else{
 			for (int j=0; j<4; j++){
-				if ( (value[i*19 + PATTERNS[parameter][i % 5] + 5*j] > max) && (board[i*19 + PATTERNS[parameter][i % 5] + 5*j] == 0) ){
-					max = value[i*19 + PATTERNS[parameter][i % 5] + 5*j];
-					maxindex = i*19 + PATTERNS[parameter][i % 5] + 5*j;
+				if ( board[i*19 + PATTERNS[maxindex][i % 5] + 5*j] == 0 ){
+					allowed[i*19 + PATTERNS[maxindex][i % 5] + 5*j ] = 1;
 				}
 			}
 		}
 	}
-
+	
+	return maxindex;
+}
+int runDefenceAlgorithm(char parameter){ // 이제 정해진 패턴에서 가장 가치가 높은 index를 계산해 반환 (패턴 중 가장 급하게 막아야 되는 곳) 
+	float max = -1000;
+	int maxindex;
+	int orgx, orgy, x, y, dx, dy, direction;
+	
+	for (int i=0; i<361; i++){
+		if (allowed[i] == 1 && board[i] != 0){
+			allowed[i] = 0;
+			orgx = (i / 19);
+			orgy = (i % 19);
+			for (int j=0; j<4; j++){
+				if (j==0){
+					dx = 1;
+					dy = 0;
+				}
+				else{
+					dx = j - 2;
+					dy = 1;
+				}
+				for (int k=-1; k<2; k = k + 2){
+					direction = k;
+					x = orgx;
+					y = orgy;
+					for (int l=0; l<6; l++){
+						x = x + k * dx;
+						y = y + k * dy;
+						
+						if ( (x<0) || (x>18) || (y<0) || (y>18) ){
+							break;
+						}
+						else{
+							allowed[19 * x +y] = l + 2;
+						}
+					}
+				}
+			}
+		}
+	}
+	for (int i=0; i<361; i++){
+		if (allowed[i] != 0 && Value[i] >= max ){
+			max = Value[i];
+			maxindex = i;
+		}
+	}
+	allowed[maxindex] = 0;
 	return maxindex;
 }
 
@@ -142,7 +230,10 @@ void update(int index, int gameLength, bool Black){
 		board[index] = white;
 	}
 	drawBoard(gameLength);
-	updateValue(index, Black);
+	clenaValue();
+	for (int i=0; i<361; i++){
+		updateValue(i);	
+	}
 	drawValue(gameLength);
 }
 
@@ -163,16 +254,30 @@ void drawBoard(int gameLength){
 		printf("\n");
 	}
 }
-
-void updateValue(int index, bool Black){
+void clenaValue(){
+	for (int i=0; i<361; i++){
+		Value[i] = defaultValue[i];
+	}
+}
+void updateValue(int index){
+	bool Black;
+	if (board[index] == 1){
+		Black = true;
+	}
+	else if (board[index] == -1){
+		Black = false;
+	}
+	else{
+		return;
+	}
 	int orgx = index / 19;
 	int orgy = index % 19;
-	
 	int x, y, dx, dy, direction;
 	float distance;
+	
 	for (int i = 0; i<4; i++){
 		if (i==0){
-			dx = 1;
+			dx = 1;        
 			dy = 0;
 		}
 		else{
@@ -184,28 +289,36 @@ void updateValue(int index, bool Black){
 			distance = 0;
 			x = orgx;
 			y = orgy;
-			value[19*x + y] = 0;
 			while ( ( ( 0 <= (x + direction * dx) ) && ( (x + direction * dx) <= 18) )  && ( ( 0 <= (y + direction * dy) ) && ( (y + direction * dy) <= 18) ) ){
 				x = x + direction * dx;
 				y = y + direction * dy;
 				distance++;
 				if (Black){
 					if (board[19*x + y] != 0){
-						value[19*x + y] = 0;
+						Value[19*x + y] = -5;
 					}
 					else{
-						value[19*x + y] = value[19*x + y] - (float)(5.0 / distance) ;
+						Value[19*x + y] = Value[19*x + y] - (float)(4.0 / (distance) ) ;
 					} 
 				}
 				else{
 					if (board[19*x + y] != 0){
-						value[19*x + y] = 0;
+						Value[19*x + y] = -5;
 					}
 					else{
-						value[19*x + y] = value[19*x + y] + (float)(5.0 / distance) ;
+						Value[19*x + y] = Value[19*x + y] + (float)(4.0 / (distance + 0.75)) ;
 					} 
 				}
 			}
+		}
+	}
+	
+	for (int i=0; i<361; i++){
+		if (allowed[i] >= 2){
+			Value[i] = Value[i] +  (float)( 4.0 / (float)(allowed[i]) ) - 2 ;
+		}
+		if (board[i] != 0){
+			Value[i] = -5;
 		}
 	}
 }
@@ -214,14 +327,14 @@ void drawValue(int gameLength){
 	printf("\nThe Value of %d th Turn\n", gameLength);
 	for (int i=0; i<19; i++){
 		for (int j=0; j<19; j++){
-			if (value[19*i +j] > 0){
-				printf(" %1.1f ", value[19*i +j]);	
+			if (Value[19*i +j] > 0){
+				printf(" %1.1f ", Value[19*i +j]);	
 			}
-			else if (value[19*i +j] == 0){
+			else if (Value[19*i +j] == 0){
 				printf(" 0.0 ");	
 			}
 			else{
-				printf("%1.1f ", value[19*i +j]);	
+				printf("%1.1f ", Value[19*i +j]);	
 			}
 		}
 		printf("\n");
