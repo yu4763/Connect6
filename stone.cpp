@@ -4,6 +4,8 @@
 extern bool userStatus;
 extern int userColor;
 int cnt = 1;
+extern int minei1, minek1;
+extern int minei2, minek2;
 
 stone::stone(QWidget *parent, int i, int k) : QWidget(parent){
     this->i = i;
@@ -61,6 +63,14 @@ void stone::mousePressEvent(QMouseEvent*){
 
     if( userStatus && state == 0 ){
         cnt++;
+        if(cnt==1){
+            minei1 = i;
+            minek1 = k;
+        }
+        else if(cnt==2){
+            minei2 = i;
+            minek2 = k;
+        }
         this->setUpdatesEnabled(true);
 
     }

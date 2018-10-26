@@ -10,10 +10,6 @@ int check4( stone *s[19][19], char state, int& pos1, int& pos2){
     int result;
     result = checkmine(s, state, pos1, pos2);
 
-    if(result == 0){
-        result = checkmineblank(s, state, pos1, pos2);
-    }
-
     return result;
 }
 
@@ -661,7 +657,662 @@ int checkmine(stone *s[19][19], char state, int& pos1, int& pos2 ){
 
 
 
-int checkmineblank(stone *s[19][19], char state, int& pos1, int& pos2){
+int checkmineblank(stone *s[19][19], char state, int& pos1, int& pos2, int p, int q){
 
+
+    int cnt = 0;
+    int empty = 0;
+    int i, k;
+
+    /*check row*/
+    for(k=0; k<stoneNum; k++){
+
+        if(s[p][k]->state == state){
+            cnt++;
+        }
+        else
+            cnt = 0;
+
+        if(cnt == 1){
+
+            if(k+5>=stoneNum)
+                break;
+
+            if(s[p][k+1]->state == 0){
+                if(k+6>=stoneNum || s[p][k+6]->state != state){
+                    if(s[p][k+2]->state==0 && s[p][k+3]->state==state && s[p][k+4]->state == state && s[p][k+5]->state==state){
+                        pos1 = p*stoneNum + (k+1);
+                        pos2 = p*stoneNum + (k+2);
+                        return 2;
+                    }
+                    else if(s[p][k+2]->state==state && s[p][k+3]->state==state && s[p][k+4]->state == state && s[p][k+5]->state== 0){
+                        pos1 = p*stoneNum + (k+1);
+                        pos2 = p*stoneNum + (k+5);
+                        return 2;
+                    }
+                    else if(s[p][k+2]->state==state && s[p][k+3]->state==state && s[p][k+4]->state == state && s[p][k+5]->state== state){
+                        pos1 = p*stoneNum + (k+1);
+                        return 1;
+                    }
+                }
+            }
+
+        }
+
+        if(cnt==2 ){
+
+            if(k+4 >= stoneNum)
+                break;
+
+            if(s[p][k+1]->state==0){
+
+                if(k+5>=stoneNum || s[p][k+5]->state != state){
+                    if(s[p][k+2]->state==0 && s[p][k+3]->state == state && s[p][k+4]->state == state){
+                        pos1 = p*stoneNum + (k+1);
+                        pos2 = p*stoneNum + (k+2);
+                        return 2;
+                    }
+                    else if( s[p][k+2]->state == state && s[p][k+3]->state == state && s[p][k+4]->state == 0){
+                        pos1 = p*stoneNum + (k+1);
+                        pos2 = p*stoneNum + (k+4);
+                        return 2;
+                    }
+                    else if( s[p][k+2]->state == state && s[p][k+3]->state == state && s[p][k+4]->state == state){
+                        pos1 = p*stoneNum + (k+1);
+                        return 1;
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        if(cnt == 3){
+
+            if(k+3 >= stoneNum)
+                break;
+
+            else{
+
+                if( s[p][k+1]->state == 0){
+
+                    if(s[p][k+2]->state == 0 && s[p][k+3]->state == state){
+
+                        if( k+4 >= stoneNum || s[p][k+4]->state != state){
+                            pos1 = p*stoneNum + (k+1);
+                            pos2 = p*stoneNum + (k+2);
+                            return 2;
+                        }
+                    }
+                    else if(s[p][k+2]->state == state){
+
+                        if( k+4 >= stoneNum || s[p][k+4]->state != state){
+                            if(s[p][k+3]->state == state){
+                                pos1 = p*stoneNum +(k+1);
+                                return 1;
+                            }
+                            else if(s[p][k+3]->state == 0){
+
+                                pos1 = p*stoneNum + (k+1);
+                                pos2 = p*stoneNum + (k+3);
+                                return 2;
+
+                            }
+                        }
+
+                    }
+
+                }
+                else if(s[p][k+1]->state == state){
+
+                    if(s[p][k+2]->state==0 && s[p][k+3]->state == state){
+                        if( k+4 >= stoneNum || s[p][k+4]->state != state){
+                            pos1 = p*stoneNum + (k+2);
+                            return 1;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+    for(k=0; k<stoneNum; k++){
+
+        if(s[p][k]->state == 0)
+            empty++;
+        else if(s[p][k]->state == state){
+            if(empty>1 || (empty==1 && k-2 < 0)){
+                if(k+4 >= stoneNum)
+                    break;
+
+                if(k+5>=stoneNum || s[p][k+5]->state != state){
+                    if(s[p][k+1]->state==state && s[p][k+2]->state == 0 && s[p][k+3]->state==state && s[p][k+4]->state==state){
+                        pos1 = p*stoneNum + (k-1);
+                        pos2 = p*stoneNum + (k+2);
+                        return 2;
+                    }
+                    else if(s[p][k+1]->state==state && s[p][k+2]->state == state && s[p][k+3]->state==0 && s[p][k+4]->state==state){
+                        pos1 = p*stoneNum + (k-1);
+                        pos2 = p*stoneNum + (k+3);
+                        return 2;
+                    }
+
+                    else if(s[p][k+1]->state==0 && s[p][k+2]->state == state && s[p][k+3]->state==state && s[p][k+4]->state==state){
+                        pos1 = p*stoneNum + (k-1);
+                        pos2 = p*stoneNum + (k+1);
+                        return 2;
+                    }
+
+                }
+
+            }
+
+            empty = 0;
+        }
+        else
+            empty = 0;
+
+    }
+
+    /* check column */
+
+    for(i=0; i<stoneNum; i++){
+
+        if(s[i][q]->state == state){
+            cnt++;
+        }
+        else
+            cnt = 0;
+
+        if(cnt == 1){
+
+            if(i+5>=stoneNum)
+                break;
+
+            if(s[i+1][q]->state == 0){
+                if(i+6>=stoneNum || s[i+6][q]->state != state){
+                    if(s[i+2][q]->state==0 && s[i+3][q]->state==state && s[i+4][q]->state == state && s[i+5][q]->state==state){
+                        pos1 = (i+1)*stoneNum + q;
+                        pos2 = (i+2)*stoneNum + q;
+                        return 2;
+                    }
+                    else if(s[i+2][q]->state==state && s[i+3][q]->state==state && s[i+4][q]->state == state && s[i+5][q]->state== 0){
+                        pos1 = (i+1)*stoneNum + q;
+                        pos2 = (i+5)*stoneNum + q;
+                        return 2;
+                    }
+                    else if(s[i+2][q]->state==state && s[i+3][q]->state==state && s[i+4][q]->state == state && s[i+5][q]->state== state){
+                        pos1 = (i+1)*stoneNum + q;
+                        return 1;
+                    }
+                }
+            }
+
+        }
+
+        if(cnt==2 ){
+
+            if(i+4 >= stoneNum)
+                break;
+
+            if(s[i+1][q]->state==0){
+
+                if(i+5>=stoneNum || s[i+5][q]->state != state){
+                    if(s[i+2][q]->state==0 && s[i+3][q]->state == state && s[i+4][q]->state == state){
+                        pos1 = (i+1)*stoneNum + q;
+                        pos2 = (i+2)*stoneNum + q;
+                        return 2;
+                    }
+                    else if( s[i+2][q]->state == state && s[i+3][q]->state == state && s[i+4][q]->state == 0){
+                        pos1 = (i+1)*stoneNum + q;
+                        pos2 = (i+4)*stoneNum + q;
+                        return 2;
+                    }
+                    else if( s[i+2][q]->state == state && s[i+3][q]->state == state && s[i+4][q]->state == state){
+                        pos1 = (i+1)*stoneNum + q;
+                        return 1;
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        if(cnt == 3){
+
+            if(i+3 >= stoneNum)
+                break;
+
+            else{
+
+                if( s[i+1][q]->state == 0){
+
+                    if(s[i+2][q]->state == 0 && s[i+3][q]->state == state){
+
+                        if( i+4 >= stoneNum || s[i+4][q]->state != state){
+                            pos1 = (i+1)*stoneNum + q;
+                            pos2 = (i+2)*stoneNum + q;
+                            return 2;
+                        }
+                    }
+                    else if(s[i+2][q]->state == state){
+
+                        if( i+4 >= stoneNum || s[i+4][q]->state != state){
+                            if(s[i+3][q]->state == state){
+                                pos1 = (i+1)*stoneNum + q;
+                                return 1;
+                            }
+                            else if(s[i+3][q]->state == 0){
+
+                                pos1 = (i+1)*stoneNum + q;
+                                pos2 = (i+3)*stoneNum + q;
+                                return 2;
+
+                            }
+                        }
+
+                    }
+
+                }
+                else if(s[i+1][q]->state == state){
+
+                    if(s[i+2][q]->state==0 && s[i+3][q]->state == state){
+                        if( i+4 >= stoneNum || s[i+4][q]->state != state){
+                            pos1 = (i+2)*stoneNum + q;
+                            return 1;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+    for(i=0; i<stoneNum; i++){
+
+        if(s[i][q]->state == 0)
+            empty++;
+        else if(s[i][q]->state == state){
+            if(empty>1 || (empty==1 && i-2 < 0)){
+                if(i+4 >= stoneNum)
+                    break;
+
+                if(i+5>=stoneNum || s[i+5][q]->state != state){
+                    if(s[i+1][q]->state==state && s[i+2][q]->state == 0 && s[i+3][q]->state==state && s[i+4][q]->state==state){
+                        pos1 = (i-1)*stoneNum + q;
+                        pos2 = (i+2)*stoneNum + q;
+                        return 2;
+                    }
+                    else if(s[i+1][q]->state==state && s[i+2][q]->state == state && s[i+3][q]->state==0 && s[i+4][q]->state==state){
+                        pos1 = (i-1)*stoneNum + q;
+                        pos2 = (i+3)*stoneNum + q;
+                        return 2;
+                    }
+
+                    else if(s[i+1][q]->state==0 && s[i+2][q]->state == state && s[i+3][q]->state==state && s[i+4][q]->state==state){
+                        pos1 = (i-1)*stoneNum + q;
+                        pos2 = (i+1)*stoneNum + q;
+                        return 2;
+                    }
+
+                }
+
+            }
+
+            empty = 0;
+        }
+        else
+            empty = 0;
+
+    }
+
+    /* check diagonal */
+
+    int j;
+    int max, min;
+
+    if(p<=q){
+        min = p;
+        max = q;
+    }
+    else{
+        min = q;
+        max = p;
+    }
+
+    for(j=-min; j<stoneNum-max; j++){
+
+        if(s[p+j][q+j]->state == state){
+            cnt++;
+        }
+        else
+            cnt = 0;
+
+        if(cnt == 1){
+
+            if(j+5>=stoneNum-max)
+                break;
+
+            if(s[p+j+1][q+j+1]->state == 0){
+                if(j+6>=stoneNum-max || s[p+j+6][q+j+6]->state != state){
+                    if(s[p+j+2][q+j+2]->state==0 && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state == state && s[p+j+5][q+j+5]->state==state){
+                        pos1 = (p+j+1)*stoneNum + q+j+1;
+                        pos2 = (p+j+2)*stoneNum + q+j+2;
+                        return 2;
+                    }
+                    else if(s[p+j+2][q+j+2]->state==state && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state == state && s[p+j+5][q+j+5]->state== 0){
+                        pos1 = (p+j+1)*stoneNum + q+j+1;
+                        pos2 = (p+j+5)*stoneNum + q+j+5;
+                        return 2;
+                    }
+                    else if(s[p+j+2][q+j+2]->state==state && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state == state && s[p+j+5][q+j+5]->state== state){
+                        pos1 = (p+j+1)*stoneNum + q+j+1;
+                        return 1;
+                    }
+                }
+            }
+
+        }
+
+        if(cnt==2 ){
+            if(j+4 >= stoneNum-max)
+                break;
+
+            if(s[p+j+1][q+j+1]->state==0){
+
+                if(j+5>=stoneNum-max || s[p+j+5][q+j+5]->state != state){
+                    if(s[p+j+2][q+j+2]->state==0 && s[p+j+3][q+j+3]->state == state && s[p+j+4][q+j+4]->state == state){
+                        pos1 = (p+j+1)*stoneNum + q+j+1;
+                        pos2 = (p+j+2)*stoneNum + q+j+2;
+                        return 2;
+                    }
+                    else if( s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state == state && s[p+j+4][q+j+4]->state == 0){
+                        pos1 = (p+j+1)*stoneNum + q+j+1;
+                        pos2 = (p+j+4)*stoneNum + q+j+4;
+                        return 2;
+                    }
+                    else if( s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state == state && s[p+j+4][q+j+4]->state == state){
+                        pos1 = (p+j+1)*stoneNum + q+j+1;
+                        return 1;
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        if(cnt == 3){
+
+            if(j+3 >= stoneNum-max)
+                break;
+
+            else{
+
+                if( s[p+j+1][q+j+1]->state == 0){
+
+                    if(s[p+j+2][q+j+2]->state == 0 && s[p+j+3][q+j+3]->state == state){
+
+                        if( j+4 >= stoneNum-max || s[p+j+4][q+j+4]->state != state){
+                            pos1 = (p+j+1)*stoneNum + q+j+1;
+                            pos2 = (p+j+2)*stoneNum + q+j+2;
+                            return 2;
+                        }
+                    }
+                    else if(s[p+j+2][q+j+2]->state == state){
+
+                        if( j+4 >= stoneNum-max || s[p+j+4][q+j+4]->state != state){
+                            if(s[p+j+3][q+j+3]->state == state){
+                                pos1 = (p+j+1)*stoneNum + q+j+1;
+                                return 1;
+                            }
+                            else if(s[p+j+3][q+j+3]->state == 0){
+
+                                pos1 = (p+j+1)*stoneNum + q+j+1;
+                                pos2 = (p+j+3)*stoneNum + q+j+3;
+                                return 2;
+
+                            }
+                        }
+
+                    }
+
+                }
+                else if(s[p+j+1][q+j+1]->state == state){
+
+                    if(s[p+j+2][q+j+2]->state==0 && s[p+j+3][q+j+3]->state == state){
+                        if( j+4 >= stoneNum-max || s[p+j+4][q+j+4]->state != state){
+                            pos1 = (p+j+2)*stoneNum + q+j+2;
+                            return 1;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+    for(j=-min; j<stoneNum-max; j++){
+
+        if(s[p+j][q+j]->state == 0)
+            empty++;
+        else if(s[p+j][q+j]->state == state){
+            if(empty>1 || (empty==1 && i-2 < 0)){
+                if(j+4 >= stoneNum-max)
+                    break;
+
+                if( j+5>=stoneNum-max || s[p+j+5][q+j+5]->state != state){
+                    if(s[p+j+1][q+j+1]->state==state && s[p+j+2][q+j+2]->state == 0 && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state==state){
+                        pos1 = (p+j-1)*stoneNum + q+j-1;
+                        pos2 = (p+j+2)*stoneNum + q+j+2;
+                        return 2;
+                    }
+                    else if(s[p+j+1][q+j+1]->state==state && s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state==0 && s[p+j+4][q+j+4]->state==state){
+                        pos1 = (p+j-1)*stoneNum + q+j-1;
+                        pos2 = (p+j+3)*stoneNum + q+j+3;
+                        return 2;
+                    }
+
+                    else if(s[p+j+1][q+j+1]->state==0 && s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state==state){
+                        pos1 = (p+j-1)*stoneNum + q+j-1;
+                        pos2 = (p+j+1)*stoneNum + q+j+1;
+                        return 2;
+                    }
+
+                }
+
+            }
+
+            empty = 0;
+        }
+        else
+            empty = 0;
+
+    }
+
+    /*check diagonal */
+    if(p-0 < stoneNum-1-q){
+        min = p;
+    }
+    else{
+        min = stoneNum-1-q;
+    }
+
+    if(q-0 < stoneNum-1-p){
+        max = q;
+    }
+    else{
+        max = stoneNum-1-p;
+    }
+
+
+    for(j=-min; j <= max; j++){
+
+        if(s[p+j][q-j]->state == state){
+            cnt++;
+        }
+        else
+            cnt = 0;
+
+        if(cnt == 1){
+
+            if(j+5> max)
+                break;
+
+            if(s[p+j+1][q-j-1]->state == 0){
+                if(j+6 > max || s[p+j+6][q-j-6]->state != state){
+                    if(s[p+j+2][q-j-2]->state==0 && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state == state && s[p+j+5][q-j-5]->state==state){
+                        pos1 = (p+j+1)*stoneNum + q-j-1;
+                        pos2 = (p+j+2)*stoneNum + q-j-2;
+                        return 2;
+                    }
+                    else if(s[p+j+2][q-j-2]->state==state && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state == state && s[p+j+5][q-j-5]->state== 0){
+                        pos1 = (p+j+1)*stoneNum + q-j-1;
+                        pos2 = (p+j+5)*stoneNum + q-j-5;
+                        return 2;
+                    }
+                    else if(s[p+j+2][q-j-2]->state==state && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state == state && s[p+j+5][q-j-5]->state== state){
+                        pos1 = (p+j+1)*stoneNum + q-j-1;
+                        return 1;
+                    }
+                }
+            }
+
+        }
+
+        if(cnt==2 ){
+            if(j+4 > max)
+                break;
+
+            if(s[p+j+1][q-j-1]->state==0){
+
+                if(j+5 > max || s[p+j+5][q-j-5]->state != state){
+                    if(s[p+j+2][q-j-2]->state==0 && s[p+j+3][q-j-3]->state == state && s[p+j+4][q-j-4]->state == state){
+                        pos1 = (p+j+1)*stoneNum + q-j-1;
+                        pos2 = (p+j+2)*stoneNum + q-j-2;
+                        return 2;
+                    }
+                    else if( s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state == state && s[p+j+4][q-j-4]->state == 0){
+                        pos1 = (p+j+1)*stoneNum + q-j-1;
+                        pos2 = (p+j+4)*stoneNum + q-j-4;
+                        return 2;
+                    }
+                    else if( s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state == state && s[p+j+4][q-j-4]->state == state){
+                        pos1 = (p+j+1)*stoneNum + q-j-1;
+                        return 1;
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        if(cnt == 3){
+
+            if(j+3 > max)
+                break;
+
+            else{
+
+                if( s[p+j+1][q-j-1]->state == 0){
+
+                    if(s[p+j+2][q-j-2]->state == 0 && s[p+j+3][q-j-3]->state == state){
+
+                        if( j+4 > max || s[p+j+4][q-j-4]->state != state){
+                            pos1 = (p+j+1)*stoneNum + q-j-1;
+                            pos2 = (p+j+2)*stoneNum + q-j-2;
+                            return 2;
+                        }
+                    }
+                    else if(s[p+j+2][q-j-2]->state == state){
+
+                        if( j+4 > max || s[p+j+4][q-j-4]->state != state){
+                            if(s[p+j+3][q-j-3]->state == state){
+                                pos1 = (p+j+1)*stoneNum + q-j-1;
+                                return 1;
+                            }
+                            else if(s[p+j+3][q-j-3]->state == 0){
+
+                                pos1 = (p+j+1)*stoneNum + q-j-1;
+                                pos2 = (p+j+3)*stoneNum + q-j-3;
+                                return 2;
+
+                            }
+                        }
+
+                    }
+
+                }
+                else if(s[p+j+1][q-j-1]->state == state){
+
+                    if(s[p+j+2][q-j-2]->state==0 && s[p+j+3][q-j-3]->state == state){
+                        if( j+4 > max || s[p+j+4][q-j-4]->state != state){
+                            pos1 = (p+j+2)*stoneNum + q-j-2;
+                            return 1;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+    for(j=-min; j<=max; j++){
+
+        if(s[p+j][q-j]->state == 0)
+            empty++;
+        else if(s[p+j][q-j]->state == state){
+            if(empty>1 || (empty==1 && i-2 < 0)){
+                if(j+4 > max)
+                    break;
+
+                if( j+5> max || s[p+j+5][q-j-5]->state != state){
+                    if(s[p+j+1][q-j-1]->state==state && s[p+j+2][q-j-2]->state == 0 && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state==state){
+                        pos1 = (p+j-1)*stoneNum + q-j-1;
+                        pos2 = (p+j+2)*stoneNum + q-j-2;
+                        return 2;
+                    }
+                    else if(s[p+j+1][q-j-1]->state==state && s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state==0 && s[p+j+4][q-j-4]->state==state){
+                        pos1 = (p+j-1)*stoneNum + q-j-1;
+                        pos2 = (p+j+3)*stoneNum + q-j-3;
+                        return 2;
+                    }
+
+                    else if(s[p+j+1][q-j-1]->state==0 && s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state==state){
+                        pos1 = (p+j-1)*stoneNum + q-j-1;
+                        pos2 = (p+j+1)*stoneNum + q-j-1;
+                        return 2;
+                    }
+
+                }
+
+            }
+
+            empty = 0;
+        }
+        else
+            empty = 0;
+
+    }
+
+
+
+    return 0;
 
 }

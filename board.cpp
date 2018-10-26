@@ -7,6 +7,8 @@ char userColor = 1;
 extern int cnt;
 extern int best_pos1;
 extern int best_pos2;
+int minei1, minek1;
+int minei2, minek2;
 
 board::board() : QWidget(){
 
@@ -80,6 +82,72 @@ void board::changeLabel(){
             stones[i][k]->setUpdatesEnabled(true);
             stones[i][k]->update();
             stones[i][k]->state = userColor;
+
+        }
+        else{
+            exist4 = checkmineblank(stones, userColor, pos1, pos2, minei1, minek1);
+            printf("%d \n", exist4);
+            if(exist4 == 1){
+
+                k = pos1%stoneNum;
+                i = pos1/stoneNum;
+                stones[i][k]->setUpdatesEnabled(true);
+                stones[i][k]->update();
+                stones[i][k]->state = userColor;
+
+            }
+            else if(exist4 == 2){
+
+                k = pos1%stoneNum;
+                i = pos1/stoneNum;
+                stones[i][k]->setUpdatesEnabled(true);
+                stones[i][k]->update();
+                stones[i][k]->state = userColor;
+                printf("%d %d i, k\n",i, k);
+
+
+                k = pos2%stoneNum;
+                i = pos2/stoneNum;
+                stones[i][k]->setUpdatesEnabled(true);
+                stones[i][k]->update();
+                stones[i][k]->state = userColor;
+                printf("%d %d i, k\n",i, k);
+
+            }
+
+            else{
+
+                exist4 = checkmineblank(stones, userColor, pos1, pos2, minei2, minek2);
+                printf("%d \n", exist4);
+                if(exist4 == 1){
+
+                    k = pos1%stoneNum;
+                    i = pos1/stoneNum;
+                    stones[i][k]->setUpdatesEnabled(true);
+                    stones[i][k]->update();
+                    stones[i][k]->state = userColor;
+
+                }
+                else if(exist4 == 2){
+
+                    k = pos1%stoneNum;
+                    i = pos1/stoneNum;
+                    stones[i][k]->setUpdatesEnabled(true);
+                    stones[i][k]->update();
+                    stones[i][k]->state = userColor;
+                    printf("%d %d i, k\n",i, k);
+
+                    k = pos2%stoneNum;
+                    i = pos2/stoneNum;
+                    stones[i][k]->setUpdatesEnabled(true);
+                    stones[i][k]->update();
+                    stones[i][k]->state = userColor;
+                    printf("%d %d i, k\n",i, k);
+
+                }
+
+
+            }
 
         }
 

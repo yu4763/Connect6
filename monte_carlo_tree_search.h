@@ -16,7 +16,7 @@ extern char userColor;
 
 // Namespace for save constants of monte carlo tree search
 namespace mct_const {
-  const double TIME = 5;
+  const double TIME = 1;
   const double TERMINATE_TIME_PADDING = 0.01;
   const int NUMBER_OF_THREADS = 4;
   const int NUMBER_OF_MAX_CHILD_NODES = 12;
@@ -76,7 +76,7 @@ class Position {
       return *this;
     }
     int GetPosition() { return pos_; }
-  
+
   private:
     int pos_;
 };
@@ -107,9 +107,9 @@ class State {
         board_[i] = board[i];
       }
     }
-        
+
     // Construction using board
-    State(const board& board_ref) 
+    State(const board& board_ref)
       : parent_(NULL), uct_value_(123456789), number_of_wins_(0), number_of_visiting_(0), change_idx_1_(-1), change_idx_2_(-1) {
       for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
         child_list_[i] = NULL;
@@ -120,7 +120,7 @@ class State {
         }
       }
     }
-    
+
     // If it is needed, then implement constructor using stones' chage index
     State(const int idx1, const int idx2);
 
