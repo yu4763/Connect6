@@ -1,7 +1,10 @@
 #include<stdio.h>
 char black = 1;
 char white = -1;
-char board[361] = {0,};
+char board2[361] = {0,};
+int index1;
+int index2;
+char parameter;
 
 	//	ValueTable	  0		1	  2		3	  4		5	  6		7	  8		9	 10	   11	 12	   13	 14    15    16    17    18
 float value[361] = {-0.8, -0.7, -0.6, -0.5, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.5, -0.6, -0.7, -0.8, // 0
@@ -44,43 +47,22 @@ char PATTERN5[5] = {0,2,4,1,3}; char PATTERN6[5] = {2,4,1,3,0}; char PATTERN7[5]
 char* PATTERNS[10] = {PATTERN0, PATTERN1, PATTERN2, PATTERN3, PATTERN4,
 					  PATTERN5, PATTERN6, PATTERN7, PATTERN8, PATTERN9};
 
-void update(int index, int gameLenth, bool Black);
-void drawBoard(int gameLength);
-void drawValue(int gameLength);
+void update(int index, bool Black);
 void updateValue(int index, bool Black);
 int runDefenceAlgorithm(char parameter);
 char initializeDefenceAlgorithm();
+void getIndex();
 
-int main(void){
-
-	int gameLength = 0;
-	char parameter;
-	int index;
-	
-	// Initial point Black, (9,9)
-	update(180, gameLength, true);
-	gameLength++;
-	
-	// First White turn
-	update(181, gameLength, false);
-	gameLength++;
-	update(184, gameLength, false);
-	gameLength++;
-	
-	// Get parameter which is required for DefenceAlgorithm. (Run it once, First Turn of Black!)
+void getIndex(){
 	parameter = initializeDefenceAlgorithm();
 	
-	// First turn of Black
-	index = runDefenceAlgorithm(parameter);
-	update(index, gameLength, true);
-	gameLength++;
+	index1 = runDefenceAlgorithm(parameter);
+	update(index1, false);
 	
-	index = runDefenceAlgorithm(parameter);
-	update(index, gameLength, true);
-	gameLength++;
-	
-	return 0;
+	index2 = runDefenceAlgorithm(parameter);
+	update(index2, false);
 }
+
 char initializeDefenceAlgorithm(){ //ÆÐÅÏÀÇ °¢ ÀÚ¸®ÀÇ °¡Ä¡ÀÇ ÃÑÇÕÀÌ °¡Àå ³ôÀº ÆÐÅÏÀ» °è»êÇØ ¹ÝÈ¯ 
 	float table[10] = {0,};
 	int index;
@@ -117,7 +99,7 @@ int runDefenceAlgorithm(char parameter){ // ÀÌÁ¦ Á¤ÇØÁø ÆÐÅÏ¿¡¼­ °¡Àå °¡Ä¡°¡ ³ôÀ
 	for (int i=0; i<19; i++){
 		if (PATTERNS[parameter][i % 5] == 4){
 			for (int j=0; j<3; j++){
-				if ( (value[i*19 + PATTERNS[parameter][i % 5] + 5*j] > max) && (board[i*19 + PATTERNS[parameter][i % 5] + 5*j] == 0) ){
+				if ( (value[i*19 + PATTERNS[parameter][i % 5] + 5*j] > max) && (board2[i*19 + PATTERNS[parameter][i % 5] + 5*j] == 0) ){
 					max = value[i*19 + PATTERNS[parameter][i % 5] + 5*j];
 					maxindex = i*19 + PATTERNS[parameter][i % 5] + 5*j;
 				}
@@ -125,7 +107,7 @@ int runDefenceAlgorithm(char parameter){ // ÀÌÁ¦ Á¤ÇØÁø ÆÐÅÏ¿¡¼­ °¡Àå °¡Ä¡°¡ ³ôÀ
 		}
 		else{
 			for (int j=0; j<4; j++){
-				if ( (value[i*19 + PATTERNS[parameter][i % 5] + 5*j] > max) && (board[i*19 + PATTERNS[parameter][i % 5] + 5*j] == 0) ){
+				if ( (value[i*19 + PATTERNS[parameter][i % 5] + 5*j] > max) && (board2[i*19 + PATTERNS[parameter][i % 5] + 5*j] == 0) ){
 					max = value[i*19 + PATTERNS[parameter][i % 5] + 5*j];
 					maxindex = i*19 + PATTERNS[parameter][i % 5] + 5*j;
 				}
@@ -136,34 +118,14 @@ int runDefenceAlgorithm(char parameter){ // ÀÌÁ¦ Á¤ÇØÁø ÆÐÅÏ¿¡¼­ °¡Àå °¡Ä¡°¡ ³ôÀ
 	return maxindex;
 }
 
-void update(int index, int gameLength, bool Black){
+void update(int index, bool Black){
 	if (Black){
-		board[index] = black;
+		board2[index] = black;
 	}
 	else{
-		board[index] = white;
+		board2[index] = white;
 	}
-	drawBoard(gameLength);
 	updateValue(index, Black);
-	drawValue(gameLength);
-}
-
-void drawBoard(int gameLength){
-	printf("\nThe board of %d th Turn\n", gameLength);
-	for (int i=0; i<19; i++){
-		for (int j=0; j<19; j++){
-			if (board[19*i+j] == black){
-				printf("O ");
-			}
-			else if (board[19*i+j] == white){
-				printf("X ");
-			}
-			else{
-				printf("- ");
-			}
-		}
-		printf("\n");
-	}
 }
 
 void updateValue(int index, bool Black){
@@ -192,7 +154,7 @@ void updateValue(int index, bool Black){
 				y = y + direction * dy;
 				distance++;
 				if (Black){
-					if (board[19*x + y] != 0){
+					if (boar2d[19*x + y] != 0){
 						value[19*x + y] = 0;
 					}
 					else{
@@ -200,7 +162,7 @@ void updateValue(int index, bool Black){
 					} 
 				}
 				else{
-					if (board[19*x + y] != 0){
+					if (board2[19*x + y] != 0){
 						value[19*x + y] = 0;
 					}
 					else{
@@ -209,23 +171,5 @@ void updateValue(int index, bool Black){
 				}
 			}
 		}
-	}
-}
-
-void drawValue(int gameLength){
-	printf("\nThe Value of %d th Turn\n", gameLength);
-	for (int i=0; i<19; i++){
-		for (int j=0; j<19; j++){
-			if (value[19*i +j] > 0){
-				printf(" %1.1f ", value[19*i +j]);	
-			}
-			else if (value[19*i +j] == 0){
-				printf(" 0.0 ");	
-			}
-			else{
-				printf("%1.1f ", value[19*i +j]);	
-			}
-		}
-		printf("\n");
 	}
 }
