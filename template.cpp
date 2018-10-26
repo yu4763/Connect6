@@ -26,6 +26,11 @@ int y[2];
 
 extern int index1;
 extern int index2;
+void update(int index, bool Black);
+void updateValue(int index, bool Black);
+int runDefenceAlgorithm(char parameter);
+char initializeDefenceAlgorithm();
+void getIndex();
 
 void print_board() {
 
@@ -50,9 +55,6 @@ int isFree(int X, int Y) {
 void put_stone() {
 	getIndex();
 	int index;
-	for (int i = 0; i<361; i++){
-		board2[i] = board[i/19][i%19];
-	}
 	for (int i = 0; i < CNT; i++) {
 		do {
 			if (i ==0){
@@ -123,7 +125,7 @@ int main() {
 
 		for (int i = 0; i < 19; i++)
 			for (int j = 0; j < 19; j++)
-				board2[18-i][j] = buf[i * 19 + j] - '0';
+				board[18-i][j] = buf[i * 19 + j] - '0';
 
 		op_x[0] = (buf[361]-'0')*10 + (buf[362] - '0');
 		op_y[0] = (buf[363] - '0') * 10 + (buf[364] - '0');

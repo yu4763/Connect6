@@ -1,10 +1,17 @@
 #include<stdio.h>
+#include <fstream>
+using namespace std;
+
 char black = 1;
-char white = -1;
+char white = 2;
 char board2[361] = {0,};
 int index1;
 int index2;
-char parameter;
+char parameter = 100;
+
+extern int board[19][19];
+extern int op_x[2];
+extern int op_y[2];
 
 	//	ValueTable	  0		1	  2		3	  4		5	  6		7	  8		9	 10	   11	 12	   13	 14    15    16    17    18
 float value[361] = {-0.8, -0.7, -0.6, -0.5, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.4, -0.5, -0.6, -0.7, -0.8, // 0
@@ -39,7 +46,7 @@ O X X -			- X X O
 */
 
 // TypeA x5
-char PATTERN0[5] = {2,0,3,1,4}; char PATTERN1[5] = {0,3,1,4,2}; char PATTERN2[5] = {3,1,4,2,0}; char PATTERN3[5] = {1,4,2,0,3}; char PATTERN4[5] = {4,2,0,3,1}; // ¾Æ¸¶ ¸ð¸£¼Åµµ µÉ °Å °°Àºµ¥ ±Ã±ÝÇÏ¸é ¹°¾îº¸¼¼¿è 
+char PATTERN0[5] = {2,0,3,1,4}; char PATTERN1[5] = {0,3,1,4,2}; char PATTERN2[5] = {3,1,4,2,0}; char PATTERN3[5] = {1,4,2,0,3}; char PATTERN4[5] = {4,2,0,3,1}; // ï¿½Æ¸ï¿½ ï¿½ð¸£¼Åµï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã±ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½îº¸ï¿½ï¿½ï¿½ï¿½
 
 // TypeB x5
 char PATTERN5[5] = {0,2,4,1,3}; char PATTERN6[5] = {2,4,1,3,0}; char PATTERN7[5] = {4,1,3,0,2}; char PATTERN8[5] = {1,3,0,2,4}; char PATTERN9[5] = {3,0,2,4,1};
@@ -50,20 +57,68 @@ char* PATTERNS[10] = {PATTERN0, PATTERN1, PATTERN2, PATTERN3, PATTERN4,
 void update(int index, bool Black);
 void updateValue(int index, bool Black);
 int runDefenceAlgorithm(char parameter);
+void drawBoard();
+void drawValue();
 char initializeDefenceAlgorithm();
 void getIndex();
 
+
 void getIndex(){
-	parameter = initializeDefenceAlgorithm();
-	
+	for (int i = 0; i < 361; i++) {
+		board2[i] = board[i/19][i%19];
+	}
+	if (parameter == 100) {
+		parameter = initializeDefenceAlgorithm();
+		update(180, true);
+	} else{
+		update(op_x[0] + (18 - op_y[0]) * 19, true);
+		update(op_x[1] + (18 - op_y[1]) * 19, true);
+	}
+
 	index1 = runDefenceAlgorithm(parameter);
 	update(index1, false);
-	
+
 	index2 = runDefenceAlgorithm(parameter);
 	update(index2, false);
 }
+void drawValue(){
+	ofstream out("out.txt", ios::app);
+	for (int i=0; i<19; i++){
+		for (int j=0; j<19; j++){
+			if (value[19*i +j] > 0){
+				out << value[19*i +j] << " ";
+			}
+			else if (value[19*i +j] == 0){
+				out << 0 << " ";
+			}
+			else{
+				out << value[19*i +j] <<  " ";
+			}
+		}
+		out << endl;
+	}
+	out.close();
+}
+void drawBoard(){
+	ofstream out("out.txt", ios::app);
+	for (int i=0; i<19; i++){
+		for (int j=0; j<19; j++){
+			if (board2[19*i+j] == black){
+				out << "O ";
+			}
+			else if (board2[19*i+j] == white){
+				out << "X ";
+			}
+			else{
+				out << "- ";
+			}
+		}
+		out << endl;
+	}
+	out.close();
+}
 
-char initializeDefenceAlgorithm(){ //ÆÐÅÏÀÇ °¢ ÀÚ¸®ÀÇ °¡Ä¡ÀÇ ÃÑÇÕÀÌ °¡Àå ³ôÀº ÆÐÅÏÀ» °è»êÇØ ¹ÝÈ¯ 
+char initializeDefenceAlgorithm(){ //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 	float table[10] = {0,};
 	int index;
 	for (int i=0; i<10; i++){
@@ -79,12 +134,12 @@ char initializeDefenceAlgorithm(){ //ÆÐÅÏÀÇ °¢ ÀÚ¸®ÀÇ °¡Ä¡ÀÇ ÃÑÇÕÀÌ °¡Àå ³ôÀº ÆÐ
 					table[i] = table[i] + value[19*j + index + 5 * k];
 				}
 			}
-		}	
+		}
 	}
-	
+
 	float max = table[0];
 	int maxindex = 0;
-	
+
 	for (int i=0; i<10; i++){
 		if ( table[i] > max){
 			max = table[i];
@@ -93,7 +148,7 @@ char initializeDefenceAlgorithm(){ //ÆÐÅÏÀÇ °¢ ÀÚ¸®ÀÇ °¡Ä¡ÀÇ ÃÑÇÕÀÌ °¡Àå ³ôÀº ÆÐ
 	}
 	return maxindex;
 }
-int runDefenceAlgorithm(char parameter){ // ÀÌÁ¦ Á¤ÇØÁø ÆÐÅÏ¿¡¼­ °¡Àå °¡Ä¡°¡ ³ôÀº index¸¦ °è»êÇØ ¹ÝÈ¯ (ÆÐÅÏ Áß °¡Àå ±ÞÇÏ°Ô ¸·¾Æ¾ß µÇ´Â °÷) 
+int runDefenceAlgorithm(char parameter){ // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ indexï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Æ¾ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½)
 	float max = value[PATTERNS[parameter][0]];
 	int maxindex = PATTERNS[parameter][0];
 	for (int i=0; i<19; i++){
@@ -125,13 +180,15 @@ void update(int index, bool Black){
 	else{
 		board2[index] = white;
 	}
+	drawBoard();
 	updateValue(index, Black);
+	drawValue();
 }
 
 void updateValue(int index, bool Black){
 	int orgx = index / 19;
 	int orgy = index % 19;
-	
+
 	int x, y, dx, dy, direction;
 	float distance;
 	for (int i = 0; i<4; i++){
@@ -154,20 +211,20 @@ void updateValue(int index, bool Black){
 				y = y + direction * dy;
 				distance++;
 				if (Black){
-					if (boar2d[19*x + y] != 0){
+					if (board2[19*x + y] != 0){
 						value[19*x + y] = 0;
 					}
 					else{
-						value[19*x + y] = value[19*x + y] - (float)(5.0 / distance) ;
-					} 
+						value[19*x + y] = value[19*x + y] + (float)(5.0 / distance) ;
+					}
 				}
 				else{
 					if (board2[19*x + y] != 0){
 						value[19*x + y] = 0;
 					}
 					else{
-						value[19*x + y] = value[19*x + y] + (float)(5.0 / distance) ;
-					} 
+						value[19*x + y] = value[19*x + y] - (float)(5.0 / distance) ;
+					}
 				}
 			}
 		}
