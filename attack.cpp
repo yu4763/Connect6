@@ -1,8 +1,4 @@
 #include <function.h>
-#include <stdio.h>
-#include "monte_carlo_tree_search.h"
-
-
 
 //pos2 = -1; return 1: pos1 exist
 //return 2: pos1 pos2 exist
@@ -1057,9 +1053,6 @@ int checkmineblank(int s[19][19], char state, int& pos1, int& pos2, int p, int q
 
 
             else{
-
-                printf("%d\n", s[p+j+1][q+j+1]);
-                printf("%d %d\n", p+j+1, q+j+1);
 
                 if( s[p+j+1][q+j+1] == 0){
 

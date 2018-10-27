@@ -1,7 +1,4 @@
 #include <function.h>
-#include <stdio.h>
-#include "monte_carlo_tree_search.h"
-
 
 
 //return 1: pos1 exist
