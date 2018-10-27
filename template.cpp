@@ -6,7 +6,7 @@
 
 #define		BUF_SIZE	1024
 #define		IPAddress	"127.0.0.1"
-#define		PORT		8052	// white: 8052 black: 8053
+#define		PORT		8053	// white: 8052 black: 8053
 #define		WIDTH		19
 #define		HEIGHT		19
 #define		CNT			2
@@ -26,10 +26,6 @@ int y[2];
 
 extern int index1;
 extern int index2;
-void update(int index, bool Black);
-void updateValue(int index, bool Black);
-int runDefenceAlgorithm(char parameter);
-char initializeDefenceAlgorithm();
 void getIndex();
 
 void print_board() {
@@ -37,7 +33,7 @@ void print_board() {
 	printf("\n    ---------------------------------------------------------\n");
 
 	for (int i = 0; i < WIDTH; i++) {
-		printf("%3d", 18-i);
+		printf("%3d", 18 - i);
 		for (int j = 0; j < HEIGHT; j++) {
 			printf("|%c", board[i][j] == 1 ? 'O' : board[i][j] == 2 ? 'X' : ' ');
 		}
@@ -57,9 +53,10 @@ void put_stone() {
 	int index;
 	for (int i = 0; i < CNT; i++) {
 		do {
-			if (i ==0){
+			if (i == 0) {
 				index = index1;
-			} else{
+			}
+			else {
 				index = index2;
 			}
 			x[i] = index % WIDTH;
@@ -103,7 +100,7 @@ int main() {
 		return false; //Couldn't create the socket
 	}
 
-	if (bind(s, reinterpret_cast<SOCKADDR *>(&servAddr), sizeof(servAddr)) == SOCKET_ERROR){
+	if (bind(s, reinterpret_cast<SOCKADDR *>(&servAddr), sizeof(servAddr)) == SOCKET_ERROR) {
 		cout << "Binding failed. Error code: " << WSAGetLastError() << endl;
 		WSACleanup();
 		return false; //Couldn't connect
@@ -125,9 +122,9 @@ int main() {
 
 		for (int i = 0; i < 19; i++)
 			for (int j = 0; j < 19; j++)
-				board[18-i][j] = buf[i * 19 + j] - '0';
+				board[18 - i][j] = buf[i * 19 + j] - '0';
 
-		op_x[0] = (buf[361]-'0')*10 + (buf[362] - '0');
+		op_x[0] = (buf[361] - '0') * 10 + (buf[362] - '0');
 		op_y[0] = (buf[363] - '0') * 10 + (buf[364] - '0');
 		op_x[1] = (buf[365] - '0') * 10 + (buf[366] - '0');
 		op_y[1] = (buf[367] - '0') * 10 + (buf[368] - '0');
