@@ -53,7 +53,7 @@ void board::changeLabel(){
     }
     else if(result == 0 && cnt == 2){
         int pos1, pos2, exist4;
-        exist4 = check4(stones, userColor, pos1, pos2);
+        exist4 = checkmine(stones, userColor, pos1, pos2, minei1, minek1);
 
         userStatus = true;
         statusLabel->setText("Your Turn");
@@ -85,8 +85,9 @@ void board::changeLabel(){
 
         }
         else{
-            exist4 = checkmineblank(stones, userColor, pos1, pos2, minei1, minek1);
-            printf("%d \n", exist4);
+
+            exist4 = checkmine(stones, userColor, pos1, pos2, minei2, minek2);
+
             if(exist4 == 1){
 
                 k = pos1%stoneNum;
@@ -103,52 +104,15 @@ void board::changeLabel(){
                 stones[i][k]->setUpdatesEnabled(true);
                 stones[i][k]->update();
                 stones[i][k]->state = userColor;
-                printf("%d %d i, k\n",i, k);
-
 
                 k = pos2%stoneNum;
                 i = pos2/stoneNum;
                 stones[i][k]->setUpdatesEnabled(true);
                 stones[i][k]->update();
                 stones[i][k]->state = userColor;
-                printf("%d %d i, k\n",i, k);
 
             }
-
-            else{
-
-                exist4 = checkmineblank(stones, userColor, pos1, pos2, minei2, minek2);
-                printf("%d \n", exist4);
-                if(exist4 == 1){
-
-                    k = pos1%stoneNum;
-                    i = pos1/stoneNum;
-                    stones[i][k]->setUpdatesEnabled(true);
-                    stones[i][k]->update();
-                    stones[i][k]->state = userColor;
-
-                }
-                else if(exist4 == 2){
-
-                    k = pos1%stoneNum;
-                    i = pos1/stoneNum;
-                    stones[i][k]->setUpdatesEnabled(true);
-                    stones[i][k]->update();
-                    stones[i][k]->state = userColor;
-                    printf("%d %d i, k\n",i, k);
-
-                    k = pos2%stoneNum;
-                    i = pos2/stoneNum;
-                    stones[i][k]->setUpdatesEnabled(true);
-                    stones[i][k]->update();
-                    stones[i][k]->state = userColor;
-                    printf("%d %d i, k\n",i, k);
-
-                }
-
-
-            }
-
+            
         }
 
     }
@@ -157,6 +121,7 @@ void board::changeLabel(){
 void board::emptyLabel(){
 
     int result = checkEnd(stones, userColor);
+
 
     if(result == 1){
         userStatus = false;
@@ -169,10 +134,75 @@ void board::emptyLabel(){
     else if(result == 0 && cnt == 2){
         userStatus = false;
         statusLabel->setText("computer");
-        MonteCarloTreeSearch();
-        QTimer::singleShot(5, this, SLOT(handleClick()));
-        QTimer::singleShot(10, this, SLOT(handleClick()));
         cnt = 0;
+        int i, k;
+
+
+        int pos1, pos2;
+        int block4 = checkopponent(stones, userColor, pos1, pos2, minei1, minek1);
+        if(block4 == 1){
+            cnt++;
+            k = pos1%stoneNum;
+            i = pos1/stoneNum;
+            printf("%d %d %d\n", block4, i, k);
+            stones[i][k]->setUpdatesEnabled(true);
+            stones[i][k]->update();
+            stones[i][k]->state = -userColor+3;
+            MonteCarloTreeSearch();
+            QTimer::singleShot(5, this, SLOT(handleClick()));
+        }
+        else if (block4 == 2){
+            cnt++;
+            k = pos1%stoneNum;
+            i = pos1/stoneNum;
+            printf("%d %d %d\n", block4, i, k);
+            stones[i][k]->setUpdatesEnabled(true);
+            stones[i][k]->update();
+            stones[i][k]->state = -userColor+3;
+            cnt++;
+            k = pos2%stoneNum;
+            i = pos2/stoneNum;
+            printf("%d %d %d\n", block4, i, k);
+            stones[i][k]->setUpdatesEnabled(true);
+            stones[i][k]->update();
+            stones[i][k]->state = -userColor+3;
+        }
+        else{
+            block4 = checkopponent(stones, userColor, pos1, pos2, minei2, minek2);
+            if(block4 == 1){
+                cnt++;
+                k = pos1%stoneNum;
+                i = pos1/stoneNum;
+                printf("%d %d %d\n", block4, i, k);
+                stones[i][k]->setUpdatesEnabled(true);
+                stones[i][k]->update();
+                stones[i][k]->state = -userColor+3;
+                MonteCarloTreeSearch();
+                QTimer::singleShot(5, this, SLOT(handleClick()));
+            }
+            else if (block4 == 2){
+                cnt++;
+                k = pos1%stoneNum;
+                i = pos1/stoneNum;
+                printf("%d %d %d\n", block4, i, k);
+                stones[i][k]->setUpdatesEnabled(true);
+                stones[i][k]->update();
+                stones[i][k]->state = -userColor+3;
+                cnt++;
+                k = pos2%stoneNum;
+                i = pos2/stoneNum;
+                printf("%d %d %d\n", block4, i, k);
+                stones[i][k]->setUpdatesEnabled(true);
+                stones[i][k]->update();
+                stones[i][k]->state = -userColor+3;
+            }
+            else {
+                MonteCarloTreeSearch();
+                QTimer::singleShot(5, this, SLOT(handleClick()));
+                QTimer::singleShot(10, this, SLOT(handleClick()));
+            }
+        }
+
     }
 
 }
