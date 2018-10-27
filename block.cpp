@@ -7,7 +7,7 @@
 //return 1: pos1 exist
 //return 2: pos1 pos2 exist
 //return 0: deosn't exist
-int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int q){
+int checkopponent(int s[19][19], char state, int& pos1, int& pos2, int p, int q){
 
     int i, j, k;
 
@@ -24,7 +24,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             continue;
         }
 
-        if(s[p][k]->state == 0){
+        if(s[p][k] == 0){
 
             empty = 1;
             emindex = k;
@@ -39,7 +39,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             for(j=k+1; ; j++){
                 if(j==stoneNum-1)
                     break;
-                if(s[p][j]->state != 0){
+                if(s[p][j] != 0){
                     break;
                 }
                 if(empty < 2){
@@ -49,12 +49,12 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             }
         }
 
-        else if(s[p][k]->state==state){
+        else if(s[p][k]==state){
             cnt = 1;
             for(j=k+1; j<k+6; j++){
                 if(j>=stoneNum)
                     break;
-                if(s[p][j]->state != state){
+                if(s[p][j] != state){
                     break;
                 }
                 cnt++;
@@ -62,8 +62,8 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             if(cnt == 5){
                 if (empty > 1 || (empty==1 && !left) ){
-                    if( !(j==stoneNum) && s[p][j] ->state== 0){
-                         if(j+1 == stoneNum  || s[p][j+1]-> state !=state){
+                    if( !(j==stoneNum) && s[p][j] == 0){
+                         if(j+1 == stoneNum  || s[p][j+1] !=state){
                              pos1 = p*stoneNum +emindex;
                              pos2 = p*stoneNum+j;
                              return 2;
@@ -83,8 +83,8 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                     }
 
                 }
-                else if( !(j==stoneNum) && s[p][j] ->state== 0){
-                    if( j+1 == stoneNum  || s[p][j+1]-> state !=state){
+                else if( !(j==stoneNum) && s[p][j] == 0){
+                    if( j+1 == stoneNum  || s[p][j+1] !=state){
                         pos1 = p*stoneNum+j;
                         pos2 = -1;
                         return 1;
@@ -94,7 +94,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             else if(cnt == 4){
                 if (empty > 2 || (empty==2 && !left) ){
-                    if( (j<=stoneNum-1) && s[p][j]->state == 0 ){
+                    if( (j<=stoneNum-1) && s[p][j] == 0 ){
                         pos1 = p*stoneNum + emindex;
                         pos2 = p*stoneNum + j;
                         return 2;
@@ -106,7 +106,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                     }
                 }
                 else if(empty == 1){
-                    if( (j<=stoneNum-1) && s[p][j] ->state== 0){
+                    if( (j<=stoneNum-1) && s[p][j] == 0){
                         pos1 = p*stoneNum + emindex;
                         pos2 = p*stoneNum + j;
                         return 2;
@@ -117,7 +117,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                         return 1;
                     }
                 }
-                else if( (j<=stoneNum-1) && s[p][j] ->state== 0){
+                else if( (j<=stoneNum-1) && s[p][j] == 0){
                     pos1 = p*stoneNum+j;
                     pos2 = -1;
                     return 1;
@@ -145,7 +145,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             continue;
         }
 
-        if(s[k][q]->state == 0){
+        if(s[k][q] == 0){
 
             empty = 1;
             emindex = k;
@@ -160,7 +160,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             for(j=k+1; ; j++){
                 if(j==stoneNum-1)
                     break;
-                if(s[j][q]->state != 0){
+                if(s[j][q] != 0){
                     break;
                 }
                 if(empty < 2){
@@ -170,12 +170,12 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             }
         }
 
-        else if(s[k][q]->state==state){
+        else if(s[k][q]==state){
             cnt = 1;
             for(j=k+1; j<k+6; j++){
                 if(j>=stoneNum)
                     break;
-                if(s[j][q]->state != state){
+                if(s[j][q] != state){
                     break;
                 }
                 cnt++;
@@ -183,8 +183,8 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             if(cnt == 5){
                 if (empty > 1 || (empty==1 && !left) ){
-                    if( !(j==stoneNum) && s[j][q] ->state== 0){
-                         if(j+1 == stoneNum  || s[j+1][q]-> state !=state){
+                    if( !(j==stoneNum) && s[j][q] == 0){
+                         if(j+1 == stoneNum  || s[j+1][q] !=state){
                              pos1 = emindex*stoneNum + q;
                              pos2 = j*stoneNum + q;
                              return 2;
@@ -204,8 +204,8 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                     }
 
                 }
-                else if( !(j==stoneNum) && s[j][q] ->state== 0){
-                    if( j+1 == stoneNum  || s[j+1][q]-> state !=state){
+                else if( !(j==stoneNum) && s[j][q] == 0){
+                    if( j+1 == stoneNum  || s[j+1][q] !=state){
                         pos1 = j*stoneNum + q;
                         pos2 = -1;
                         return 1;
@@ -215,7 +215,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             else if(cnt == 4){
                 if (empty > 2 || (empty==2 && !left) ){
-                    if( (j<=stoneNum-1) && s[j][q]->state == 0 ){
+                    if( (j<=stoneNum-1) && s[j][q] == 0 ){
                         pos1 = emindex*stoneNum + q;
                         pos2 = j*stoneNum + q;
                         return 2;
@@ -227,7 +227,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                     }
                 }
                 else if(empty == 1){
-                    if( (j<=stoneNum-1) && s[j][q] ->state== 0){
+                    if( (j<=stoneNum-1) && s[j][q] == 0){
                         pos1 = emindex*stoneNum + q;
                         pos2 = j*stoneNum + q;
                         return 2;
@@ -238,7 +238,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                         return 1;
                     }
                 }
-                else if( (j<=stoneNum-1) && s[j][q] ->state== 0){
+                else if( (j<=stoneNum-1) && s[j][q] == 0){
                     pos1 = j*stoneNum + q;
                     pos2 = -1;
                     return 1;
@@ -270,7 +270,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             if(j < t)
                 continue;
 
-            if(s[i+j][k+j]->state==0){
+            if(s[i+j][k+j]==0){
 
                 empty = 1;
                 emindex = j;
@@ -285,7 +285,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                 for( t=j+1; ; t++){
                     if(i+t >= stoneNum-1 || k+t >= stoneNum-1)
                         break;
-                    if(s[i+t][k+t]->state != 0){
+                    if(s[i+t][k+t] != 0){
                         break;
                     }
                     if(empty < 2){
@@ -296,12 +296,12 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             }
 
-            else if(s[i+j][k+j]->state==state){
+            else if(s[i+j][k+j]==state){
                 cnt = 1;
                 for(t=j+1; t<j+6; t++){
                     if(i+t>=stoneNum || k+t>=stoneNum)
                         break;
-                    if(s[i+t][k+t]->state != state){
+                    if(s[i+t][k+t] != state){
                         break;
                     }
                     cnt++;
@@ -309,7 +309,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 if(cnt == 5){
                     if (empty > 1 || (empty==1 && !left) ){
-                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                             pos1 = (i+emindex)*stoneNum + k+emindex;
                             pos2 = (i+t)*stoneNum + (k+t);
                             return 2;
@@ -330,7 +330,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 else if(cnt == 4){
                     if (empty > 2 || (empty==2 && !left) ){
-                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                             pos1 = (i+emindex)*stoneNum + k+emindex;
                             pos2 = (i+t)*stoneNum + (k+t);
                             return 2;
@@ -343,7 +343,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                     }
                     else if(empty == 1){
-                        if( (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                        if( (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                             pos1 = (i+emindex)*stoneNum + k+emindex;
                             pos2 = (i+t)*stoneNum + (k+t);
                             return 2;
@@ -354,7 +354,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                             return 1;
                         }
                     }
-                    else if(  (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                    else if(  (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                         pos1 = (i+t)*stoneNum + k+t;
                         pos2 = -1;
                         return 1;
@@ -389,7 +389,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             if(j < t)
                 continue;
 
-            if(s[i+j][k+j]->state==0){
+            if(s[i+j][k+j]==0){
 
                 empty = 1;
                 emindex = j;
@@ -404,7 +404,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                 for( t=j+1; ; t++){
                     if(i+t >= stoneNum-1 || k+t >= stoneNum-1)
                         break;
-                    if(s[i+t][k+t]->state != 0){
+                    if(s[i+t][k+t] != 0){
                         break;
                     }
                     if(empty < 2){
@@ -415,12 +415,12 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             }
 
-            else if(s[i+j][k+j]->state==state){
+            else if(s[i+j][k+j]==state){
                 cnt = 1;
                 for(t=j+1; t<j+6; t++){
                     if(i+t>=stoneNum || k+t>=stoneNum)
                         break;
-                    if(s[i+t][k+t]->state != state){
+                    if(s[i+t][k+t] != state){
                         break;
                     }
                     cnt++;
@@ -428,7 +428,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 if(cnt == 5){
                     if (empty > 1 || (empty==1 && !left) ){
-                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                             pos1 = (i+emindex)*stoneNum + k+emindex;
                             pos2 = (i+t)*stoneNum + (k+t);
                             return 2;
@@ -449,7 +449,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 else if(cnt == 4){
                     if (empty > 2 || (empty==2 && !left) ){
-                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                        if((i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                             pos1 = (i+emindex)*stoneNum + k+emindex;
                             pos2 = (i+t)*stoneNum + (k+t);
                             return 2;
@@ -462,7 +462,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                     }
                     else if(empty == 1){
-                        if( (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                        if( (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                             pos1 = (i+emindex)*stoneNum + k+emindex;
                             pos2 = (i+t)*stoneNum + (k+t);
                             return 2;
@@ -473,7 +473,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                             return 1;
                         }
                     }
-                    else if(  (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] ->state== 0){
+                    else if(  (i+t < stoneNum) && (k+t < stoneNum) && s[i+t][k+t] == 0){
                         pos1 = (i+t)*stoneNum + k+t;
                         pos2 = -1;
                         return 1;
@@ -509,7 +509,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             if(j < t)
                 continue;
 
-            if(s[i+j][k-j]->state==0){
+            if(s[i+j][k-j]==0){
 
                 empty = 1;
                 emindex = j;
@@ -524,7 +524,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                 for( t=j+1; ; t++){
                     if(i+t >= stoneNum-1 || k-t <= 0)
                         break;
-                    if(s[i+t][k-t]->state != 0){
+                    if(s[i+t][k-t] != 0){
                         break;
                     }
                     if(empty < 2){
@@ -535,12 +535,12 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             }
 
-            else if(s[i+j][k-j]->state==state){
+            else if(s[i+j][k-j]==state){
                 cnt = 1;
                 for(t=j+1; t<j+6; t++){
                     if(i+t>=stoneNum || k-t<=0)
                         break;
-                    if(s[i+t][k-t]->state != state){
+                    if(s[i+t][k-t] != state){
                         break;
                     }
                     cnt++;
@@ -549,7 +549,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 if(cnt == 5){
                     if (empty > 1 || (empty==1 && !left) ){
-                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                             pos1 = (i+emindex)*stoneNum + k -emindex;
                             pos2 = (i+t)*stoneNum +(k-t);
                             return 2;
@@ -571,7 +571,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 else if(cnt == 4){
                     if (empty > 2 || (empty==2 && !left) ){
-                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                             pos1 = (i+emindex)*stoneNum + k -emindex;
                             pos2 = (i+t)*stoneNum +(k-t);
                             return 2;
@@ -583,7 +583,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                         }
                     }
                     else if(empty == 1){
-                        if( (i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                        if( (i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                             pos1 = (i+emindex)*stoneNum + k -emindex;
                             pos2 = (i+t)*stoneNum +(k-t);
                             return 2;
@@ -594,7 +594,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                             return 1;
                         }
                     }
-                    else if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                    else if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                         pos1 = (i+t)*stoneNum +(k-t);
                         pos2 = -1;
                         return 1;
@@ -629,7 +629,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
             if(j < t)
                 continue;
 
-            if(s[i+j][k-j]->state==0){
+            if(s[i+j][k-j]==0){
 
                 empty = 1;
                 emindex = j;
@@ -644,7 +644,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                 for( t=j+1; ; t++){
                     if(i+t >= stoneNum-1 || k-t <= 0)
                         break;
-                    if(s[i+t][k-t]->state != 0){
+                    if(s[i+t][k-t] != 0){
                         break;
                     }
                     if(empty < 2){
@@ -655,12 +655,12 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
             }
 
-            else if(s[i+j][k-j]->state==state){
+            else if(s[i+j][k-j]==state){
                 cnt = 1;
                 for(t=j+1; t<j+6; t++){
                     if(i+t>=stoneNum || k-t<=0)
                         break;
-                    if(s[i+t][k-t]->state != state){
+                    if(s[i+t][k-t] != state){
                         break;
                     }
                     cnt++;
@@ -669,7 +669,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 if(cnt == 5){
                     if (empty > 1 || (empty==1 && !left) ){
-                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                             pos1 = (i+emindex)*stoneNum + k -emindex;
                             pos2 = (i+t)*stoneNum +(k-t);
                             return 2;
@@ -691,7 +691,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
                 else if(cnt == 4){
                     if (empty > 2 || (empty==2 && !left) ){
-                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                        if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                             pos1 = (i+emindex)*stoneNum + k -emindex;
                             pos2 = (i+t)*stoneNum +(k-t);
                             return 2;
@@ -703,7 +703,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                         }
                     }
                     else if(empty == 1){
-                        if( (i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                        if( (i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                             pos1 = (i+emindex)*stoneNum + k -emindex;
                             pos2 = (i+t)*stoneNum +(k-t);
                             return 2;
@@ -714,7 +714,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
                             return 1;
                         }
                     }
-                    else if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] ->state== 0){
+                    else if((i+t < stoneNum) && (k-t >= 0) && s[i+t][k-t] == 0){
                         pos1 = (i+t)*stoneNum +(k-t);
                         pos2 = -1;
                         return 1;
@@ -737,7 +737,7 @@ int checkopponent(stone *s[19][19], char state, int& pos1, int& pos2, int p, int
 
 }
 
-int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p, int q){
+int checkopponentblank(int s[19][19], char state, int& pos1, int& pos2, int p, int q){
 
     int cnt = 0;
     int empty = 0;
@@ -746,7 +746,7 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
     /*check row*/
     for(k=0; k<stoneNum; k++){
 
-        if(s[p][k]->state == state){
+        if(s[p][k] == state){
             cnt++;
         }
         else
@@ -757,19 +757,19 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(k+5>=stoneNum)
                 break;
 
-            if(s[p][k+1]->state == 0){
-                if(k+6>=stoneNum || s[p][k+6]->state != state){
-                    if(s[p][k+2]->state==0 && s[p][k+3]->state==state && s[p][k+4]->state == state && s[p][k+5]->state==state){
+            if(s[p][k+1] == 0){
+                if(k+6>=stoneNum || s[p][k+6] != state){
+                    if(s[p][k+2]==0 && s[p][k+3]==state && s[p][k+4] == state && s[p][k+5]==state){
                         pos1 = p*stoneNum + (k+2);
                         pos2 = -1;
                         return 1;
                     }
-                    else if(s[p][k+2]->state==state && s[p][k+3]->state==state && s[p][k+4]->state == state && s[p][k+5]->state== 0){
+                    else if(s[p][k+2]==state && s[p][k+3]==state && s[p][k+4] == state && s[p][k+5]== 0){
                         pos1 = p*stoneNum + (k+1);
                         pos2 = -1;
                         return 1;
                     }
-                    else if(s[p][k+2]->state==state && s[p][k+3]->state==state && s[p][k+4]->state == state && s[p][k+5]->state== state){
+                    else if(s[p][k+2]==state && s[p][k+3]==state && s[p][k+4] == state && s[p][k+5]== state){
 
                         if(k+6<stoneNum){
                             pos1 = p*stoneNum + (k+1);
@@ -792,20 +792,20 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(k+4 >= stoneNum)
                 break;
 
-            if(s[p][k+1]->state==0){
+            if(s[p][k+1]==0){
 
-                if(k+5>=stoneNum || s[p][k+5]->state != state){
-                    if(s[p][k+2]->state==0 && s[p][k+3]->state == state && s[p][k+4]->state == state){
+                if(k+5>=stoneNum || s[p][k+5] != state){
+                    if(s[p][k+2]==0 && s[p][k+3] == state && s[p][k+4] == state){
                         pos1 = p*stoneNum + (k+1);
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[p][k+2]->state == state && s[p][k+3]->state == state && s[p][k+4]->state == 0){
+                    else if( s[p][k+2] == state && s[p][k+3] == state && s[p][k+4] == 0){
                         pos1 = p*stoneNum + (k+1);
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[p][k+2]->state == state && s[p][k+3]->state == state && s[p][k+4]->state == state){
+                    else if( s[p][k+2] == state && s[p][k+3] == state && s[p][k+4] == state){
                         pos1 = p*stoneNum + (k+1);
                         pos2 = -1;
                         return 1;
@@ -825,25 +825,25 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
             else{
 
-                if( s[p][k+1]->state == 0){
+                if( s[p][k+1] == 0){
 
-                    if(s[p][k+2]->state == 0 && s[p][k+3]->state == state){
+                    if(s[p][k+2] == 0 && s[p][k+3] == state){
 
-                        if( k+4 >= stoneNum || s[p][k+4]->state != state){
+                        if( k+4 >= stoneNum || s[p][k+4] != state){
                             pos1 = p*stoneNum + (k+1);
                             pos2 = -1;
                             return 1;
                         }
                     }
-                    else if(s[p][k+2]->state == state){
+                    else if(s[p][k+2] == state){
 
-                        if( k+4 >= stoneNum || s[p][k+4]->state != state){
-                            if(s[p][k+3]->state == state){
+                        if( k+4 >= stoneNum || s[p][k+4] != state){
+                            if(s[p][k+3] == state){
                                 pos1 = p*stoneNum +(k+1);
                                 pos2 = -1;
                                 return 1;
                             }
-                            else if(s[p][k+3]->state == 0){
+                            else if(s[p][k+3] == 0){
 
                                 pos1 = p*stoneNum + (k+1);
                                 pos2 = -1;
@@ -863,27 +863,27 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
     for(k=0; k<stoneNum; k++){
 
-        if(s[p][k]->state == 0)
+        if(s[p][k] == 0)
             empty++;
-        else if(s[p][k]->state == state){
+        else if(s[p][k] == state){
             if(empty>1 || (empty==1 && k-2 < 0)){
                 if(k+4 >= stoneNum)
                     break;
 
-                if(k+5>=stoneNum || s[p][k+5]->state != state){
-                    if(s[p][k+1]->state==state && s[p][k+2]->state == 0 && s[p][k+3]->state==state && s[p][k+4]->state==state){
+                if(k+5>=stoneNum || s[p][k+5] != state){
+                    if(s[p][k+1]==state && s[p][k+2] == 0 && s[p][k+3]==state && s[p][k+4]==state){
                         pos1 = p*stoneNum + (k+2);
                         pos2 = -1;
                         return 1;
                     }
-                    else if(s[p][k+1]->state==state && s[p][k+2]->state == state && s[p][k+3]->state==0 && s[p][k+4]->state==state){
+                    else if(s[p][k+1]==state && s[p][k+2] == state && s[p][k+3]==0 && s[p][k+4]==state){
 
                         pos1 = p*stoneNum + (k+3);
                         pos2 = -1;
                         return 1;
                     }
 
-                    else if(s[p][k+1]->state==0 && s[p][k+2]->state == state && s[p][k+3]->state==state && s[p][k+4]->state==state){
+                    else if(s[p][k+1]==0 && s[p][k+2] == state && s[p][k+3]==state && s[p][k+4]==state){
                         pos1 = p*stoneNum + (k+1);
                         pos2 = -1;
                         return 1;
@@ -906,7 +906,7 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
     for(i=0; i<stoneNum; i++){
 
-        if(s[i][q]->state == state){
+        if(s[i][q] == state){
             cnt++;
         }
         else
@@ -917,14 +917,14 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(i+5>=stoneNum)
                 break;
 
-            if(s[i+1][q]->state == 0){
-                if(i+6>=stoneNum || s[i+6][q]->state != state){
-                    if(s[i+2][q]->state==0 && s[i+3][q]->state==state && s[i+4][q]->state == state && s[i+5][q]->state==state){
+            if(s[i+1][q] == 0){
+                if(i+6>=stoneNum || s[i+6][q] != state){
+                    if(s[i+2][q]==0 && s[i+3][q]==state && s[i+4][q] == state && s[i+5][q]==state){
                         pos2 = -1;
                         pos1 = (i+2)*stoneNum + q;
                         return 1;
                     }
-                    else if(s[i+2][q]->state==state && s[i+3][q]->state==state && s[i+4][q]->state == state && s[i+5][q]->state== 0){
+                    else if(s[i+2][q]==state && s[i+3][q]==state && s[i+4][q] == state && s[i+5][q]== 0){
                         pos1 = (i+1)*stoneNum + q;
                         pos2 = -1;
                         return 1;
@@ -940,20 +940,20 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(i+4 >= stoneNum)
                 break;
 
-            if(s[i+1][q]->state==0){
+            if(s[i+1][q]==0){
 
-                if(i+5>=stoneNum || s[i+5][q]->state != state){
-                    if(s[i+2][q]->state==0 && s[i+3][q]->state == state && s[i+4][q]->state == state){
+                if(i+5>=stoneNum || s[i+5][q] != state){
+                    if(s[i+2][q]==0 && s[i+3][q] == state && s[i+4][q] == state){
                         pos1 = (i+1)*stoneNum + q;
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[i+2][q]->state == state && s[i+3][q]->state == state && s[i+4][q]->state == 0){
+                    else if( s[i+2][q] == state && s[i+3][q] == state && s[i+4][q] == 0){
                         pos1 = (i+1)*stoneNum + q;
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[i+2][q]->state == state && s[i+3][q]->state == state && s[i+4][q]->state == state){
+                    else if( s[i+2][q] == state && s[i+3][q] == state && s[i+4][q] == state){
                         pos1 = (i+1)*stoneNum + q;
                         pos2 = -1;
                         return 1;
@@ -973,25 +973,25 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
             else{
 
-                if( s[i+1][q]->state == 0){
+                if( s[i+1][q] == 0){
 
-                    if(s[i+2][q]->state == 0 && s[i+3][q]->state == state){
+                    if(s[i+2][q] == 0 && s[i+3][q] == state){
 
-                        if( i+4 >= stoneNum || s[i+4][q]->state != state){
+                        if( i+4 >= stoneNum || s[i+4][q] != state){
                             pos1 = (i+1)*stoneNum + q;
                             pos2 = -1;
                             return 1;
                         }
                     }
-                    else if(s[i+2][q]->state == state){
+                    else if(s[i+2][q] == state){
 
-                        if( i+4 >= stoneNum || s[i+4][q]->state != state){
-                            if(s[i+3][q]->state == state){
+                        if( i+4 >= stoneNum || s[i+4][q] != state){
+                            if(s[i+3][q] == state){
                                 pos1 = (i+1)*stoneNum + q;
                                 pos2 = -1;
                                 return 1;
                             }
-                            else if(s[i+3][q]->state == 0){
+                            else if(s[i+3][q] == 0){
 
                                 pos1 = (i+1)*stoneNum + q;
                                 pos2 = -1;
@@ -1014,26 +1014,26 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
     for(i=0; i<stoneNum; i++){
 
-        if(s[i][q]->state == 0)
+        if(s[i][q] == 0)
             empty++;
-        else if(s[i][q]->state == state){
+        else if(s[i][q] == state){
             if(empty>1 || (empty==1 && i-2 < 0)){
                 if(i+4 >= stoneNum)
                     break;
 
-                if(i+5>=stoneNum || s[i+5][q]->state != state){
-                    if(s[i+1][q]->state==state && s[i+2][q]->state == 0 && s[i+3][q]->state==state && s[i+4][q]->state==state){
+                if(i+5>=stoneNum || s[i+5][q] != state){
+                    if(s[i+1][q]==state && s[i+2][q] == 0 && s[i+3][q]==state && s[i+4][q]==state){
                         pos2 = -1;
                         pos1 = (i+2)*stoneNum + q;
                         return 1;
                     }
-                    else if(s[i+1][q]->state==state && s[i+2][q]->state == state && s[i+3][q]->state==0 && s[i+4][q]->state==state){
+                    else if(s[i+1][q]==state && s[i+2][q] == state && s[i+3][q]==0 && s[i+4][q]==state){
                         pos2 = -1;
                         pos1 = (i+3)*stoneNum + q;
                         return 1;
                     }
 
-                    else if(s[i+1][q]->state==0 && s[i+2][q]->state == state && s[i+3][q]->state==state && s[i+4][q]->state==state){
+                    else if(s[i+1][q]==0 && s[i+2][q] == state && s[i+3][q]==state && s[i+4][q]==state){
                         pos2 = -1;
                         pos1 = (i+1)*stoneNum + q;
                         return 1;
@@ -1069,7 +1069,7 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
     for(j=-min; j<stoneNum-max; j++){
 
-        if(s[p+j][q+j]->state == state){
+        if(s[p+j][q+j] == state){
             cnt++;
         }
         else
@@ -1080,14 +1080,14 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(j+5>=stoneNum-max)
                 break;
 
-            if(s[p+j+1][q+j+1]->state == 0){
-                if(j+6>=stoneNum-max || s[p+j+6][q+j+6]->state != state){
-                    if(s[p+j+2][q+j+2]->state==0 && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state == state && s[p+j+5][q+j+5]->state==state){
+            if(s[p+j+1][q+j+1] == 0){
+                if(j+6>=stoneNum-max || s[p+j+6][q+j+6] != state){
+                    if(s[p+j+2][q+j+2]==0 && s[p+j+3][q+j+3]==state && s[p+j+4][q+j+4] == state && s[p+j+5][q+j+5]==state){
                         pos2 = -1;
                         pos1 = (p+j+2)*stoneNum + q+j+2;
                         return 1;
                     }
-                    else if(s[p+j+2][q+j+2]->state==state && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state == state && s[p+j+5][q+j+5]->state== 0){
+                    else if(s[p+j+2][q+j+2]==state && s[p+j+3][q+j+3]==state && s[p+j+4][q+j+4] == state && s[p+j+5][q+j+5]== 0){
                         pos1 = (p+j+1)*stoneNum + q+j+1;
                         pos2 = -1;
                         return 1;
@@ -1101,20 +1101,20 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(j+4 >= stoneNum-max)
                 break;
 
-            if(s[p+j+1][q+j+1]->state==0){
+            if(s[p+j+1][q+j+1]==0){
 
-                if(j+5>=stoneNum-max || s[p+j+5][q+j+5]->state != state){
-                    if(s[p+j+2][q+j+2]->state==0 && s[p+j+3][q+j+3]->state == state && s[p+j+4][q+j+4]->state == state){
+                if(j+5>=stoneNum-max || s[p+j+5][q+j+5] != state){
+                    if(s[p+j+2][q+j+2]==0 && s[p+j+3][q+j+3] == state && s[p+j+4][q+j+4] == state){
                         pos1 = (p+j+1)*stoneNum + q+j+1;
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state == state && s[p+j+4][q+j+4]->state == 0){
+                    else if( s[p+j+2][q+j+2] == state && s[p+j+3][q+j+3] == state && s[p+j+4][q+j+4] == 0){
                         pos1 = (p+j+1)*stoneNum + q+j+1;
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state == state && s[p+j+4][q+j+4]->state == state){
+                    else if( s[p+j+2][q+j+2] == state && s[p+j+3][q+j+3] == state && s[p+j+4][q+j+4] == state){
                         pos1 = (p+j+1)*stoneNum + q+j+1;
                         pos2 = -1;
                         return 1;
@@ -1134,27 +1134,27 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
             else{
 
-                if( s[p+j+1][q+j+1]->state == 0){
+                if( s[p+j+1][q+j+1] == 0){
 
 
-                    if(s[p+j+2][q+j+2]->state == 0 && s[p+j+3][q+j+3]->state == state){
+                    if(s[p+j+2][q+j+2] == 0 && s[p+j+3][q+j+3] == state){
 
-                        if( j+4 >= stoneNum-max || s[p+j+4][q+j+4]->state != state){
+                        if( j+4 >= stoneNum-max || s[p+j+4][q+j+4] != state){
                             pos1 = (p+j+1)*stoneNum + q+j+1;
                             pos2 = -1;
                             return 1;
                         }
                     }
-                    else if(s[p+j+2][q+j+2]->state == state){
+                    else if(s[p+j+2][q+j+2] == state){
 
-                        if( j+4 >= stoneNum-max || s[p+j+4][q+j+4]->state != state){
+                        if( j+4 >= stoneNum-max || s[p+j+4][q+j+4] != state){
                         ;
-                            if(s[p+j+3][q+j+3]->state == state){
+                            if(s[p+j+3][q+j+3] == state){
                                 pos1 = (p+j+1)*stoneNum + q+j+1;
                                 pos2 = -1;
                                 return 1;
                             }
-                            else if(s[p+j+3][q+j+3]->state == 0){
+                            else if(s[p+j+3][q+j+3] == 0){
 
                                 pos1 = (p+j+1)*stoneNum + q+j+1;
                                 pos2 = -1;
@@ -1177,26 +1177,26 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
     for(j=-min; j<stoneNum-max; j++){
 
-        if(s[p+j][q+j]->state == 0)
+        if(s[p+j][q+j] == 0)
             empty++;
-        else if(s[p+j][q+j]->state == state){
+        else if(s[p+j][q+j] == state){
             if(empty>1 || (empty==1 && j-2 < -min)){
                 if(j+4 >= stoneNum-max)
                     break;
 
-                if( j+5>=stoneNum-max || s[p+j+5][q+j+5]->state != state){
-                    if(s[p+j+1][q+j+1]->state==state && s[p+j+2][q+j+2]->state == 0 && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state==state){
+                if( j+5>=stoneNum-max || s[p+j+5][q+j+5] != state){
+                    if(s[p+j+1][q+j+1]==state && s[p+j+2][q+j+2] == 0 && s[p+j+3][q+j+3]==state && s[p+j+4][q+j+4]==state){
                         pos2 = -1;
                         pos1 = (p+j+2)*stoneNum + q+j+2;
                         return 1;
                     }
-                    else if(s[p+j+1][q+j+1]->state==state && s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state==0 && s[p+j+4][q+j+4]->state==state){
+                    else if(s[p+j+1][q+j+1]==state && s[p+j+2][q+j+2] == state && s[p+j+3][q+j+3]==0 && s[p+j+4][q+j+4]==state){
                         pos2 = -1;
                         pos1 = (p+j+3)*stoneNum + q+j+3;
                         return 1;
                     }
 
-                    else if(s[p+j+1][q+j+1]->state==0 && s[p+j+2][q+j+2]->state == state && s[p+j+3][q+j+3]->state==state && s[p+j+4][q+j+4]->state==state){
+                    else if(s[p+j+1][q+j+1]==0 && s[p+j+2][q+j+2] == state && s[p+j+3][q+j+3]==state && s[p+j+4][q+j+4]==state){
                         pos2 = -1;
                         pos1 = (p+j+1)*stoneNum + q+j+1;
                         return 1;
@@ -1234,7 +1234,7 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
     for(j=-min; j <= max; j++){
 
-        if(s[p+j][q-j]->state == state){
+        if(s[p+j][q-j] == state){
             cnt++;
         }
         else
@@ -1245,14 +1245,14 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(j+5> max)
                 break;
 
-            if(s[p+j+1][q-j-1]->state == 0){
-                if(j+6 > max || s[p+j+6][q-j-6]->state != state){
-                    if(s[p+j+2][q-j-2]->state==0 && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state == state && s[p+j+5][q-j-5]->state==state){
+            if(s[p+j+1][q-j-1] == 0){
+                if(j+6 > max || s[p+j+6][q-j-6] != state){
+                    if(s[p+j+2][q-j-2]==0 && s[p+j+3][q-j-3]==state && s[p+j+4][q-j-4] == state && s[p+j+5][q-j-5]==state){
                         pos2 = -1;
                         pos1 = (p+j+2)*stoneNum + q-j-2;
                         return 1;
                     }
-                    else if(s[p+j+2][q-j-2]->state==state && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state == state && s[p+j+5][q-j-5]->state== 0){
+                    else if(s[p+j+2][q-j-2]==state && s[p+j+3][q-j-3]==state && s[p+j+4][q-j-4] == state && s[p+j+5][q-j-5]== 0){
                         pos1 = (p+j+1)*stoneNum + q-j-1;
                         pos2 = -1;
                         return 1;
@@ -1266,20 +1266,20 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
             if(j+4 > max)
                 break;
 
-            if(s[p+j+1][q-j-1]->state==0){
+            if(s[p+j+1][q-j-1]==0){
 
-                if(j+5 > max || s[p+j+5][q-j-5]->state != state){
-                    if(s[p+j+2][q-j-2]->state==0 && s[p+j+3][q-j-3]->state == state && s[p+j+4][q-j-4]->state == state){
+                if(j+5 > max || s[p+j+5][q-j-5] != state){
+                    if(s[p+j+2][q-j-2]==0 && s[p+j+3][q-j-3] == state && s[p+j+4][q-j-4] == state){
                         pos1 = (p+j+1)*stoneNum + q-j-1;
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state == state && s[p+j+4][q-j-4]->state == 0){
+                    else if( s[p+j+2][q-j-2] == state && s[p+j+3][q-j-3] == state && s[p+j+4][q-j-4] == 0){
                         pos1 = (p+j+1)*stoneNum + q-j-1;
                         pos2 = -1;
                         return 1;
                     }
-                    else if( s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state == state && s[p+j+4][q-j-4]->state == state){
+                    else if( s[p+j+2][q-j-2] == state && s[p+j+3][q-j-3] == state && s[p+j+4][q-j-4] == state){
                         pos1 = (p+j+1)*stoneNum + q-j-1;
                         pos2 = -1;
                         return 1;
@@ -1299,25 +1299,25 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
             else{
 
-                if( s[p+j+1][q-j-1]->state == 0){
+                if( s[p+j+1][q-j-1] == 0){
 
-                    if(s[p+j+2][q-j-2]->state == 0 && s[p+j+3][q-j-3]->state == state){
+                    if(s[p+j+2][q-j-2] == 0 && s[p+j+3][q-j-3] == state){
 
-                        if( j+4 > max || s[p+j+4][q-j-4]->state != state){
+                        if( j+4 > max || s[p+j+4][q-j-4] != state){
                             pos1 = (p+j+1)*stoneNum + q-j-1;
                             pos2 = -1;
                             return 1;
                         }
                     }
-                    else if(s[p+j+2][q-j-2]->state == state){
+                    else if(s[p+j+2][q-j-2] == state){
 
-                        if( j+4 > max || s[p+j+4][q-j-4]->state != state){
-                            if(s[p+j+3][q-j-3]->state == state){
+                        if( j+4 > max || s[p+j+4][q-j-4] != state){
+                            if(s[p+j+3][q-j-3] == state){
                                 pos1 = (p+j+1)*stoneNum + q-j-1;
                                 pos2 = -1;
                                 return 1;
                             }
-                            else if(s[p+j+3][q-j-3]->state == 0){
+                            else if(s[p+j+3][q-j-3] == 0){
 
                                 pos1 = (p+j+1)*stoneNum + q-j-1;
                                 pos2 = -1;
@@ -1340,26 +1340,26 @@ int checkopponentblank(stone *s[19][19], char state, int& pos1, int& pos2, int p
 
     for(j=-min; j<=max; j++){
 
-        if(s[p+j][q-j]->state == 0)
+        if(s[p+j][q-j] == 0)
             empty++;
-        else if(s[p+j][q-j]->state == state){
+        else if(s[p+j][q-j] == state){
             if(empty>1 || (empty==1 && j-2 < -min)){
                 if(j+4 > max)
                     break;
 
-                if( j+5> max || s[p+j+5][q-j-5]->state != state){
-                    if(s[p+j+1][q-j-1]->state==state && s[p+j+2][q-j-2]->state == 0 && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state==state){
+                if( j+5> max || s[p+j+5][q-j-5] != state){
+                    if(s[p+j+1][q-j-1]==state && s[p+j+2][q-j-2] == 0 && s[p+j+3][q-j-3]==state && s[p+j+4][q-j-4]==state){
                         pos2 = -1;
                         pos1 = (p+j+2)*stoneNum + q-j-2;
                         return 1;
                     }
-                    else if(s[p+j+1][q-j-1]->state==state && s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state==0 && s[p+j+4][q-j-4]->state==state){
+                    else if(s[p+j+1][q-j-1]==state && s[p+j+2][q-j-2] == state && s[p+j+3][q-j-3]==0 && s[p+j+4][q-j-4]==state){
                         pos2 = -1;
                         pos1 = (p+j+3)*stoneNum + q-j-3;
                         return 1;
                     }
 
-                    else if(s[p+j+1][q-j-1]->state==0 && s[p+j+2][q-j-2]->state == state && s[p+j+3][q-j-3]->state==state && s[p+j+4][q-j-4]->state==state){
+                    else if(s[p+j+1][q-j-1]==0 && s[p+j+2][q-j-2] == state && s[p+j+3][q-j-3]==state && s[p+j+4][q-j-4]==state){
                         pos2 = -1;
                         pos1 = (p+j+1)*stoneNum + q-j-1;
                         return 1;
