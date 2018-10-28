@@ -2,12 +2,12 @@
 using namespace std;
 
 // For Black
-const char my_color = 1;
-const char userColor = 2;
+// const char my_color = 1;
+// const char userColor = 2;
 
 // For white
-// const char my_color = 2;
-// const char userColor = 1;
+const char my_color = 2;
+const char userColor = 1;
 int best_pos1, best_pos2;
 
 extern int board[19][19];
@@ -100,7 +100,7 @@ State& State::SelectionAndExpansion() {
         child_state->uct_value_ = 0;
         child_state->uct_value_ += 2 * log(best_child->number_of_visiting_);
         child_state->uct_value_ /= child_state->number_of_visiting_;
-        child_state->uct_value_ = 0.5 * sqrt(child_state->uct_value_);
+        child_state->uct_value_ = mct_const::UCT_CONSTANT * sqrt(child_state->uct_value_);
         child_state->uct_value_ += (double)child_state->number_of_wins_ / child_state->number_of_visiting_;
         // Case3) There is node who has larger uct_value_ than max
         if (child_state->uct_value_ > max_uct_value) {
@@ -128,7 +128,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
   int diagLU_block[27] = {0};
   int diagRU_block[27] = {0};
 
-  // // Test Score
+  // Test Score
   // ofstream out1("out1.txt", ios::app);
   // ofstream out2("out2.txt", ios::app);
   // ofstream total("total.txt", ios::app);
@@ -153,8 +153,10 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
         // succ_score: Save the number of succesive my stones after Position
         int tmp_score = 0;
         int succ_score = 0;
+        int tmp_block = 7;
         bool is_succ = true;
         bool is_c7 = false;
+        bool is_block = false;
         // Get Horizontal score
         // Can make right c6
         if (j <= (19 - (6 - hori_connect))) {
@@ -163,6 +165,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               tmp_score++;
             } else if (board[row + j + k*1] == opp_color) {
               tmp_score = 0;
+              tmp_block = k;
               break;
             } else {
               if (is_succ) {
@@ -170,6 +173,10 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 is_succ = false;
               }
             }
+          }
+          // All closed
+          if (tmp_block + hori_block < 7) {
+            is_block = true;
           }
           // Check whether stones pattern can be c7
           // This position makes c7
@@ -179,7 +186,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             }
           }
           // Rearrange score
-          if (!is_c7) {
+          if (!is_c7 && !is_block) {
             if (turn == 1) {
               if (tmp_score + hori_connect == 5) {
                 score[row + j] += 4096;
@@ -331,6 +338,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
 
 
         tmp_score = 0;
+        tmp_block = 7;
         succ_score = 0;
         is_succ = true;
         // Get Vertical score
@@ -341,6 +349,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               tmp_score++;
             } else if (board[row + j + k*(19)] == opp_color) {
               tmp_score = 0;
+              tmp_block = k;
               break;
             } else {
               if (is_succ) {
@@ -348,6 +357,11 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 is_succ = false;
               }
             }
+          }
+          // All closed
+          is_block = false;
+          if (tmp_block + vert_block[j] < 7) {
+            is_block = true;
           }
           // Check whether stones pattern can be c7
           // This position makes c7
@@ -358,7 +372,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             }
           }
           // Rearrange score
-          if (!is_c7) {
+          if (!is_c7 && !is_block) {
             if (turn == 1) {
               if (tmp_score + vert_connect[j] == 5) {
                 score[row + j] += 4096;
@@ -510,6 +524,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
 
 
         tmp_score = 0;
+        tmp_block = 7;
         succ_score = 0;
         is_succ = true;
         // Get DiagonalLU score
@@ -521,6 +536,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 tmp_score++;
               } else if (board[row + j + k*(19 + 1)] == opp_color) {
                 tmp_score = 0;
+                tmp_block = k;
                 break;
               } else {
                 if (is_succ) {
@@ -528,6 +544,11 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   is_succ = false;
                 }
               }
+            }
+            // All closed
+            is_block = false;
+            if (tmp_block + diagLU_block[i-j+13] < 7) {
+              is_block = true;
             }
             // Check whether stones pattern can be c7
             // This position makes c7
@@ -538,7 +559,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               }
             }
             // Rearrange score
-            if (!is_c7) {
+            if (!is_c7 && !is_block) {
               if (turn == 1) {
                 if (tmp_score + diagLU_connect[i-j+13] == 5) {
                   score[row + j] += 4096;
@@ -690,6 +711,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
 
 
         tmp_score = 0;
+        tmp_block = 7;
         succ_score = 0;
         is_succ = true;
         // Get DiagonalRU score
@@ -701,6 +723,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 tmp_score++;
               } else if (board[row + j + k*(19 - 1)] == opp_color) {
                 tmp_score = 0;
+                tmp_block = k;
                 break;
               } else {
                 if (is_succ) {
@@ -708,6 +731,11 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   is_succ = false;
                 }
               }
+            }
+            // All closed
+            is_block = false;
+            if (tmp_block + diagRU_block[i+j-5] < 7) {
+              is_block = true;
             }
             // Check whether stones pattern can be c7
             // This position makes c7
@@ -718,7 +746,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               }
             }
             // Rearrange score
-            if (!is_c7) {
+            if (!is_c7 && !is_block) {
               if (turn == 1) {
                 if (tmp_score + diagRU_connect[i+j-5] == 5) {
                   score[row + j] += 4096;
@@ -886,7 +914,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
     }
   }
 
-  // // Test Score
+  // Test Score
   // out1 << endl;
   // for (int i = 0; i < 19; i++) {
   //   int iter = 19 * i;
@@ -897,608 +925,608 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
   // }
   // out1.close();
 
-  // Get opponent's score
-  for (int i = 0; i < 19; i++) {
-    vert_connect[i] = 0;
-    vert_block[i] = 0;
-  }
-  for (int i = 0; i < 27; i++) {
-    diagLU_connect[i] = 0;
-    diagRU_connect[i] = 0;
-    diagLU_block[i] = 0;
-    diagRU_block[i] = 0;
-  }
-  for (int i = 0; i < 19; i++) {
-    int row = 19 * i;
-    int hori_connect = 0;
-    int hori_block = 0;
-    for (int j = 0; j < 19; j++) {
-      // Update distance from blockings
-      hori_block++;
-      vert_block[j]++;
-      if ((i - j >= -13) && (i - j <= 13)) {
-        diagLU_block[i-j+13]++;
-      }
-      if ((i + j >= 5) && (i + j <= 31)) {
-        diagRU_block[i+j-5]++;
-      }
-      if (board[row + j] == 0) {
-        // tmp_score: Save the number of my stones after Position
-        // succ_score: Save the number of succesive my stones after Position
-        int tmp_score = 0;
-        int succ_score = 0;
-        bool is_succ = true;
-        bool is_c7 = false;
-        // Get Horizontal score
-        // Can make right c6
-        if (j <= (19 - (6 - hori_connect))) {
-          for (int k = 1; k < 6 - hori_connect; k++) {
-            if (board[row + j + k*1] == opp_color) {
-              tmp_score++;
-            } else if (board[row + j + k*1] == color) {
-              tmp_score = 0;
-              break;
-            } else {
-              if (is_succ) {
-                succ_score = tmp_score;
-                is_succ = false;
-              }
-            }
-          }
-          // Check whether stones pattern can be c7
-          // This position makes c7
-          is_c7 = false;
-          if (j <= (19 - (7 - hori_connect))) {
-            if (board[row + j + (6 - hori_connect)] == opp_color) {
-              is_c7 = true;
-            }
-          }
-          // Rearrange score
-          if (!is_c7) {
-            if (tmp_score + hori_connect == 5) {
-              score_opp[row + j] += 512;
-            } else if (tmp_score + hori_connect == 4) {
-              score_opp[row + j] += 512;
-            } else if (tmp_score + hori_connect == 3) {
-              score_opp[row + j] += 64;
-            } else if (tmp_score + hori_connect == 2) {
-              score_opp[row + j] += 32;
-            } else if (tmp_score + hori_connect == 1) {
-              score_opp[row + j] += 4;
-            } else if (tmp_score + hori_connect == 0) {
-              score_opp[row + j] += 2;
-            }
-          }
-
-          tmp_score = 0;
-          // Can make left c6
-          if (hori_block >= (6 - succ_score)) {
-            for (int k = 1; k < 6 - succ_score; k++) {
-              if (board[row + j - k*1] == opp_color) {
-                tmp_score++;
-              }
-            }
-            // Check whether stones pattern can be c7
-            // This position makes c7
-            is_c7 = false;
-            if (hori_block >= (7 - succ_score)) {
-              if (board[row + j - (6 - succ_score)] == opp_color) {
-                is_c7 = true;
-              }
-            }
-            // Rearrange score
-            if (!is_c7) {
-              if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 3) {
-                score_opp[row + j] += 64;
-              } else if (tmp_score + succ_score == 2) {
-                score_opp[row + j] += 32;
-              } else if (tmp_score + succ_score == 1) {
-                score_opp[row + j] += 4;
-              } else if (tmp_score + succ_score == 0) {
-                score_opp[row + j] += 2;
-              }
-            }
-          }
-        // Can't make right c6
-        } else {
-          // Can make left c6
-          for (int k = 1; k < 19 - j; k++) {
-            if (board[row + j + k*1] == opp_color) {
-              tmp_score++;
-            } else if (board[row + j + k*1] == color) {
-              tmp_score = 0;
-              break;
-            } else {
-              if (is_succ) {
-                succ_score = tmp_score;
-                is_succ = false;
-              }
-            }
-          }
-          if (is_succ) {
-            succ_score = tmp_score;
-          }
-          if (hori_block >= (6 - succ_score)) {
-            for (int k = 1; k < 6 - succ_score; k++) {
-              if (board[row + j - k*1] == opp_color) {
-                tmp_score++;
-              }
-            }
-            // Check whether stones pattern can be c7
-            // This position makes c7
-            is_c7 = false;
-            if (hori_block >= (7 - succ_score)) {
-              if (board[row + j - (6 - succ_score)] == opp_color) {
-                is_c7 = true;
-              }
-            }
-            // Rearrange score
-            if (!is_c7) {
-              if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 3) {
-                score_opp[row + j] += 64;
-              } else if (tmp_score + succ_score == 2) {
-                score_opp[row + j] += 32;
-              } else if (tmp_score + succ_score == 1) {
-                score_opp[row + j] += 4;
-              } else if (tmp_score + succ_score == 0) {
-                score_opp[row + j] += 2;
-              }
-            }
-          }
-        }
-        hori_connect = 0;
-
-
-        tmp_score = 0;
-        succ_score = 0;
-        is_succ = true;
-        // Get Vertical score
-        // Can make down c6
-        if (i <= (19 - (6 - vert_connect[j]))) {
-          for (int k = 1; k < 6 - vert_connect[j]; k++) {
-            if (board[row + j + k*(19)] == opp_color) {
-              tmp_score++;
-            } else if (board[row + j + k*(19)] == color) {
-              tmp_score = 0;
-              break;
-            } else {
-              if (is_succ) {
-                succ_score = tmp_score;
-                is_succ = false;
-              }
-            }
-          }
-          // Check whether stones pattern can be c7
-          // This position makes c7
-          is_c7 = false;
-          if (i <= (19 - (7 - vert_connect[j]))) {
-            if (board[row + j + (6 - vert_connect[j])*(19)] == opp_color) {
-              is_c7 = true;
-            }
-          }
-          // Rearrange score
-          if (!is_c7) {
-            if (tmp_score + vert_connect[j] == 5) {
-              score_opp[row + j] += 512;
-            } else if (tmp_score + vert_connect[j] == 4) {
-              score_opp[row + j] += 512;
-            } else if (tmp_score + vert_connect[j] == 3) {
-              score_opp[row + j] += 64;
-            } else if (tmp_score + vert_connect[j] == 2) {
-              score_opp[row + j] += 32;
-            } else if (tmp_score + vert_connect[j] == 1) {
-              score_opp[row + j] += 4;
-            } else if (tmp_score + vert_connect[j] == 0) {
-              score_opp[row + j] += 2;
-            }
-          }
-
-          tmp_score = 0;
-          // Can make Up c6
-          if (vert_block[j] >= (6 - succ_score)) {
-            for (int k = 1; k < 6 - succ_score; k++) {
-              if (board[row + j - k*(19)] == opp_color) {
-                tmp_score++;
-              }
-            }
-            // Check whether stones pattern can be c7
-            // This position makes c7
-            is_c7 = false;
-            if (vert_block[j] >= (7 - succ_score)) {
-              if (board[row + j - (6 - succ_score)*(19)] == opp_color) {
-                is_c7 = true;
-              }
-            }
-            // Rearrange score
-            if (!is_c7) {
-              if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 3) {
-                score_opp[row + j] += 64;
-              } else if (tmp_score + succ_score == 2) {
-                score_opp[row + j] += 32;
-              } else if (tmp_score + succ_score == 1) {
-                score_opp[row + j] += 4;
-              } else if (tmp_score + succ_score == 0) {
-                score_opp[row + j] += 2;
-              }
-            }
-          }
-        // Can't make down c6
-        } else {
-          // Can make up c6
-          for (int k = 1; k < 19 - i; k++) {
-            if (board[row + j + k*(19)] == opp_color) {
-              tmp_score++;
-            } else if (board[row + j + k*(19)] == color) {
-              tmp_score = 0;
-              break;
-            } else {
-              if (is_succ) {
-                succ_score = tmp_score;
-                is_succ = false;
-              }
-            }
-          }
-          if (is_succ) {
-            succ_score = tmp_score;
-          }
-          if (vert_block[j] >= (6 - succ_score)) {
-            for (int k = 1; k < 6 - succ_score; k++) {
-              if (board[row + j - k*(19)] == opp_color) {
-                tmp_score++;
-              }
-            }
-            // Check whether stones pattern can be c7
-            // This position makes c7
-            is_c7 = false;
-            if (vert_block[j] >= (7 - succ_score)) {
-              if (board[row + j - (6 - succ_score)*(19)] == opp_color) {
-                is_c7 = true;
-              }
-            }
-            // Rearrange score
-            if (!is_c7) {
-              if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + succ_score == 3) {
-                score_opp[row + j] += 64;
-              } else if (tmp_score + succ_score == 2) {
-                score_opp[row + j] += 32;
-              } else if (tmp_score + succ_score == 1) {
-                score_opp[row + j] += 4;
-              } else if (tmp_score + succ_score == 0) {
-                score_opp[row + j] += 2;
-              }
-            }
-          }
-        }
-        vert_connect[j] = 0;
-
-
-        tmp_score = 0;
-        succ_score = 0;
-        is_succ = true;
-        // Get DiagonalLU score
-        // Can make RD c6
-        if ((i - j >= -13) && (i - j <= 13)) {
-          if ((j <= (19 - (6 - diagLU_connect[i-j+13]))) && (i <= (19 - (6 - diagLU_connect[i-j+13])))) {
-            for (int k = 1; k < 6 - diagLU_connect[i-j+13]; k++) {
-              if (board[row + j + k*(19 + 1)] == opp_color) {
-                tmp_score++;
-              } else if (board[row + j + k*(19 + 1)] == color) {
-                tmp_score = 0;
-                break;
-              } else {
-                if (is_succ) {
-                  succ_score = tmp_score;
-                  is_succ = false;
-                }
-              }
-            }
-            // Check whether stones pattern can be c7
-            // This position makes c7
-            is_c7 = false;
-            if ((j <= (19 - (7 - diagLU_connect[i-j+13]))) && (i <= (19 - (7 - diagLU_connect[i-j+13])))) {
-              if (board[row + j + (6 - diagLU_connect[i-j+13])*(19 + 1)] == opp_color) {
-                is_c7 = true;
-              }
-            }
-            // Rearrange score
-            if (!is_c7) {
-              if (tmp_score + diagLU_connect[i-j+13] == 5) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
-                score_opp[row + j] += 64;
-              } else if (tmp_score + diagLU_connect[i-j+13] == 2) {
-                score_opp[row + j] += 32;
-              } else if (tmp_score + diagLU_connect[i-j+13] == 1) {
-                score_opp[row + j] += 4;
-              } else if (tmp_score + diagLU_connect[i-j+13] == 0) {
-                score_opp[row + j] += 2;
-              }
-            }
-
-            tmp_score = 0;
-            // Can make LU c6
-            if (diagLU_block[i-j+13] >= (6 - succ_score)) {
-              for (int k = 1; k < 6 - succ_score; k++) {
-                if (board[row + j - k*(19 + 1)] == opp_color) {
-                  tmp_score++;
-                }
-              }
-              // Check whether stones pattern can be c7
-              // This position makes c7
-              is_c7 = false;
-              if (diagLU_block[i-j+13] >= (7 - succ_score)) {
-                if (board[row + j - (6 - succ_score)*(19 + 1)] == opp_color) {
-                  is_c7 = true;
-                }
-              }
-              // Rearrange score
-              if (!is_c7) {
-                if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 3) {
-                  score_opp[row + j] += 64;
-                } else if (tmp_score + succ_score == 2) {
-                  score_opp[row + j] += 32;
-                } else if (tmp_score + succ_score == 1) {
-                  score_opp[row + j] += 4;
-                } else if (tmp_score + succ_score == 0) {
-                  score_opp[row + j] += 2;
-                }
-              }
-            }
-          // Can't make RD c6
-          } else {
-            // Can make LU c6
-            for (int k = 1; k < 19; k++) {
-              if ((i + k == 19) || (j + k == 19)) break;
-              if (board[row + j + k*(19 + 1)] == opp_color) {
-                tmp_score++;
-              } else if (board[row + j + k*(19 + 1)] == color) {
-                tmp_score = 0;
-                break;
-              } else {
-                if (is_succ) {
-                  succ_score = tmp_score;
-                  is_succ = false;
-                }
-              }
-            }
-            if (is_succ) {
-              succ_score = tmp_score;
-            }
-            if (diagLU_block[i-j+13] >= (6 - succ_score)) {
-              for (int k = 1; k < 6 - succ_score; k++) {
-                if (board[row + j - k*(19 + 1)] == opp_color) {
-                  tmp_score++;
-                }
-              }
-              // Check whether stones pattern can be c7
-              // This position makes c7
-              is_c7 = false;
-              if (diagLU_block[i-j+13] >= (7 - succ_score)) {
-                if (board[row + j - (6 - succ_score)*(19 + 1)] == opp_color) {
-                  is_c7 = true;
-                }
-              }
-              // Rearrange score
-              if (!is_c7) {
-                if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 3) {
-                  score_opp[row + j] += 64;
-                } else if (tmp_score + succ_score == 2) {
-                  score_opp[row + j] += 32;
-                } else if (tmp_score + succ_score == 1) {
-                  score_opp[row + j] += 4;
-                } else if (tmp_score + succ_score == 0) {
-                  score_opp[row + j] += 2;
-                }
-              }
-            }
-          }
-          diagLU_connect[i-j+13] = 0;
-        }
-
-
-        tmp_score = 0;
-        succ_score = 0;
-        is_succ = true;
-        // Get DiagonalRU score
-        // Can make LD c6
-        if ((i + j >= 5) && (i + j <= 31)) {
-          if ((i <= (19 - (6 - diagRU_connect[i+j-5]))) && (j >= 5 - diagRU_connect[i+j-5])) {
-            for (int k = 1; k < 6 - diagRU_connect[i+j-5]; k++) {
-              if (board[row + j + k*(19 - 1)] == opp_color) {
-                tmp_score++;
-              } else if (board[row + j + k*(19 - 1)] == color) {
-                tmp_score = 0;
-                break;
-              } else {
-                if (is_succ) {
-                  succ_score = tmp_score;
-                  is_succ = false;
-                }
-              }
-            }
-            // Check whether stones pattern can be c7
-            // This position makes c7
-            is_c7 = false;
-            if (i <= (19 - (7 - diagRU_connect[i+j-5])) && (j >= 6 - diagRU_connect[i+j-5])) {
-              if (board[row + j + (6 - diagRU_connect[i+j-5])*(19 - 1)] == opp_color) {
-                is_c7 = true;
-              }
-            }
-            // Rearrange score
-            if (!is_c7) {
-              if (tmp_score + diagRU_connect[i+j-5] == 5) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
-                score_opp[row + j] += 512;
-              } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
-                score_opp[row + j] += 64;
-              } else if (tmp_score + diagRU_connect[i+j-5] == 2) {
-                score_opp[row + j] += 32;
-              } else if (tmp_score + diagRU_connect[i+j-5] == 1) {
-                score_opp[row + j] += 4;
-              } else if (tmp_score + diagRU_connect[i+j-5] == 0) {
-                score_opp[row + j] += 2;
-              }
-            }
-
-            tmp_score = 0;
-            // Can make RU c6
-            if (diagRU_block[i+j-5] >= (6 - succ_score)) {
-              for (int k = 1; k < 6 - succ_score; k++) {
-                if (board[row + j - k*(19 - 1)] == opp_color) {
-                  tmp_score++;
-                }
-              }
-              // Check whether stones pattern can be c7
-              // This position makes c7
-              is_c7 = false;
-              if (diagRU_block[i+j-5] >= (7 - succ_score)) {
-                if (board[row + j - (6 - succ_score)*(19 - 1)] == opp_color) {
-                  is_c7 = true;
-                }
-              }
-              // Rearrange score
-              if (!is_c7) {
-                if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 3) {
-                  score_opp[row + j] += 64;
-                } else if (tmp_score + succ_score == 2) {
-                  score_opp[row + j] += 32;
-                } else if (tmp_score + succ_score == 1) {
-                  score_opp[row + j] += 4;
-                } else if (tmp_score + succ_score == 0) {
-                  score_opp[row + j] += 2;
-                }
-              }
-            }
-          // Can't make LD c6
-          } else {
-            // Can make RU c6
-            for (int k = 1; k < 19; k++) {
-              if ((i + k == 19) || (j - k == -1)) break;
-              if (board[row + j + k*(19 - 1)] == opp_color) {
-                tmp_score++;
-              } else if (board[row + j + k*(19 - 1)] == color) {
-                tmp_score = 0;
-                break;
-              } else {
-                if (is_succ) {
-                  succ_score = tmp_score;
-                  is_succ = false;
-                }
-              }
-            }
-            if (is_succ) {
-              succ_score = tmp_score;
-            }
-            if (diagRU_block[i+j-5] >= (6 - succ_score)) {
-              for (int k = 1; k < 6 - succ_score; k++) {
-                if (board[row + j - k*(19 - 1)] == opp_color) {
-                  tmp_score++;
-                }
-              }
-              // Check whether stones pattern can be c7
-              // This position makes c7
-              is_c7 = false;
-              if (diagRU_block[i+j-5] >= (7 - succ_score)) {
-                if (board[row + j - (7 - succ_score)*(19 - 1)] == opp_color) {
-                  is_c7 = true;
-                }
-              }
-              // Rearrange score
-              if (!is_c7) {
-                if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
-                } else if (tmp_score + succ_score == 3) {
-                  score_opp[row + j] += 64;
-                } else if (tmp_score + succ_score == 2) {
-                  score_opp[row + j] += 32;
-                } else if (tmp_score + succ_score == 1) {
-                  score_opp[row + j] += 4;
-                } else if (tmp_score + succ_score == 0) {
-                  score_opp[row + j] += 2;
-                }
-              }
-            }
-          }
-          diagRU_connect[i+j-5] = 0;
-        }
-
-      } else if (board[row + j] == opp_color) {
-        hori_connect++;
-        vert_connect[j]++;
-        diagLU_connect[i-j+13]++;
-        diagRU_connect[i+j-5]++;
-      } else {
-        hori_connect = 0;
-        vert_connect[j] = 0;
-        diagLU_connect[i-j+13] = 0;
-        diagRU_connect[i+j-5] = 0;
-        hori_block = 0;
-        vert_block[j] = 0;
-        diagLU_block[i-j+13] = 0;
-        diagRU_block[i+j-5] = 0;
-      }
-    }
-  }
-
-  // // Test Score
-  // out2 << endl;
+  // // Get opponent's score
   // for (int i = 0; i < 19; i++) {
-  //   int iter = 19 * i;
-  //   for (int j = 0; j < 19; j++) {
-  //     out2 << score_opp[iter + j] << "  ";
-  //   }
-  //   out2 << endl;
+  //   vert_connect[i] = 0;
+  //   vert_block[i] = 0;
   // }
-  // out2.close();
-
-  // Add score Arrays
-  for (int i = 0; i < 361; i++) {
-    score[i] += (score_opp[i] + score[i]);
-  }
-
-  // // Test Score
-  // total << endl;
+  // for (int i = 0; i < 27; i++) {
+  //   diagLU_connect[i] = 0;
+  //   diagRU_connect[i] = 0;
+  //   diagLU_block[i] = 0;
+  //   diagRU_block[i] = 0;
+  // }
   // for (int i = 0; i < 19; i++) {
-  //   int iter = 19 * i;
+  //   int row = 19 * i;
+  //   int hori_connect = 0;
+  //   int hori_block = 0;
   //   for (int j = 0; j < 19; j++) {
-  //     total << score[iter + j] << "  ";
+  //     // Update distance from blockings
+  //     hori_block++;
+  //     vert_block[j]++;
+  //     if ((i - j >= -13) && (i - j <= 13)) {
+  //       diagLU_block[i-j+13]++;
+  //     }
+  //     if ((i + j >= 5) && (i + j <= 31)) {
+  //       diagRU_block[i+j-5]++;
+  //     }
+  //     if (board[row + j] == 0) {
+  //       // tmp_score: Save the number of my stones after Position
+  //       // succ_score: Save the number of succesive my stones after Position
+  //       int tmp_score = 0;
+  //       int succ_score = 0;
+  //       bool is_succ = true;
+  //       bool is_c7 = false;
+  //       // Get Horizontal score
+  //       // Can make right c6
+  //       if (j <= (19 - (6 - hori_connect))) {
+  //         for (int k = 1; k < 6 - hori_connect; k++) {
+  //           if (board[row + j + k*1] == opp_color) {
+  //             tmp_score++;
+  //           } else if (board[row + j + k*1] == color) {
+  //             tmp_score = 0;
+  //             break;
+  //           } else {
+  //             if (is_succ) {
+  //               succ_score = tmp_score;
+  //               is_succ = false;
+  //             }
+  //           }
+  //         }
+  //         // Check whether stones pattern can be c7
+  //         // This position makes c7
+  //         is_c7 = false;
+  //         if (j <= (19 - (7 - hori_connect))) {
+  //           if (board[row + j + (6 - hori_connect)] == opp_color) {
+  //             is_c7 = true;
+  //           }
+  //         }
+  //         // Rearrange score
+  //         if (!is_c7) {
+  //           if (tmp_score + hori_connect == 5) {
+  //             score_opp[row + j] += 512;
+  //           } else if (tmp_score + hori_connect == 4) {
+  //             score_opp[row + j] += 512;
+  //           } else if (tmp_score + hori_connect == 3) {
+  //             score_opp[row + j] += 64;
+  //           } else if (tmp_score + hori_connect == 2) {
+  //             score_opp[row + j] += 32;
+  //           } else if (tmp_score + hori_connect == 1) {
+  //             score_opp[row + j] += 4;
+  //           } else if (tmp_score + hori_connect == 0) {
+  //             score_opp[row + j] += 2;
+  //           }
+  //         }
+  //
+  //         tmp_score = 0;
+  //         // Can make left c6
+  //         if (hori_block >= (6 - succ_score)) {
+  //           for (int k = 1; k < 6 - succ_score; k++) {
+  //             if (board[row + j - k*1] == opp_color) {
+  //               tmp_score++;
+  //             }
+  //           }
+  //           // Check whether stones pattern can be c7
+  //           // This position makes c7
+  //           is_c7 = false;
+  //           if (hori_block >= (7 - succ_score)) {
+  //             if (board[row + j - (6 - succ_score)] == opp_color) {
+  //               is_c7 = true;
+  //             }
+  //           }
+  //           // Rearrange score
+  //           if (!is_c7) {
+  //             if (tmp_score + succ_score == 5) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 4) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 3) {
+  //               score_opp[row + j] += 64;
+  //             } else if (tmp_score + succ_score == 2) {
+  //               score_opp[row + j] += 32;
+  //             } else if (tmp_score + succ_score == 1) {
+  //               score_opp[row + j] += 4;
+  //             } else if (tmp_score + succ_score == 0) {
+  //               score_opp[row + j] += 2;
+  //             }
+  //           }
+  //         }
+  //       // Can't make right c6
+  //       } else {
+  //         // Can make left c6
+  //         for (int k = 1; k < 19 - j; k++) {
+  //           if (board[row + j + k*1] == opp_color) {
+  //             tmp_score++;
+  //           } else if (board[row + j + k*1] == color) {
+  //             tmp_score = 0;
+  //             break;
+  //           } else {
+  //             if (is_succ) {
+  //               succ_score = tmp_score;
+  //               is_succ = false;
+  //             }
+  //           }
+  //         }
+  //         if (is_succ) {
+  //           succ_score = tmp_score;
+  //         }
+  //         if (hori_block >= (6 - succ_score)) {
+  //           for (int k = 1; k < 6 - succ_score; k++) {
+  //             if (board[row + j - k*1] == opp_color) {
+  //               tmp_score++;
+  //             }
+  //           }
+  //           // Check whether stones pattern can be c7
+  //           // This position makes c7
+  //           is_c7 = false;
+  //           if (hori_block >= (7 - succ_score)) {
+  //             if (board[row + j - (6 - succ_score)] == opp_color) {
+  //               is_c7 = true;
+  //             }
+  //           }
+  //           // Rearrange score
+  //           if (!is_c7) {
+  //             if (tmp_score + succ_score == 5) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 4) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 3) {
+  //               score_opp[row + j] += 64;
+  //             } else if (tmp_score + succ_score == 2) {
+  //               score_opp[row + j] += 32;
+  //             } else if (tmp_score + succ_score == 1) {
+  //               score_opp[row + j] += 4;
+  //             } else if (tmp_score + succ_score == 0) {
+  //               score_opp[row + j] += 2;
+  //             }
+  //           }
+  //         }
+  //       }
+  //       hori_connect = 0;
+  //
+  //
+  //       tmp_score = 0;
+  //       succ_score = 0;
+  //       is_succ = true;
+  //       // Get Vertical score
+  //       // Can make down c6
+  //       if (i <= (19 - (6 - vert_connect[j]))) {
+  //         for (int k = 1; k < 6 - vert_connect[j]; k++) {
+  //           if (board[row + j + k*(19)] == opp_color) {
+  //             tmp_score++;
+  //           } else if (board[row + j + k*(19)] == color) {
+  //             tmp_score = 0;
+  //             break;
+  //           } else {
+  //             if (is_succ) {
+  //               succ_score = tmp_score;
+  //               is_succ = false;
+  //             }
+  //           }
+  //         }
+  //         // Check whether stones pattern can be c7
+  //         // This position makes c7
+  //         is_c7 = false;
+  //         if (i <= (19 - (7 - vert_connect[j]))) {
+  //           if (board[row + j + (6 - vert_connect[j])*(19)] == opp_color) {
+  //             is_c7 = true;
+  //           }
+  //         }
+  //         // Rearrange score
+  //         if (!is_c7) {
+  //           if (tmp_score + vert_connect[j] == 5) {
+  //             score_opp[row + j] += 512;
+  //           } else if (tmp_score + vert_connect[j] == 4) {
+  //             score_opp[row + j] += 512;
+  //           } else if (tmp_score + vert_connect[j] == 3) {
+  //             score_opp[row + j] += 64;
+  //           } else if (tmp_score + vert_connect[j] == 2) {
+  //             score_opp[row + j] += 32;
+  //           } else if (tmp_score + vert_connect[j] == 1) {
+  //             score_opp[row + j] += 4;
+  //           } else if (tmp_score + vert_connect[j] == 0) {
+  //             score_opp[row + j] += 2;
+  //           }
+  //         }
+  //
+  //         tmp_score = 0;
+  //         // Can make Up c6
+  //         if (vert_block[j] >= (6 - succ_score)) {
+  //           for (int k = 1; k < 6 - succ_score; k++) {
+  //             if (board[row + j - k*(19)] == opp_color) {
+  //               tmp_score++;
+  //             }
+  //           }
+  //           // Check whether stones pattern can be c7
+  //           // This position makes c7
+  //           is_c7 = false;
+  //           if (vert_block[j] >= (7 - succ_score)) {
+  //             if (board[row + j - (6 - succ_score)*(19)] == opp_color) {
+  //               is_c7 = true;
+  //             }
+  //           }
+  //           // Rearrange score
+  //           if (!is_c7) {
+  //             if (tmp_score + succ_score == 5) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 4) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 3) {
+  //               score_opp[row + j] += 64;
+  //             } else if (tmp_score + succ_score == 2) {
+  //               score_opp[row + j] += 32;
+  //             } else if (tmp_score + succ_score == 1) {
+  //               score_opp[row + j] += 4;
+  //             } else if (tmp_score + succ_score == 0) {
+  //               score_opp[row + j] += 2;
+  //             }
+  //           }
+  //         }
+  //       // Can't make down c6
+  //       } else {
+  //         // Can make up c6
+  //         for (int k = 1; k < 19 - i; k++) {
+  //           if (board[row + j + k*(19)] == opp_color) {
+  //             tmp_score++;
+  //           } else if (board[row + j + k*(19)] == color) {
+  //             tmp_score = 0;
+  //             break;
+  //           } else {
+  //             if (is_succ) {
+  //               succ_score = tmp_score;
+  //               is_succ = false;
+  //             }
+  //           }
+  //         }
+  //         if (is_succ) {
+  //           succ_score = tmp_score;
+  //         }
+  //         if (vert_block[j] >= (6 - succ_score)) {
+  //           for (int k = 1; k < 6 - succ_score; k++) {
+  //             if (board[row + j - k*(19)] == opp_color) {
+  //               tmp_score++;
+  //             }
+  //           }
+  //           // Check whether stones pattern can be c7
+  //           // This position makes c7
+  //           is_c7 = false;
+  //           if (vert_block[j] >= (7 - succ_score)) {
+  //             if (board[row + j - (6 - succ_score)*(19)] == opp_color) {
+  //               is_c7 = true;
+  //             }
+  //           }
+  //           // Rearrange score
+  //           if (!is_c7) {
+  //             if (tmp_score + succ_score == 5) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 4) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + succ_score == 3) {
+  //               score_opp[row + j] += 64;
+  //             } else if (tmp_score + succ_score == 2) {
+  //               score_opp[row + j] += 32;
+  //             } else if (tmp_score + succ_score == 1) {
+  //               score_opp[row + j] += 4;
+  //             } else if (tmp_score + succ_score == 0) {
+  //               score_opp[row + j] += 2;
+  //             }
+  //           }
+  //         }
+  //       }
+  //       vert_connect[j] = 0;
+  //
+  //
+  //       tmp_score = 0;
+  //       succ_score = 0;
+  //       is_succ = true;
+  //       // Get DiagonalLU score
+  //       // Can make RD c6
+  //       if ((i - j >= -13) && (i - j <= 13)) {
+  //         if ((j <= (19 - (6 - diagLU_connect[i-j+13]))) && (i <= (19 - (6 - diagLU_connect[i-j+13])))) {
+  //           for (int k = 1; k < 6 - diagLU_connect[i-j+13]; k++) {
+  //             if (board[row + j + k*(19 + 1)] == opp_color) {
+  //               tmp_score++;
+  //             } else if (board[row + j + k*(19 + 1)] == color) {
+  //               tmp_score = 0;
+  //               break;
+  //             } else {
+  //               if (is_succ) {
+  //                 succ_score = tmp_score;
+  //                 is_succ = false;
+  //               }
+  //             }
+  //           }
+  //           // Check whether stones pattern can be c7
+  //           // This position makes c7
+  //           is_c7 = false;
+  //           if ((j <= (19 - (7 - diagLU_connect[i-j+13]))) && (i <= (19 - (7 - diagLU_connect[i-j+13])))) {
+  //             if (board[row + j + (6 - diagLU_connect[i-j+13])*(19 + 1)] == opp_color) {
+  //               is_c7 = true;
+  //             }
+  //           }
+  //           // Rearrange score
+  //           if (!is_c7) {
+  //             if (tmp_score + diagLU_connect[i-j+13] == 5) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
+  //               score_opp[row + j] += 64;
+  //             } else if (tmp_score + diagLU_connect[i-j+13] == 2) {
+  //               score_opp[row + j] += 32;
+  //             } else if (tmp_score + diagLU_connect[i-j+13] == 1) {
+  //               score_opp[row + j] += 4;
+  //             } else if (tmp_score + diagLU_connect[i-j+13] == 0) {
+  //               score_opp[row + j] += 2;
+  //             }
+  //           }
+  //
+  //           tmp_score = 0;
+  //           // Can make LU c6
+  //           if (diagLU_block[i-j+13] >= (6 - succ_score)) {
+  //             for (int k = 1; k < 6 - succ_score; k++) {
+  //               if (board[row + j - k*(19 + 1)] == opp_color) {
+  //                 tmp_score++;
+  //               }
+  //             }
+  //             // Check whether stones pattern can be c7
+  //             // This position makes c7
+  //             is_c7 = false;
+  //             if (diagLU_block[i-j+13] >= (7 - succ_score)) {
+  //               if (board[row + j - (6 - succ_score)*(19 + 1)] == opp_color) {
+  //                 is_c7 = true;
+  //               }
+  //             }
+  //             // Rearrange score
+  //             if (!is_c7) {
+  //               if (tmp_score + succ_score == 5) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 4) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 3) {
+  //                 score_opp[row + j] += 64;
+  //               } else if (tmp_score + succ_score == 2) {
+  //                 score_opp[row + j] += 32;
+  //               } else if (tmp_score + succ_score == 1) {
+  //                 score_opp[row + j] += 4;
+  //               } else if (tmp_score + succ_score == 0) {
+  //                 score_opp[row + j] += 2;
+  //               }
+  //             }
+  //           }
+  //         // Can't make RD c6
+  //         } else {
+  //           // Can make LU c6
+  //           for (int k = 1; k < 19; k++) {
+  //             if ((i + k == 19) || (j + k == 19)) break;
+  //             if (board[row + j + k*(19 + 1)] == opp_color) {
+  //               tmp_score++;
+  //             } else if (board[row + j + k*(19 + 1)] == color) {
+  //               tmp_score = 0;
+  //               break;
+  //             } else {
+  //               if (is_succ) {
+  //                 succ_score = tmp_score;
+  //                 is_succ = false;
+  //               }
+  //             }
+  //           }
+  //           if (is_succ) {
+  //             succ_score = tmp_score;
+  //           }
+  //           if (diagLU_block[i-j+13] >= (6 - succ_score)) {
+  //             for (int k = 1; k < 6 - succ_score; k++) {
+  //               if (board[row + j - k*(19 + 1)] == opp_color) {
+  //                 tmp_score++;
+  //               }
+  //             }
+  //             // Check whether stones pattern can be c7
+  //             // This position makes c7
+  //             is_c7 = false;
+  //             if (diagLU_block[i-j+13] >= (7 - succ_score)) {
+  //               if (board[row + j - (6 - succ_score)*(19 + 1)] == opp_color) {
+  //                 is_c7 = true;
+  //               }
+  //             }
+  //             // Rearrange score
+  //             if (!is_c7) {
+  //               if (tmp_score + succ_score == 5) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 4) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 3) {
+  //                 score_opp[row + j] += 64;
+  //               } else if (tmp_score + succ_score == 2) {
+  //                 score_opp[row + j] += 32;
+  //               } else if (tmp_score + succ_score == 1) {
+  //                 score_opp[row + j] += 4;
+  //               } else if (tmp_score + succ_score == 0) {
+  //                 score_opp[row + j] += 2;
+  //               }
+  //             }
+  //           }
+  //         }
+  //         diagLU_connect[i-j+13] = 0;
+  //       }
+  //
+  //
+  //       tmp_score = 0;
+  //       succ_score = 0;
+  //       is_succ = true;
+  //       // Get DiagonalRU score
+  //       // Can make LD c6
+  //       if ((i + j >= 5) && (i + j <= 31)) {
+  //         if ((i <= (19 - (6 - diagRU_connect[i+j-5]))) && (j >= 5 - diagRU_connect[i+j-5])) {
+  //           for (int k = 1; k < 6 - diagRU_connect[i+j-5]; k++) {
+  //             if (board[row + j + k*(19 - 1)] == opp_color) {
+  //               tmp_score++;
+  //             } else if (board[row + j + k*(19 - 1)] == color) {
+  //               tmp_score = 0;
+  //               break;
+  //             } else {
+  //               if (is_succ) {
+  //                 succ_score = tmp_score;
+  //                 is_succ = false;
+  //               }
+  //             }
+  //           }
+  //           // Check whether stones pattern can be c7
+  //           // This position makes c7
+  //           is_c7 = false;
+  //           if (i <= (19 - (7 - diagRU_connect[i+j-5])) && (j >= 6 - diagRU_connect[i+j-5])) {
+  //             if (board[row + j + (6 - diagRU_connect[i+j-5])*(19 - 1)] == opp_color) {
+  //               is_c7 = true;
+  //             }
+  //           }
+  //           // Rearrange score
+  //           if (!is_c7) {
+  //             if (tmp_score + diagRU_connect[i+j-5] == 5) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
+  //               score_opp[row + j] += 512;
+  //             } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
+  //               score_opp[row + j] += 64;
+  //             } else if (tmp_score + diagRU_connect[i+j-5] == 2) {
+  //               score_opp[row + j] += 32;
+  //             } else if (tmp_score + diagRU_connect[i+j-5] == 1) {
+  //               score_opp[row + j] += 4;
+  //             } else if (tmp_score + diagRU_connect[i+j-5] == 0) {
+  //               score_opp[row + j] += 2;
+  //             }
+  //           }
+  //
+  //           tmp_score = 0;
+  //           // Can make RU c6
+  //           if (diagRU_block[i+j-5] >= (6 - succ_score)) {
+  //             for (int k = 1; k < 6 - succ_score; k++) {
+  //               if (board[row + j - k*(19 - 1)] == opp_color) {
+  //                 tmp_score++;
+  //               }
+  //             }
+  //             // Check whether stones pattern can be c7
+  //             // This position makes c7
+  //             is_c7 = false;
+  //             if (diagRU_block[i+j-5] >= (7 - succ_score)) {
+  //               if (board[row + j - (6 - succ_score)*(19 - 1)] == opp_color) {
+  //                 is_c7 = true;
+  //               }
+  //             }
+  //             // Rearrange score
+  //             if (!is_c7) {
+  //               if (tmp_score + succ_score == 5) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 4) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 3) {
+  //                 score_opp[row + j] += 64;
+  //               } else if (tmp_score + succ_score == 2) {
+  //                 score_opp[row + j] += 32;
+  //               } else if (tmp_score + succ_score == 1) {
+  //                 score_opp[row + j] += 4;
+  //               } else if (tmp_score + succ_score == 0) {
+  //                 score_opp[row + j] += 2;
+  //               }
+  //             }
+  //           }
+  //         // Can't make LD c6
+  //         } else {
+  //           // Can make RU c6
+  //           for (int k = 1; k < 19; k++) {
+  //             if ((i + k == 19) || (j - k == -1)) break;
+  //             if (board[row + j + k*(19 - 1)] == opp_color) {
+  //               tmp_score++;
+  //             } else if (board[row + j + k*(19 - 1)] == color) {
+  //               tmp_score = 0;
+  //               break;
+  //             } else {
+  //               if (is_succ) {
+  //                 succ_score = tmp_score;
+  //                 is_succ = false;
+  //               }
+  //             }
+  //           }
+  //           if (is_succ) {
+  //             succ_score = tmp_score;
+  //           }
+  //           if (diagRU_block[i+j-5] >= (6 - succ_score)) {
+  //             for (int k = 1; k < 6 - succ_score; k++) {
+  //               if (board[row + j - k*(19 - 1)] == opp_color) {
+  //                 tmp_score++;
+  //               }
+  //             }
+  //             // Check whether stones pattern can be c7
+  //             // This position makes c7
+  //             is_c7 = false;
+  //             if (diagRU_block[i+j-5] >= (7 - succ_score)) {
+  //               if (board[row + j - (7 - succ_score)*(19 - 1)] == opp_color) {
+  //                 is_c7 = true;
+  //               }
+  //             }
+  //             // Rearrange score
+  //             if (!is_c7) {
+  //               if (tmp_score + succ_score == 5) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 4) {
+  //                 score_opp[row + j] += 512;
+  //               } else if (tmp_score + succ_score == 3) {
+  //                 score_opp[row + j] += 64;
+  //               } else if (tmp_score + succ_score == 2) {
+  //                 score_opp[row + j] += 32;
+  //               } else if (tmp_score + succ_score == 1) {
+  //                 score_opp[row + j] += 4;
+  //               } else if (tmp_score + succ_score == 0) {
+  //                 score_opp[row + j] += 2;
+  //               }
+  //             }
+  //           }
+  //         }
+  //         diagRU_connect[i+j-5] = 0;
+  //       }
+  //
+  //     } else if (board[row + j] == opp_color) {
+  //       hori_connect++;
+  //       vert_connect[j]++;
+  //       diagLU_connect[i-j+13]++;
+  //       diagRU_connect[i+j-5]++;
+  //     } else {
+  //       hori_connect = 0;
+  //       vert_connect[j] = 0;
+  //       diagLU_connect[i-j+13] = 0;
+  //       diagRU_connect[i+j-5] = 0;
+  //       hori_block = 0;
+  //       vert_block[j] = 0;
+  //       diagLU_block[i-j+13] = 0;
+  //       diagRU_block[i+j-5] = 0;
+  //     }
   //   }
-  //   total << endl;
   // }
-  // total.close();
+  //
+  // // // Test Score
+  // // out2 << endl;
+  // // for (int i = 0; i < 19; i++) {
+  // //   int iter = 19 * i;
+  // //   for (int j = 0; j < 19; j++) {
+  // //     out2 << score_opp[iter + j] << "  ";
+  // //   }
+  // //   out2 << endl;
+  // // }
+  // // out2.close();
+  //
+  // // Add score Arrays
+  // for (int i = 0; i < 361; i++) {
+  //   score[i] += (score_opp[i] + score[i]);
+  // }
+  //
+  // // // Test Score
+  // // total << endl;
+  // // for (int i = 0; i < 19; i++) {
+  // //   int iter = 19 * i;
+  // //   for (int j = 0; j < 19; j++) {
+  // //     total << score[iter + j] << "  ";
+  // //   }
+  // //   total << endl;
+  // // }
+  // // total.close();
 
   // Select (num) Best picks
   int min_idx = 0;
@@ -1619,6 +1647,19 @@ State* State::BestChoice() {
 
   best_pos1 = child_list_[max_idx]->change_idx_1_;
   best_pos2 = child_list_[max_idx]->change_idx_2_;
+
+  // Test values
+  // ofstream out("out.txt", ios::app);
+  // out << best_pos1/19 << ", " << best_pos1%19 << " | ";
+  // out << best_pos2/19 << ", " << best_pos2%19 << endl;
+  // for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
+  //   out << "UCT: " << child_list_[i]->uct_value_ << " Visit: " << child_list_[i]->number_of_visiting_;
+  //   out << " Win Rate: " << (double) child_list_[i]->number_of_wins_/child_list_[i]->number_of_visiting_ << endl;
+  // }
+  // out << endl;
+  // out.close();
+  //
+
   return child_list_[max_idx];
 }
 

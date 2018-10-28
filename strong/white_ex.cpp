@@ -49,7 +49,7 @@ int isFree(int X, int Y) {
 
 void put_stone() {
 	MonteCarloTreeSearch();
-	// YOUT ALGORITHM
+	// YOUR ALGORITHM
 	for (int i = 0; i < CNT; i++) {
 		do {
 			if (i == 0) {

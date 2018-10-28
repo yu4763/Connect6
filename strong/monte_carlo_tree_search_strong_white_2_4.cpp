@@ -2,12 +2,12 @@
 using namespace std;
 
 // For Black
-const char my_color = 1;
-const char userColor = 2;
+// const char my_color = 1;
+// const char userColor = 2;
 
 // For white
-// const char my_color = 2;
-// const char userColor = 1;
+const char my_color = 2;
+const char userColor = 1;
 int best_pos1, best_pos2;
 
 extern int board[19][19];
@@ -190,7 +190,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               } else if (tmp_score + hori_connect == 2) {
                 score[row + j] += 32;
               } else if (tmp_score + hori_connect == 1) {
-                score[row + j] += 20;
+                score[row + j] += 4;
               } else if (tmp_score + hori_connect == 0) {
                 score[row + j] += 2;
               }
@@ -204,7 +204,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               } else if (tmp_score + hori_connect == 2) {
                 score[row + j] += 32;
               } else if (tmp_score + hori_connect == 1) {
-                score[row + j] += 20;
+                score[row + j] += 4;
               } else if (tmp_score + hori_connect == 0) {
                 score[row + j] += 2;
               }
@@ -239,7 +239,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -253,7 +253,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -305,7 +305,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -319,7 +319,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -369,7 +369,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               } else if (tmp_score + vert_connect[j] == 2) {
                 score[row + j] += 32;
               } else if (tmp_score + vert_connect[j] == 1) {
-                score[row + j] += 20;
+                score[row + j] += 4;
               } else if (tmp_score + vert_connect[j] == 0) {
                 score[row + j] += 2;
               }
@@ -383,7 +383,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               } else if (tmp_score + vert_connect[j] == 2) {
                 score[row + j] += 32;
               } else if (tmp_score + vert_connect[j] == 1) {
-                score[row + j] += 20;
+                score[row + j] += 4;
               } else if (tmp_score + vert_connect[j] == 0) {
                 score[row + j] += 2;
               }
@@ -418,7 +418,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -432,7 +432,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -478,13 +478,13 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 if (tmp_score + succ_score == 5) {
                   score[row + j] += 4096;
                 } else if (tmp_score + succ_score == 4) {
-                  score[row + j] += 4096;
+                  score[row + j] += 512;
                 } else if (tmp_score + succ_score == 3) {
                   score[row + j] += 40;
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -498,7 +498,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + succ_score == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + succ_score == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + succ_score == 0) {
                   score[row + j] += 2;
                 }
@@ -543,13 +543,13 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 if (tmp_score + diagLU_connect[i-j+13] == 5) {
                   score[row + j] += 4096;
                 } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
-                  score[row + j] += 4096;
+                  score[row + j] += 512;
                 } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
                   score[row + j] += 40;
                 } else if (tmp_score + diagLU_connect[i-j+13] == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + diagLU_connect[i-j+13] == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + diagLU_connect[i-j+13] == 0) {
                   score[row + j] += 2;
                 }
@@ -563,7 +563,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + diagLU_connect[i-j+13] == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + diagLU_connect[i-j+13] == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + diagLU_connect[i-j+13] == 0) {
                   score[row + j] += 2;
                 }
@@ -591,13 +591,13 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   if (tmp_score + succ_score == 5) {
                     score[row + j] += 4096;
                   } else if (tmp_score + succ_score == 4) {
-                    score[row + j] += 4096;
+                    score[row + j] += 512;
                   } else if (tmp_score + succ_score == 3) {
                     score[row + j] += 40;
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -611,7 +611,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -657,13 +657,13 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   if (tmp_score + succ_score == 5) {
                     score[row + j] += 4096;
                   } else if (tmp_score + succ_score == 4) {
-                    score[row + j] += 4096;
+                    score[row + j] += 512;
                   } else if (tmp_score + succ_score == 3) {
                     score[row + j] += 40;
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -677,7 +677,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -723,13 +723,13 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 if (tmp_score + diagRU_connect[i+j-5] == 5) {
                   score[row + j] += 4096;
                 } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
-                  score[row + j] += 4096;
+                  score[row + j] += 512;
                 } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
                   score[row + j] += 40;
                 } else if (tmp_score + diagRU_connect[i+j-5] == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + diagRU_connect[i+j-5] == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + diagRU_connect[i+j-5] == 0) {
                   score[row + j] += 2;
                 }
@@ -743,7 +743,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 } else if (tmp_score + diagRU_connect[i+j-5] == 2) {
                   score[row + j] += 32;
                 } else if (tmp_score + diagRU_connect[i+j-5] == 1) {
-                  score[row + j] += 20;
+                  score[row + j] += 4;
                 } else if (tmp_score + diagRU_connect[i+j-5] == 0) {
                   score[row + j] += 2;
                 }
@@ -771,13 +771,13 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   if (tmp_score + succ_score == 5) {
                     score[row + j] += 4096;
                   } else if (tmp_score + succ_score == 4) {
-                    score[row + j] += 4096;
+                    score[row + j] += 512;
                   } else if (tmp_score + succ_score == 3) {
                     score[row + j] += 40;
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -791,7 +791,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -837,13 +837,13 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   if (tmp_score + succ_score == 5) {
                     score[row + j] += 4096;
                   } else if (tmp_score + succ_score == 4) {
-                    score[row + j] += 4096;
+                    score[row + j] += 512;
                   } else if (tmp_score + succ_score == 3) {
                     score[row + j] += 40;
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -857,7 +857,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   } else if (tmp_score + succ_score == 2) {
                     score[row + j] += 32;
                   } else if (tmp_score + succ_score == 1) {
-                    score[row + j] += 20;
+                    score[row + j] += 4;
                   } else if (tmp_score + succ_score == 0) {
                     score[row + j] += 2;
                   }
@@ -873,6 +873,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
         vert_connect[j]++;
         diagLU_connect[i-j+13]++;
         diagRU_connect[i+j-5]++;
+
       } else {
         hori_connect = 0;
         vert_connect[j] = 0;
@@ -956,9 +957,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
           // Rearrange score
           if (!is_c7) {
             if (tmp_score + hori_connect == 5) {
-              score_opp[row + j] += 512;
+              score_opp[row + j] += 513;
             } else if (tmp_score + hori_connect == 4) {
-              score_opp[row + j] += 512;
+              score_opp[row + j] += 513;
             } else if (tmp_score + hori_connect == 3) {
               score_opp[row + j] += 64;
             } else if (tmp_score + hori_connect == 2) {
@@ -989,9 +990,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             // Rearrange score
             if (!is_c7) {
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 2) {
@@ -1039,9 +1040,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             // Rearrange score
             if (!is_c7) {
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 2) {
@@ -1087,9 +1088,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
           // Rearrange score
           if (!is_c7) {
             if (tmp_score + vert_connect[j] == 5) {
-              score_opp[row + j] += 512;
+              score_opp[row + j] += 513;
             } else if (tmp_score + vert_connect[j] == 4) {
-              score_opp[row + j] += 512;
+              score_opp[row + j] += 513;
             } else if (tmp_score + vert_connect[j] == 3) {
               score_opp[row + j] += 64;
             } else if (tmp_score + vert_connect[j] == 2) {
@@ -1120,9 +1121,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             // Rearrange score
             if (!is_c7) {
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 2) {
@@ -1170,9 +1171,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             // Rearrange score
             if (!is_c7) {
               if (tmp_score + succ_score == 5) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 4) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + succ_score == 3) {
                 score_opp[row + j] += 64;
               } else if (tmp_score + succ_score == 2) {
@@ -1219,9 +1220,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             // Rearrange score
             if (!is_c7) {
               if (tmp_score + diagLU_connect[i-j+13] == 5) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + diagLU_connect[i-j+13] == 4) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + diagLU_connect[i-j+13] == 3) {
                 score_opp[row + j] += 64;
               } else if (tmp_score + diagLU_connect[i-j+13] == 2) {
@@ -1252,9 +1253,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               // Rearrange score
               if (!is_c7) {
                 if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 3) {
                   score_opp[row + j] += 64;
                 } else if (tmp_score + succ_score == 2) {
@@ -1303,9 +1304,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               // Rearrange score
               if (!is_c7) {
                 if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 3) {
                   score_opp[row + j] += 64;
                 } else if (tmp_score + succ_score == 2) {
@@ -1353,9 +1354,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             // Rearrange score
             if (!is_c7) {
               if (tmp_score + diagRU_connect[i+j-5] == 5) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + diagRU_connect[i+j-5] == 4) {
-                score_opp[row + j] += 512;
+                score_opp[row + j] += 513;
               } else if (tmp_score + diagRU_connect[i+j-5] == 3) {
                 score_opp[row + j] += 64;
               } else if (tmp_score + diagRU_connect[i+j-5] == 2) {
@@ -1386,9 +1387,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               // Rearrange score
               if (!is_c7) {
                 if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 3) {
                   score_opp[row + j] += 64;
                 } else if (tmp_score + succ_score == 2) {
@@ -1437,9 +1438,9 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               // Rearrange score
               if (!is_c7) {
                 if (tmp_score + succ_score == 5) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 4) {
-                  score_opp[row + j] += 512;
+                  score_opp[row + j] += 513;
                 } else if (tmp_score + succ_score == 3) {
                   score_opp[row + j] += 64;
                 } else if (tmp_score + succ_score == 2) {

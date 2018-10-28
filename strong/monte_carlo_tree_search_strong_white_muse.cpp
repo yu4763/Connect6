@@ -2,12 +2,12 @@
 using namespace std;
 
 // For Black
-const char my_color = 1;
-const char userColor = 2;
+// const char my_color = 1;
+// const char userColor = 2;
 
 // For white
-// const char my_color = 2;
-// const char userColor = 1;
+const char my_color = 2;
+const char userColor = 1;
 int best_pos1, best_pos2;
 
 extern int board[19][19];
@@ -100,7 +100,7 @@ State& State::SelectionAndExpansion() {
         child_state->uct_value_ = 0;
         child_state->uct_value_ += 2 * log(best_child->number_of_visiting_);
         child_state->uct_value_ /= child_state->number_of_visiting_;
-        child_state->uct_value_ = 0.5 * sqrt(child_state->uct_value_);
+        child_state->uct_value_ = mct_const::UCT_CONSTANT * sqrt(child_state->uct_value_);
         child_state->uct_value_ += (double)child_state->number_of_wins_ / child_state->number_of_visiting_;
         // Case3) There is node who has larger uct_value_ than max
         if (child_state->uct_value_ > max_uct_value) {
@@ -128,7 +128,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
   int diagLU_block[27] = {0};
   int diagRU_block[27] = {0};
 
-  // // Test Score
+  // Test Score
   // ofstream out1("out1.txt", ios::app);
   // ofstream out2("out2.txt", ios::app);
   // ofstream total("total.txt", ios::app);
@@ -153,8 +153,10 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
         // succ_score: Save the number of succesive my stones after Position
         int tmp_score = 0;
         int succ_score = 0;
+        int tmp_block = 7;
         bool is_succ = true;
         bool is_c7 = false;
+        bool is_block = false;
         // Get Horizontal score
         // Can make right c6
         if (j <= (19 - (6 - hori_connect))) {
@@ -163,6 +165,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               tmp_score++;
             } else if (board[row + j + k*1] == opp_color) {
               tmp_score = 0;
+              tmp_block = k;
               break;
             } else {
               if (is_succ) {
@@ -170,6 +173,10 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 is_succ = false;
               }
             }
+          }
+          // All closed
+          if (tmp_block + hori_block < 7) {
+            is_block = true;
           }
           // Check whether stones pattern can be c7
           // This position makes c7
@@ -179,7 +186,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             }
           }
           // Rearrange score
-          if (!is_c7) {
+          if (!is_c7 && !is_block) {
             if (turn == 1) {
               if (tmp_score + hori_connect == 5) {
                 score[row + j] += 4096;
@@ -331,6 +338,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
 
 
         tmp_score = 0;
+        tmp_block = 7;
         succ_score = 0;
         is_succ = true;
         // Get Vertical score
@@ -341,6 +349,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               tmp_score++;
             } else if (board[row + j + k*(19)] == opp_color) {
               tmp_score = 0;
+              tmp_block = k;
               break;
             } else {
               if (is_succ) {
@@ -348,6 +357,11 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 is_succ = false;
               }
             }
+          }
+          // All closed
+          is_block = false;
+          if (tmp_block + vert_block[j] < 7) {
+            is_block = true;
           }
           // Check whether stones pattern can be c7
           // This position makes c7
@@ -358,7 +372,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
             }
           }
           // Rearrange score
-          if (!is_c7) {
+          if (!is_c7 && !is_block) {
             if (turn == 1) {
               if (tmp_score + vert_connect[j] == 5) {
                 score[row + j] += 4096;
@@ -510,6 +524,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
 
 
         tmp_score = 0;
+        tmp_block = 7;
         succ_score = 0;
         is_succ = true;
         // Get DiagonalLU score
@@ -521,6 +536,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 tmp_score++;
               } else if (board[row + j + k*(19 + 1)] == opp_color) {
                 tmp_score = 0;
+                tmp_block = k;
                 break;
               } else {
                 if (is_succ) {
@@ -528,6 +544,11 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   is_succ = false;
                 }
               }
+            }
+            // All closed
+            is_block = false;
+            if (tmp_block + diagLU_block[i-j+13] < 7) {
+              is_block = true;
             }
             // Check whether stones pattern can be c7
             // This position makes c7
@@ -538,7 +559,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               }
             }
             // Rearrange score
-            if (!is_c7) {
+            if (!is_c7 && !is_block) {
               if (turn == 1) {
                 if (tmp_score + diagLU_connect[i-j+13] == 5) {
                   score[row + j] += 4096;
@@ -690,6 +711,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
 
 
         tmp_score = 0;
+        tmp_block = 7;
         succ_score = 0;
         is_succ = true;
         // Get DiagonalRU score
@@ -701,6 +723,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                 tmp_score++;
               } else if (board[row + j + k*(19 - 1)] == opp_color) {
                 tmp_score = 0;
+                tmp_block = k;
                 break;
               } else {
                 if (is_succ) {
@@ -708,6 +731,11 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
                   is_succ = false;
                 }
               }
+            }
+            // All closed
+            is_block = false;
+            if (tmp_block + diagRU_block[i+j-5] < 7) {
+              is_block = true;
             }
             // Check whether stones pattern can be c7
             // This position makes c7
@@ -718,7 +746,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
               }
             }
             // Rearrange score
-            if (!is_c7) {
+            if (!is_c7 && !is_block) {
               if (turn == 1) {
                 if (tmp_score + diagRU_connect[i+j-5] == 5) {
                   score[row + j] += 4096;
@@ -886,7 +914,7 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
     }
   }
 
-  // // Test Score
+  // Test Score
   // out1 << endl;
   // for (int i = 0; i < 19; i++) {
   //   int iter = 19 * i;
@@ -1619,6 +1647,19 @@ State* State::BestChoice() {
 
   best_pos1 = child_list_[max_idx]->change_idx_1_;
   best_pos2 = child_list_[max_idx]->change_idx_2_;
+
+  // Test values
+  // ofstream out("out.txt", ios::app);
+  // out << best_pos1/19 << ", " << best_pos1%19 << " | ";
+  // out << best_pos2/19 << ", " << best_pos2%19 << endl;
+  // for (int i = 0; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
+  //   out << "UCT: " << child_list_[i]->uct_value_ << " Visit: " << child_list_[i]->number_of_visiting_;
+  //   out << " Win Rate: " << (double) child_list_[i]->number_of_wins_/child_list_[i]->number_of_visiting_ << endl;
+  // }
+  // out << endl;
+  // out.close();
+  //
+
   return child_list_[max_idx];
 }
 

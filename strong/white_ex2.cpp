@@ -57,7 +57,7 @@ void put_stone() {
 		}
 	}
 	GetBestPositions(board_, index, 2, 2);
-	// YOUT ALGORITHM
+	// YOUR ALGORITHM
 	for (int i = 0; i < CNT; i++) {
 		do {
 			if (i == 0) {

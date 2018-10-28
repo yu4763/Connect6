@@ -56,7 +56,7 @@ void put_stone() {
 			board_[iter + j] = board[i][j];
 		}
 	}
-	// YOUT ALGORITHM
+	// YOUR ALGORITHM
 	for (int i = 0; i < CNT; i++) {
 		do {
 		GetBestPositions(board_, index, 1, 1, i + 1);
