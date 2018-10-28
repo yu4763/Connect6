@@ -62,9 +62,9 @@ void clenaValue();
 void updateValue(int index);
 int runDefenceAlgorithm(char parameter);
 char initializeDefenceAlgorithm(bool Black);
-void getIndex();
+bool getIndex();
 
-void getIndex(void) {
+bool getIndex(void) {
 	for (int i = 0; i < 361; i++) {
 		board2[i] = board[i / 19][i % 19];
 	}
@@ -78,12 +78,32 @@ void getIndex(void) {
 		update(op_x[0] + (18 - op_y[0]) * 19, false);
 		update(op_x[1] + (18 - op_y[1]) * 19, false);
 	}
+	bool status = false;
+	for (int i = 0; i < 361; i++) {
+		if (allowed[i] == 1) {
+			status = true;
+		}
+	}
+	if (status == false) {
+		return status;
+	}
 
 	index1 = runDefenceAlgorithm(parameter);
 	update(index1, true);
 
+	status = false;
+	for (int i = 0; i < 361; i++) {
+		if (allowed[i] == 1) {
+			status = true;
+		}
+	}
+	if (status == false) {
+		return status;
+	}
+
 	index2 = runDefenceAlgorithm(parameter);
 	update(index2, true);
+	return true;
 }
 char initializeDefenceAlgorithm(bool Black) { //패턴의 각 자리의 가치의 총합이 가장 높은 패턴을 계산해 반환 
 	float table[10] = { 0, };
@@ -223,7 +243,7 @@ void updateValue(int index) {
 							allowed[19 * x + y] = 0;
 							break;
 						}
-						else if (allowed[19 * x + y] != 1){
+						else if (allowed[19 * x + y] != 1) {
 							allowed[19 * x + y] = 3;
 						}
 					}
@@ -238,7 +258,7 @@ void updateValue(int index) {
 	else if (board2[index] == white) {
 		Black = false;
 	}
-	else{
+	else {
 		return;
 	}
 	//up
@@ -471,7 +491,7 @@ void updateValue(int index) {
 			}
 		}
 	}
-	
+
 	//down left
 	x = index / 19;
 	y = index % 19;

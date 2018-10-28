@@ -4,6 +4,10 @@
 #include <string>
 #include <ctime>
 
+#include "function.h"
+#include "monte_carlo_tree_search_strong.h"
+extern int best_pos1, best_pos2;
+
 #define		BUF_SIZE	1024
 #define		IPAddress	"127.0.0.1"
 #define		PORT		8053	// white: 8052 black: 8053
@@ -26,7 +30,7 @@ int y[2];
 
 extern int index1;
 extern int index2;
-void getIndex();
+bool getIndex();
 
 void print_board() {
 
@@ -49,7 +53,52 @@ int isFree(int X, int Y) {
 }
 
 void put_stone() {
-	getIndex();
+	int pos1, pos2;
+	checkmine(board, 1, pos1, pos2, index1 / 19, index1 % 19);
+	if ((pos1 == -1) && (pos2 == -1)) {
+		checkmine(board, 1, pos1, pos2, index1 / 19, index1 % 19);
+		if ((pos1 == -1) && (pos2 == -1)) {
+			checkopponent(board, 2, pos1, pos2, op_x[0], (18 - op_y[0]) );
+			if ((pos1 == -1) && (pos2 == -1)) {
+				checkopponent(board, 2, pos1, pos2, op_x[1], (18 - op_y[1]));
+			}
+		}
+	}
+	printf("\n  pos1 : %d, pos2 :  %d\n", pos1, pos2);
+	bool operating = getIndex();
+	if (!operating) {
+		printf("\nMonte\n");
+		MonteCarloTreeSearch();
+		index1 = best_pos1;
+		index2 = best_pos2;
+	}
+	else {
+		printf("\nPattern\n");
+	}
+	if (pos1 != -1) {
+		if (pos2 != -1) {
+			index1 = pos1;
+			index2 = pos2;
+		}
+		else {
+			if (pos1 == index2) {
+				index2 = pos1;
+			}
+			else {
+				index1 = pos1;
+			}
+		}
+	}
+	else {
+		if (pos2 != -1) {
+			if (pos2 == index1) {
+				index1 = pos2;
+			}
+			else {
+				index2 = pos2;
+			}
+		}
+	}
 	int index;
 	for (int i = 0; i < CNT; i++) {
 		do {
@@ -100,7 +149,7 @@ int main() {
 		return false; //Couldn't create the socket
 	}
 
-	if (bind(s, reinterpret_cast<SOCKADDR *>(&servAddr), sizeof(servAddr)) == SOCKET_ERROR) {
+	if (::bind(s, reinterpret_cast<SOCKADDR *>(&servAddr), sizeof(servAddr)) == SOCKET_ERROR) {
 		cout << "Binding failed. Error code: " << WSAGetLastError() << endl;
 		WSACleanup();
 		return false; //Couldn't connect
