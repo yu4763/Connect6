@@ -273,11 +273,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -286,11 +286,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -311,11 +311,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -324,11 +324,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -349,11 +349,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -362,11 +362,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -387,11 +387,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -400,11 +400,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -426,11 +426,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -439,11 +439,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -465,11 +465,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -478,11 +478,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -505,11 +505,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -518,11 +518,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -544,11 +544,11 @@ void updateValue(int index) {
 		influence--;
 
 		if (White) {
-			if (board2[19 * x + y] == black) {
+			if (board2[19 * x + y] == white) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == white) {
+			else if (board2[19 * x + y] == black) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
@@ -557,11 +557,11 @@ void updateValue(int index) {
 			}
 		}
 		else {
-			if (board2[19 * x + y] == white) {
+			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
 			}
-			else if (board2[19 * x + y] == black) {
+			else if (board2[19 * x + y] == white) {
 				influence = 0;
 				Value[19 * x + y] = -5;
 			}
