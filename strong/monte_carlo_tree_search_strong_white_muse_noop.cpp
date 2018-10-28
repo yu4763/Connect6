@@ -1516,17 +1516,17 @@ void GetBestPositions(char* board, int* indexes, int num, char color, int turn) 
   // for (int i = 0; i < 361; i++) {
   //   score[i] += (score_opp[i] + score[i]);
   // }
-  //
-  // // // Test Score
-  // // total << endl;
-  // // for (int i = 0; i < 19; i++) {
-  // //   int iter = 19 * i;
-  // //   for (int j = 0; j < 19; j++) {
-  // //     total << score[iter + j] << "  ";
-  // //   }
-  // //   total << endl;
-  // // }
-  // // total.close();
+
+  // // Test Score
+  // total << endl;
+  // for (int i = 0; i < 19; i++) {
+  //   int iter = 19 * i;
+  //   for (int j = 0; j < 19; j++) {
+  //     total << score[iter + j] << "  ";
+  //   }
+  //   total << endl;
+  // }
+  // total.close();
 
   // Select (num) Best picks
   int min_idx = 0;
@@ -1634,13 +1634,20 @@ void State::Update(int result) {
 }
 
 // Select Best
-// The biggest uct
+// The biggest win rate
 State* State::BestChoice() {
   int max_idx = 0;
-  double max_uct = child_list_[0]->uct_value_;
-  for (int i = 1; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
-    if (child_list_[i]->uct_value_ > max_uct) {
-      max_uct = child_list_[i]->uct_value_;
+  // double max_uct = child_list_[0]->uct_value_;
+  // for (int i = 1; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
+  //   if (child_list_[i]->uct_value_ > max_uct) {
+  //     max_uct = child_list_[i]->uct_value_;
+  //     max_idx = i;
+  //   }
+  // }
+  double max_winrate = (double)child_list_[0]->number_of_wins_ / child_list_[0]->number_of_visiting_;
+  for (int i =1; i < mct_const::NUMBER_OF_MAX_CHILD_NODES; i++) {
+    if (((double)child_list_[i]->number_of_wins_ / child_list_[i]->number_of_visiting_) > max_winrate) {
+      max_winrate = (double)child_list_[i]->number_of_wins_ / child_list_[i]->number_of_visiting_;
       max_idx = i;
     }
   }
