@@ -73,13 +73,11 @@ bool getIndex(void) {
 	}
 	if (parameter == 100) {
 		update(180, true);
-		update(op_x[0] + (18 - op_y[0]) * 19, false);
-		update(op_x[1] + (18 - op_y[1]) * 19, false);
-		parameter = initializeDefenceAlgorithm(true);
+		parameter = initializeDefenceAlgorithm(false);
 	}
 	else {
-		update(op_x[0] + (18 - op_y[0]) * 19, false);
-		update(op_x[1] + (18 - op_y[1]) * 19, false);
+		update(op_x[0] + (18 - op_y[0]) * 19, true);
+		update(op_x[1] + (18 - op_y[1]) * 19, true);
 	}
 	bool status = false;
 	for (int i = 0; i < 361; i++) {
@@ -92,7 +90,7 @@ bool getIndex(void) {
 	}
 
 	index1 = runDefenceAlgorithm(parameter);
-	update(index1, true);
+	update(index1, false);
 
 	status = false;
 	for (int i = 0; i < 361; i++) {
@@ -105,7 +103,7 @@ bool getIndex(void) {
 	}
 
 	index2 = runDefenceAlgorithm(parameter);
-	update(index2, true);
+	update(index2, false);
 	return true;
 }
 char initializeDefenceAlgorithm(bool Black) { //패턴의 각 자리의 가치의 총합이 가장 높은 패턴을 계산해 반환 
@@ -178,7 +176,7 @@ int runDefenceAlgorithm(char parameter) { // 이제 정해진 패턴에서 가장 가치가 높
 	int maxindex;
 
 	for (int i = 0; i < 361; i++) {
-		if (allowed[i] == 1 && board2[i] == white) {
+		if (allowed[i] == 1 && board2[i] == black) {
 			allowed[i] = 2;
 		}
 	}
@@ -238,10 +236,10 @@ void updateValue(int index) {
 						break;
 					}
 					else {
-						if (board2[19 * x + y] == white) {
+						if (board2[19 * x + y] == black) {
 							allowed[19 * x + y] = 0;
 						}
-						else if (board2[19 * x + y] == black) {
+						else if (board2[19 * x + y] == white) {
 							allowed[19 * x + y] = 0;
 							break;
 						}
@@ -253,12 +251,12 @@ void updateValue(int index) {
 			}
 		}
 	}
-	bool Black;
-	if (board2[index] == black) {
-		Black = true;
+	bool White;
+	if (board2[index] == white) {
+		White = true;
 	}
-	else if (board2[index] == white) {
-		Black = false;
+	else if (board2[index] == black) {
+		White = false;
 	}
 	else {
 		return;
@@ -274,7 +272,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
@@ -312,7 +310,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
@@ -350,7 +348,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
@@ -388,7 +386,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
@@ -427,7 +425,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
@@ -466,7 +464,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
@@ -506,7 +504,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;
@@ -545,7 +543,7 @@ void updateValue(int index) {
 		}
 		influence--;
 
-		if (Black) {
+		if (White) {
 			if (board2[19 * x + y] == black) {
 				influence++;
 				Value[19 * x + y] = -5;

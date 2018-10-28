@@ -11,7 +11,7 @@ extern int best_pos1, best_pos2;
 
 #define		BUF_SIZE	1024
 #define		IPAddress	"127.0.0.1"
-#define		PORT		8053	// white: 8052 black: 8053
+#define		PORT		8052	// white: 8052 black: 8053
 #define		WIDTH		19
 #define		HEIGHT		19
 #define		CNT			2
@@ -55,26 +55,26 @@ int isFree(int X, int Y) {
 
 void put_stone() {
 	int pos1, pos2, dontcare;
-	checkmine(board, 1, pos1, pos2, index1 / 19, index1 % 19);
+	checkmine(board, 2, pos1, pos2, index1 / 19, index1 % 19);
 	if ((pos1 == -1) && (pos2 == -1)) {
-		checkmine(board, 1, pos1, pos2, index2 / 19, index2 % 19);
+		checkmine(board, 2, pos1, pos2, index2 / 19, index2 % 19);
 		if ((pos1 == -1) && (pos2 == -1)) {
-			checkopponent(board, 2, pos1, pos2, (18 - op_y[0]), op_x[0]);
+			checkopponent(board, 1, pos1, pos2, (18 - op_y[0]), op_x[0]);
 			if ((pos1 == -1) && (pos2 == -1)) {
-				checkopponent(board, 2, pos1, pos2, (18 - op_y[1]), op_x[1]);
+				checkopponent(board, 1, pos1, pos2, (18 - op_y[1]), op_x[1]);
 			}
-			else if ( (pos1 != -1 && pos2 == -1) ){
-				checkopponent(board, 2, pos2, dontcare, (18 - op_y[1]), op_x[1]);
+			else if ((pos1 != -1 && pos2 == -1)) {
+				checkopponent(board, 1, pos2, dontcare, (18 - op_y[1]), op_x[1]);
 			}
 			else if ((pos2 != -1 && pos1 == -1)) {
-				checkopponent(board, 2, pos1, dontcare, (18 - op_y[1]), op_x[1]);
+				checkopponent(board, 1, pos1, dontcare, (18 - op_y[1]), op_x[1]);
 			}
 		}
 	}
 	printf("\n  pos1 : %d, pos2 :  %d\n", pos1, pos2);
 	bool operating = getIndex();
 	if (!operating || index1 == index2) {
-		printf( "\nMonte\n");
+		printf("\nMonte\n");
 		MonteCarloTreeSearch();
 		index1 = best_pos1;
 		index2 = best_pos2;

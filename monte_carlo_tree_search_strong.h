@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __MONTE_CARLO_TREE_SEARCH_STRONG_H__
 #define __MONTE_CARLO_TREE_SEARCH_STRONG_H__
 
