@@ -3,15 +3,17 @@
 #include <stdio.h>
 #include <string>
 #include <ctime>
+#include <stdio.h>
 
+#include "function.h"
 #include "monte_carlo_tree_search_strong.h"
 extern int best_pos1, best_pos2;
 
 #define		BUF_SIZE	1024
 #define		IPAddress	"127.0.0.1"
-#define		PORT		8052	// white: 8052 black: 8053
+#define		PORT		8053	// white: 8052 black: 8053
 #define		WIDTH		19
-#define		HEIGHT	19
+#define		HEIGHT		19
 #define		CNT			2
 #define		CORD_X(X)	((WIDTH - 1) - X)
 #define		CORD_Y(Y)	(Y)
@@ -27,12 +29,16 @@ int op_y[2];
 int x[2];
 int y[2];
 
+extern int index1;
+extern int index2;
+bool getIndex();
+
 void print_board() {
 
 	printf("\n    ---------------------------------------------------------\n");
 
 	for (int i = 0; i < WIDTH; i++) {
-		printf("%3d", 18-i);
+		printf("%3d", 18 - i);
 		for (int j = 0; j < HEIGHT; j++) {
 			printf("|%c", board[i][j] == 1 ? 'O' : board[i][j] == 2 ? 'X' : ' ');
 		}
@@ -48,21 +54,89 @@ int isFree(int X, int Y) {
 }
 
 void put_stone() {
-	int index[1];
-	char board_[361];
-	for (int i = 0; i < 19; i++) {
-		int iter = 19 * i;
-		for (int j = 0; j < 19; j++) {
-			board_[iter + j] = board[i][j];
+	int pos1, pos2, dontcare;
+	checkmine(board, 1, pos1, pos2, index1 / 19, index1 % 19);
+	if ((pos1 == -1) && (pos2 == -1)) {
+		checkmine(board, 1, pos1, pos2, index2 / 19, index2 % 19);
+		if ((pos1 == -1) && (pos2 == -1)) {
+			checkopponent(board, 2, pos1, pos2, (18 - op_y[0]), op_x[0], 0);
+			if ((pos1 == -1) && (pos2 == -1)) {
+				checkopponent(board, 2, pos1, pos2, (18 - op_y[1]), op_x[1], 0);
+			}
+			else if ( (pos1 != -1 && pos2 == -1) ){
+				checkopponent(board, 2, pos2, dontcare, (18 - op_y[1]), op_x[1], 0);
+			}
+			else if ((pos2 != -1 && pos1 == -1)) {
+				checkopponent(board, 2, pos1, dontcare, (18 - op_y[1]), op_x[1], 0);
+			}
 		}
 	}
-	// YOUR ALGORITHM
+	// printf("\n  pos1 : %d, pos2 :  %d\n", pos1, pos2);
+	bool operating = getIndex();
+	if (!operating || index1 == index2) {
+		// printf("\nMonte\n");
+		int _index[1];
+		char board_[361];
+		for (int i = 0; i < 19; i++) {
+			int iter = 19 * i;
+			for (int j = 0; j < 19; j++) {
+				board_[iter + j] = board[i][j];
+			}
+		}
+		GetBestPositions(board_, _index, 1, 1, 1);
+		board_[_index[0]] = 1;
+		index1 = _index[0];
+		GetBestPositions(board_, _index, 1, 1, 2);
+		index2 = _index[0];
+	}
+	else {
+		// printf("\nPattern\n");
+	}
+	if (pos1 != -1) {
+		if (pos2 != -1) {
+			if (pos1 == pos2) {
+				if (pos1 == index1) {
+					index1 = pos1;
+				}
+				else {
+					index2 = pos1;
+				}
+			}
+			else {
+				index1 = pos1;
+				index2 = pos2;
+			}
+		}
+		else {
+			if (pos1 == index2) {
+				index2 = pos1;
+			}
+			else {
+				index1 = pos1;
+			}
+		}
+	}
+	else {
+		if (pos2 != -1) {
+			if (pos2 == index1) {
+				index1 = pos2;
+			}
+			else {
+				index2 = pos2;
+			}
+		}
+	}
+	int index;
 	for (int i = 0; i < CNT; i++) {
 		do {
-		GetBestPositions(board_, index, 1, 2, i + 1);
-		board_[index[0]] = 2;
-		x[i] = index[0] % 19;
-		y[i] = 18 - (index[0] / 19);
+			if (i == 0) {
+				index = index1;
+			}
+			else {
+				index = index2;
+			}
+			x[i] = index % WIDTH;
+			y[i] = 18 - index / HEIGHT;
 			CORD(x[i], y[i]);
 		} while (!isFree(x[i], y[i]));
 		CORD(x[i], y[i]);
@@ -102,7 +176,7 @@ int main() {
 		return false; //Couldn't create the socket
 	}
 
-	if (bind(s, reinterpret_cast<SOCKADDR *>(&servAddr), sizeof(servAddr)) == SOCKET_ERROR){
+	if (::bind(s, reinterpret_cast<SOCKADDR *>(&servAddr), sizeof(servAddr)) == SOCKET_ERROR) {
 		cout << "Binding failed. Error code: " << WSAGetLastError() << endl;
 		WSACleanup();
 		return false; //Couldn't connect
@@ -124,14 +198,14 @@ int main() {
 
 		for (int i = 0; i < 19; i++)
 			for (int j = 0; j < 19; j++)
-				board[18-i][j] = buf[i * 19 + j] - '0';
+				board[18 - i][j] = buf[i * 19 + j] - '0';
 
-		op_x[0] = (buf[361]-'0')*10 + (buf[362] - '0');
+		op_x[0] = (buf[361] - '0') * 10 + (buf[362] - '0');
 		op_y[0] = (buf[363] - '0') * 10 + (buf[364] - '0');
 		op_x[1] = (buf[365] - '0') * 10 + (buf[366] - '0');
 		op_y[1] = (buf[367] - '0') * 10 + (buf[368] - '0');
 
-		printf("\n\nOpposite: %d %d / %d %d", op_x[0], op_y[0], op_x[1], op_y[1]);
+		// printf("\n\nOpposite: %d %d / %d %d", op_x[0], op_y[0], op_x[1], op_y[1]);
 
 		put_stone();
 		print_board();
